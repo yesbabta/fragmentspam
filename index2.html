@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark" data-ui="default" data-animations="1">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>meteor scripts</title>
+    <title>Velyo — Scripts Hub 2026</title>
     <style>
         * {
             margin: 0;
@@ -12,26 +12,22 @@
         }
 
         :root {
-            --bg-primary: #0b0b12;
-            --bg-secondary: #13131e;
-            --bg-card: rgba(20, 20, 32, 0.8);
+            --bg-primary: #0a0a12;
+            --bg-secondary: #12121e;
+            --bg-card: rgba(18, 18, 30, 0.85);
             --bg-input: #1a1a2a;
-            --border-color: #2a2a42;
+            --border-color: #2a2a4a;
             --text-primary: #f0eeff;
             --text-secondary: #a8a4c8;
             --text-dim: #6a6a8a;
             --accent: #8b7aff;
-            --accent-glow: rgba(139, 122, 255, 0.25);
+            --accent-glow: rgba(139, 122, 255, 0.2);
             --shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
             --radius: 20px;
-            --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-            --nav-gap: 6px;
-            --nav-padding: 8px 12px;
-            --nav-font-size: 0.7rem;
-            --nav-border-radius: 40px;
-            --font-size-base: 1rem;
+            --transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            --font-size: 1rem;
             --animations: 1;
-            --copy-sound: 1;
+            --blur: 16px;
         }
 
         [data-theme="light"] {
@@ -45,7 +41,29 @@
             --text-dim: #8a8aa2;
             --shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
         }
-
+        [data-theme="amoled"] {
+            --bg-primary: #000000;
+            --bg-secondary: #05050a;
+            --bg-card: rgba(10, 10, 18, 0.9);
+            --bg-input: #0a0a12;
+            --border-color: #1a1a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #c0c0d0;
+            --text-dim: #606070;
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+        }
+        [data-theme="cyberpunk"] {
+            --bg-primary: #0a0515;
+            --bg-secondary: #140a22;
+            --bg-card: rgba(20, 10, 34, 0.85);
+            --bg-input: #1a0a2e;
+            --border-color: #ff00cc;
+            --text-primary: #ffccff;
+            --text-secondary: #cc88cc;
+            --text-dim: #884488;
+            --accent: #ff00cc;
+            --accent-glow: rgba(255, 0, 204, 0.3);
+        }
         [data-theme="red"] {
             --bg-primary: #120a0a;
             --bg-secondary: #1e1313;
@@ -58,7 +76,6 @@
             --accent: #ff6b6b;
             --accent-glow: rgba(255, 107, 107, 0.25);
         }
-
         [data-theme="green"] {
             --bg-primary: #0a120a;
             --bg-secondary: #131e13;
@@ -71,7 +88,6 @@
             --accent: #6bff6b;
             --accent-glow: rgba(107, 255, 107, 0.25);
         }
-
         [data-theme="blue"] {
             --bg-primary: #0a0a12;
             --bg-secondary: #13131e;
@@ -84,21 +100,45 @@
             --accent: #6b6bff;
             --accent-glow: rgba(107, 107, 255, 0.25);
         }
+        [data-theme="pink"] {
+            --bg-primary: #120a12;
+            --bg-secondary: #1e131e;
+            --bg-card: rgba(32, 20, 32, 0.85);
+            --bg-input: #1a0f1a;
+            --border-color: #5a2a5a;
+            --text-primary: #ffddff;
+            --text-secondary: #ccaacc;
+            --text-dim: #aa88aa;
+            --accent: #ff6bff;
+            --accent-glow: rgba(255, 107, 255, 0.25);
+        }
+        [data-theme="orange"] {
+            --bg-primary: #120a0a;
+            --bg-secondary: #1e1310;
+            --bg-card: rgba(32, 20, 16, 0.85);
+            --bg-input: #1a0f0a;
+            --border-color: #5a3a2a;
+            --text-primary: #ffddcc;
+            --text-secondary: #ccaa88;
+            --text-dim: #aa8866;
+            --accent: #ff8a3c;
+            --accent-glow: rgba(255, 138, 60, 0.25);
+        }
 
         [data-ui="compact"] {
-            --nav-gap: 4px;
             --nav-padding: 4px 8px;
             --nav-font-size: 0.6rem;
-            --nav-border-radius: 20px;
+            --nav-gap: 4px;
+            --radius: 12px;
+            --font-size: 0.85rem;
         }
-
         [data-ui="wide"] {
-            --nav-gap: 12px;
             --nav-padding: 12px 20px;
-            --nav-font-size: 0.85rem;
-            --nav-border-radius: 50px;
+            --nav-font-size: 0.9rem;
+            --nav-gap: 12px;
+            --radius: 24px;
+            --font-size: 1.1rem;
         }
-
         [data-animations="0"] .bg-glow,
         [data-animations="0"] #particles,
         [data-animations="0"] .card:hover,
@@ -106,6 +146,7 @@
         [data-animations="0"] .script-item,
         [data-animations="0"] .injector-item,
         [data-animations="0"] .vpn-item,
+        [data-animations="0"] .settings-item,
         [data-animations="0"] .copy-toast {
             animation: none !important;
             transition: none !important;
@@ -115,9 +156,9 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-            font-size: var(--font-size-base);
+            font-size: var(--font-size);
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
             transition: background var(--transition), color var(--transition);
             overflow-x: hidden;
         }
@@ -128,7 +169,7 @@
             left: -20%;
             width: 70%;
             height: 70%;
-            background: radial-gradient(ellipse, rgba(139, 122, 255, 0.08), transparent 70%);
+            background: radial-gradient(ellipse, var(--accent-glow), transparent 70%);
             pointer-events: none;
             z-index: 0;
             animation: floatGlow 20s ease-in-out infinite alternate;
@@ -139,7 +180,7 @@
             left: auto;
             width: 50%;
             height: 50%;
-            background: radial-gradient(ellipse, rgba(139, 122, 255, 0.05), transparent 70%);
+            background: radial-gradient(ellipse, var(--accent-glow), transparent 70%);
             animation-delay: -7s;
         }
         @keyframes floatGlow {
@@ -189,10 +230,10 @@
             position: relative;
             z-index: 10;
             text-align: center;
-            padding: 12px 0 16px;
-            width: 100%;
+            padding: 10px 0 16px;
             max-width: 1400px;
             margin: 0 auto;
+            width: 100%;
         }
         .brand {
             font-size: 2.8rem;
@@ -202,15 +243,25 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 30px var(--accent-glow);
         }
         .brand span {
             background: none;
             -webkit-text-fill-color: var(--text-dim);
         }
+        .version {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            background: var(--bg-input);
+            padding: 2px 12px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 2px;
+        }
 
         .search-container {
             max-width: 600px;
-            margin: 12px auto 0;
+            margin: 10px auto 0;
             padding: 0 16px;
             position: relative;
         }
@@ -261,15 +312,15 @@
             z-index: 10;
             max-width: 1200px;
             width: 100%;
-            margin: 16px auto 20px;
+            margin: 14px auto 18px;
             padding: 4px 10px;
         }
         .nav-center {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: var(--nav-gap);
-            padding: 10px 14px;
+            gap: var(--nav-gap, 6px);
+            padding: 8px 12px;
             background: var(--bg-secondary);
             border-radius: 30px;
             border: 1px solid var(--border-color);
@@ -277,19 +328,20 @@
             box-shadow: var(--shadow);
         }
         .nav-btn {
-            padding: var(--nav-padding);
-            border-radius: var(--nav-border-radius);
+            padding: var(--nav-padding, 8px 14px);
+            border-radius: 40px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: var(--nav-font-size);
+            font-size: var(--nav-font-size, 0.7rem);
             cursor: pointer;
             transition: all var(--transition);
             font-family: inherit;
             letter-spacing: 0.3px;
             white-space: nowrap;
             flex-shrink: 0;
+            position: relative;
         }
         .nav-btn:hover {
             color: var(--text-primary);
@@ -310,7 +362,6 @@
             z-index: 10;
             max-width: 1400px;
             width: 100%;
-            flex: 1;
             margin: 0 auto;
         }
 
@@ -335,12 +386,12 @@
 
         .card {
             background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(var(--blur, 16px));
+            -webkit-backdrop-filter: blur(var(--blur, 16px));
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             padding: 20px 24px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), transform 0.25s ease;
             box-shadow: var(--shadow);
         }
@@ -365,13 +416,48 @@
             grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
-        @media (max-width: 700px) {
+        .injector-grid,
+        .vpn-grid,
+        .apps-grid,
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+        @media (max-width: 860px) {
+            .injector-grid,
+            .vpn-grid,
+            .apps-grid,
+            .settings-grid {
+                grid-template-columns: 1fr 1fr;
+            }
             .script-grid {
                 grid-template-columns: 1fr;
             }
         }
+        @media (max-width: 480px) {
+            .injector-grid,
+            .vpn-grid,
+            .apps-grid,
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 8px;
+            }
+            .brand {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 12px 14px;
+            }
+        }
 
-        .script-item {
+        .script-item,
+        .injector-item,
+        .vpn-item,
+        .apps-item,
+        .settings-item {
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -379,48 +465,68 @@
             transition: all var(--transition);
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
-        .script-item:hover {
+        .script-item:hover,
+        .injector-item:hover,
+        .vpn-item:hover,
+        .apps-item:hover,
+        .settings-item:hover {
             border-color: var(--accent);
             box-shadow: 0 0 20px var(--accent-glow);
         }
-        .script-item .name {
+        .script-item .name,
+        .injector-item .name,
+        .vpn-item .name,
+        .apps-item .name,
+        .settings-item .name {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-primary);
         }
-        .script-item .desc {
+        .script-item .desc,
+        .injector-item .desc,
+        .vpn-item .desc,
+        .apps-item .desc,
+        .settings-item .desc {
             font-size: 0.7rem;
             color: var(--text-dim);
         }
         .script-item .loadstring {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 6px;
-            padding: 6px 10px;
-            font-family: 'Fira Code', 'Courier New', monospace;
+            padding: 4px 8px;
+            font-family: monospace;
             font-size: 0.6rem;
             color: var(--text-secondary);
             word-break: break-all;
             cursor: pointer;
             transition: background var(--transition);
             border: 1px solid transparent;
-            max-height: 60px;
+            max-height: 50px;
             overflow-y: auto;
         }
         .script-item .loadstring:hover {
             background: rgba(139, 122, 255, 0.15);
             border-color: var(--accent);
         }
-        .script-item .actions {
+        .script-item .actions,
+        .injector-item .actions,
+        .vpn-item .actions,
+        .apps-item .actions,
+        .settings-item .actions {
             display: flex;
             gap: 8px;
             margin-top: 4px;
         }
-        .script-item .actions button {
+        .script-item .actions button,
+        .injector-item .actions button,
+        .vpn-item .actions button,
+        .apps-item .actions button,
+        .settings-item .actions button {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            padding: 3px 12px;
+            padding: 2px 12px;
             border-radius: 20px;
             color: var(--text-secondary);
             font-size: 0.65rem;
@@ -428,68 +534,21 @@
             transition: all var(--transition);
             font-family: inherit;
         }
-        .script-item .actions button:hover {
+        .script-item .actions button:hover,
+        .injector-item .actions button:hover,
+        .vpn-item .actions button:hover,
+        .apps-item .actions button:hover,
+        .settings-item .actions button:hover {
             background: var(--accent);
             border-color: var(--accent);
             color: #fff;
-        }
-
-        /* Скрытие элементов при поиске */
-        .script-item.hidden-by-search {
-            display: none !important;
-        }
-
-        .injector-grid,
-        .vpn-grid,
-        .apps-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 16px;
-        }
-        .injector-item,
-        .vpn-item,
-        .apps-item {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 14px 16px;
-            text-align: center;
-            transition: all var(--transition);
-        }
-        .injector-item:hover,
-        .vpn-item:hover,
-        .apps-item:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .injector-item .name,
-        .vpn-item .name,
-        .apps-item .name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-primary);
-        }
-        .injector-item .platform,
-        .vpn-item .platform,
-        .apps-item .platform {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin: 4px 0;
-        }
-        .injector-item .desc,
-        .vpn-item .desc,
-        .apps-item .desc {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin: 4px 0;
         }
         .injector-item .link,
         .vpn-item .link,
         .apps-item .link {
             display: inline-block;
-            margin-top: 8px;
-            padding: 6px 16px;
+            margin-top: 6px;
+            padding: 4px 14px;
             background: var(--accent);
             color: #fff;
             border-radius: 30px;
@@ -497,6 +556,7 @@
             font-size: 0.7rem;
             font-weight: 600;
             transition: all var(--transition);
+            text-align: center;
         }
         .injector-item .link:hover,
         .vpn-item .link:hover,
@@ -505,42 +565,111 @@
             transform: scale(0.96);
         }
 
-        @media (max-width: 860px) {
-            .injector-grid,
-            .vpn-grid,
-            .apps-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .brand {
-                font-size: 2rem;
-            }
-            .header {
-                padding: 10px 0 12px;
-            }
-            .card {
-                padding: 14px 16px;
-            }
+        .settings-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 6px 0 12px;
         }
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            .brand {
-                font-size: 1.6rem;
-            }
-            .card {
-                padding: 10px 12px;
-                margin-bottom: 12px;
-            }
-            .injector-grid,
-            .vpn-grid,
-            .apps-grid {
-                grid-template-columns: 1fr;
-            }
-            .script-item .loadstring {
-                font-size: 0.5rem;
-                max-height: 50px;
-            }
+        .settings-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            padding: 5px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all var(--transition);
+            font-family: inherit;
+            font-size: 0.75rem;
+        }
+        .settings-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+        .settings-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .settings-row {
+            margin-bottom: 16px;
+        }
+        .settings-row label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .settings-row select,
+        .settings-row input[type="range"] {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 8px 14px;
+            color: var(--text-primary);
+            font-family: inherit;
+            outline: none;
+            transition: border var(--transition);
+        }
+        .settings-row select:focus,
+        .settings-row input[type="range"]:focus {
+            border-color: var(--accent);
+        }
+        .settings-row input[type="range"] {
+            -webkit-appearance: none;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 10px;
+            padding: 0;
+        }
+        .settings-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+        .settings-row .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--bg-input);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background var(--transition);
+            position: relative;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .settings-row .toggle.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .settings-row .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform var(--transition);
+        }
+        .settings-row .toggle.active::after {
+            transform: translateX(20px);
+        }
+        .settings-row .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
         }
 
         .copy-toast {
@@ -565,79 +694,57 @@
             opacity: 1;
         }
 
-        .theme-group,
-        .ui-group,
-        .settings-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin: 8px 0 16px;
-        }
-        .theme-btn,
-        .ui-btn,
-        .settings-btn {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            font-weight: 500;
-            transition: all var(--transition);
-            font-family: inherit;
-            font-size: 0.8rem;
-        }
-        .theme-btn:hover,
-        .ui-btn:hover,
-        .settings-btn:hover {
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-        .theme-btn.active,
-        .ui-btn.active,
-        .settings-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
-
-        .settings-row {
-            margin-bottom: 20px;
-        }
-        .settings-row label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
         .footer {
             text-align: center;
-            padding: 16px 0 8px;
+            padding: 14px 0 6px;
             font-size: 0.65rem;
             color: var(--text-dim);
             border-top: 1px solid var(--border-color);
-            margin-top: 16px;
+            margin-top: 14px;
         }
 
+        .hidden-by-search {
+            display: none !important;
+        }
         .badge {
             display: inline-block;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             background: var(--accent);
             color: #fff;
-            padding: 2px 8px;
+            padding: 1px 8px;
             border-radius: 30px;
             margin-left: 6px;
         }
 
-        /* highlight для поиска */
-        .highlight {
+        .lang-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 2px 10px;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+        .lang-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+        .lang-btn.active {
             background: var(--accent);
             color: #fff;
-            padding: 0 2px;
-            border-radius: 4px;
+            border-color: var(--accent);
+        }
+        .settings-row .lang-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -648,378 +755,508 @@
     <div id="particles"></div>
 
     <header class="header">
-        <div class="brand">meteor<span>.</span></div>
+        <div class="brand">Velyo<span>.</span></div>
+        <div class="version">v3.0</div>
         <div class="search-container">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Поиск скриптов... (название, описание)">
+            <input type="text" id="searchInput" placeholder="Поиск скриптов, функций...">
             <button class="clear-search" id="clearSearchBtn">✕</button>
         </div>
     </header>
 
     <div class="nav-wrapper">
         <nav class="nav-center" id="mainNav">
-            <button class="nav-btn active" data-page="injectors">💉 Injectors</button>
+            <button class="nav-btn active" data-page="dashboard">📊 Dashboard</button>
+            <button class="nav-btn" data-page="injectors">💉 Injectors</button>
             <button class="nav-btn" data-page="vpn">🌐 VPN</button>
             <button class="nav-btn" data-page="apps">📦 Apps</button>
-            <button class="nav-btn" data-page="iy">✦ IY</button>
-            <button class="nav-btn" data-page="infinitefun">🌀 IY Fun</button>
-            <button class="nav-btn" data-page="nameless">🛡️ Nameless</button>
+            <button class="nav-btn" data-page="infiniteyield">✦ IY</button>
             <button class="nav-btn" data-page="prison">⛓️ Prison</button>
-            <button class="nav-btn" data-page="fight">🥊 Fight</button>
-            <button class="nav-btn" data-page="fefling">🌀 FE Fling</button>
             <button class="nav-btn" data-page="fisch">🐟 Fisch</button>
-            <button class="nav-btn" data-page="dangerous">🌙 Dangerous</button>
-            <button class="nav-btn" data-page="soluna">✦ Soluna</button>
-            <button class="nav-btn" data-page="dex">🔍 Dex</button>
-            <button class="nav-btn" data-page="spy">👁️ Spy</button>
-            <button class="nav-btn" data-page="framework">📦 Framework</button>
-            <button class="nav-btn" data-page="trolling">🤡 Trolling</button>
-            <button class="nav-btn" data-page="autofarm">⚡ Auto Farm</button>
-            <button class="nav-btn" data-page="bloxfruits">🍉 Blox Fruits</button>
-            <button class="nav-btn" data-page="bedwars">🛏️ BedWars</button>
-            <button class="nav-btn" data-page="arsenal">🔫 Arsenal</button>
-            <button class="nav-btn" data-page="mm2">🔪 MM2</button>
-            <button class="nav-btn" data-page="toh">🏰 ToH</button>
-            <button class="nav-btn" data-page="royalehigh">👑 Royale High</button>
             <button class="nav-btn" data-page="brookhaven">🏡 Brookhaven</button>
+            <button class="nav-btn" data-page="fefling">🌀 FE Fling</button>
+            <button class="nav-btn" data-page="bloxfruits">🍉 Blox Fruits</button>
+            <button class="nav-btn" data-page="mm2">🔪 MM2</button>
+            <button class="nav-btn" data-page="fetrolling">🤡 FE Trolling</button>
+            <button class="nav-btn" data-page="fescript">⚡ FE Script</button>
+            <button class="nav-btn" data-page="baseplate">🧱 Base Plate</button>
+            <button class="nav-btn" data-page="justplate">🟦 Just A Plate</button>
+            <button class="nav-btn" data-page="brainrot">🧠 Brainrot</button>
+            <button class="nav-btn" data-page="growgarden">🌱 Grow A Garden</button>
+            <button class="nav-btn" data-page="anime">🎌 Anime</button>
+            <button class="nav-btn" data-page="rpg">⚔️ RPG</button>
+            <button class="nav-btn" data-page="other">📜 Other</button>
             <button class="nav-btn" data-page="settings">⚙ Settings</button>
+            <button class="nav-btn" data-page="logs">📋 Logs</button>
         </nav>
     </div>
 
     <main class="main">
 
+        <!-- ===== DASHBOARD ===== -->
+        <section id="page-dashboard" class="page active">
+            <div class="card">
+                <div class="card-title">📊 System Status</div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;">
+                    <div class="stat-box" style="background:var(--bg-input);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border-color);">
+                        <div style="font-size:1.6rem;font-weight:700;color:var(--accent);">1,247</div>
+                        <div style="font-size:0.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Requests Sent</div>
+                    </div>
+                    <div class="stat-box" style="background:var(--bg-input);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border-color);">
+                        <div style="font-size:1.6rem;font-weight:700;color:var(--accent);">00:12:45</div>
+                        <div style="font-size:0.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Uptime</div>
+                    </div>
+                    <div class="stat-box" style="background:var(--bg-input);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border-color);">
+                        <div style="font-size:1.6rem;font-weight:700;color:var(--accent);">97%</div>
+                        <div style="font-size:0.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Success Rate</div>
+                    </div>
+                    <div class="stat-box" style="background:var(--bg-input);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border-color);">
+                        <div style="font-size:1.6rem;font-weight:700;color:var(--accent);">🟢</div>
+                        <div style="font-size:0.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Status</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📈 Activity</div>
+                <div style="height:80px;background:var(--bg-input);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:0.8rem;border:1px solid var(--border-color);">График активности загружается...</div>
+            </div>
+            <div class="card">
+                <div class="card-title">🕒 Recent Activity</div>
+                <div class="log-area" id="recentLog" style="max-height:150px;background:var(--bg-input);border-radius:12px;padding:10px;font-size:0.7rem;border:1px solid var(--border-color);overflow-y:auto;"></div>
+            </div>
+        </section>
+
         <!-- ===== INJECTORS ===== -->
-        <section id="page-injectors" class="page active">
+        <section id="page-injectors" class="page">
             <div class="card">
                 <div class="card-title">💉 Roblox Injectors & Executors 2026</div>
                 <div class="injector-grid">
-                    <div class="injector-item"><div class="name">Valex Executor</div><div class="platform">🖥️ PC</div><div class="desc">96% UNC, Byfron bypass, keyless</div><a class="link" href="https://valexexecs.github.io/valex/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Arceus X NEO</div><div class="platform">🖥️ PC + 📱 Android + 📱 iOS</div><div class="desc">100% UNC, keyless, 1.2M+ users</div><a class="link" href="https://github.com/arceusexecs/arceus" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Solara Executor</div><div class="platform">🖥️ PC</div><div class="desc">100% free, keyless, 2M+ downloads</div><a class="link" href="https://solara-executor.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Xeno Executor</div><div class="platform">🖥️ PC</div><div class="desc">Keyless, Level 7, multi-tab editor</div><a class="link" href="https://xeno-executor.net/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Wave Executor</div><div class="platform">🖥️ PC</div><div class="desc">AI script finder, decompiler</div><a class="link" href="https://wave-executor.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Velocity Executor</div><div class="platform">🖥️ PC + 📱 Android</div><div class="desc">Cross-platform, no key</div><a class="link" href="https://sourceforge.net/projects/velocity-executor/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Opiumware</div><div class="platform">🖥️ PC + 🍏 macOS</div><div class="desc">96% UNC, keyless, Apple Silicon</div><a class="link" href="https://git-setup-file.github.io/.github/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Hydrogen Executor</div><div class="platform">🍏 macOS + 📱 Android + 🖥️ PC</div><div class="desc">Best free Mac option</div><a class="link" href="https://hydrogen-executor.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Delta Executor</div><div class="platform">📱 Android + 📱 iOS</div><div class="desc">1.7M+ downloads, easy mobile install</div><a class="link" href="https://dltaexecutor.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Fluxus Z</div><div class="platform">📱 Android + 🖥️ PC</div><div class="desc">Keyless premium option</div><a class="link" href="https://fluxus-executor.net/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Vega X</div><div class="platform">📱 Android Only</div><div class="desc">Keyless forever, lightweight</div><a class="link" href="https://vega-x.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Trigon EVO</div><div class="platform">📱 Android + 🖥️ PC</div><div class="desc">Key-based, stable performance</div><a class="link" href="https://trigon-evo.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Delta (iOS)</div><div class="platform">📱 iOS</div><div class="desc">TrollStore required</div><a class="link" href="https://dltaexecutor.com/" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Arceus X (iOS)</div><div class="platform">📱 iOS</div><div class="desc">No jailbreak required</div><a class="link" href="https://github.com/arceusexecs/arceus" target="_blank">⬇ Download</a></div>
-                    <div class="injector-item"><div class="name">Ronix Executor</div><div class="platform">🌐 All Platforms</div><div class="desc">Works on every platform, keyless</div><a class="link" href="https://ronix-executor.com/" target="_blank">⬇ Download</a></div>
+                    <div class="injector-item"><div class="name">Valex Executor</div><div class="desc">96% UNC, Byfron bypass, keyless</div><div class="actions"><button onclick="window.open('https://valexexecs.github.io/valex/','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Arceus X NEO</div><div class="desc">100% UNC, keyless, 1.2M+ users</div><div class="actions"><button onclick="window.open('https://github.com/arceusexecs/arceus','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Solara Executor</div><div class="desc">100% free, keyless, 2M+ downloads</div><div class="actions"><button onclick="window.open('https://solara-executor.com/','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Xeno Executor</div><div class="desc">Keyless, Level 7, multi-tab editor</div><div class="actions"><button onclick="window.open('https://xeno-executor.net/','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Wave Executor</div><div class="desc">AI script finder, decompiler</div><div class="actions"><button onclick="window.open('https://wave-executor.com/','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Delta Executor</div><div class="desc">1.7M+ downloads, easy mobile install</div><div class="actions"><button onclick="window.open('https://dltaexecutor.com/','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Opiumware</div><div class="desc">96% UNC, keyless, Apple Silicon</div><div class="actions"><button onclick="window.open('https://git-setup-file.github.io/.github/','_blank')">⬇ Download</button></div></div>
+                    <div class="injector-item"><div class="name">Ronix Executor</div><div class="desc">Works on every platform, keyless</div><div class="actions"><button onclick="window.open('https://ronix-executor.com/','_blank')">⬇ Download</button></div></div>
                 </div>
-                <div style="margin-top:16px; font-size:0.7rem; color:var(--text-dim); text-align:center;">
-                    ⚠️ Все инжекторы собраны из открытых источников. Используй на свой страх и риск. Обязательно используй VPN и ALT-аккаунт!
-                </div>
+                <div style="margin-top:12px;font-size:0.65rem;color:var(--text-dim);text-align:center;">⚠️ Используй VPN и ALT-аккаунт. Все инжекторы собраны из открытых источников.</div>
             </div>
         </section>
 
         <!-- ===== VPN ===== -->
         <section id="page-vpn" class="page">
             <div class="card">
-                <div class="card-title">🌐 Free VPNs for All Platforms</div>
+                <div class="card-title">🌐 Free VPNs</div>
                 <div class="vpn-grid">
-                    <div class="vpn-item"><div class="name">ProtonVPN</div><div class="platform">🖥️ PC (Win/macOS/Linux)</div><div class="desc">Безлимитный, Swiss privacy, без рекламы</div><a class="link" href="https://protonvpn.com/free-vpn/windows" target="_blank">⬇ Download</a></div>
-                    <div class="vpn-item"><div class="name">Hotspot Shield</div><div class="platform">🖥️ PC + 📱 Android + 📱 iOS</div><div class="desc">Бесплатный, 650M+ загрузок</div><a class="link" href="https://www.hotspotshield.com/free-vpn/" target="_blank">⬇ Download</a></div>
-                    <div class="vpn-item"><div class="name">ProtonVPN (Android)</div><div class="platform">📱 Android</div><div class="desc">Google Play, F-Droid, или APK с GitHub</div><a class="link" href="https://protonvpn.com/free-vpn/android" target="_blank">⬇ Download</a></div>
-                    <div class="vpn-item"><div class="name">Swiss VPN Free</div><div class="platform">📱 iOS</div><div class="desc">Без регистрации, без логов, один тап</div><a class="link" href="https://apps.apple.com/app/swiss-vpn-free-fast-secure/id6450358745" target="_blank">⬇ Download</a></div>
-                    <div class="vpn-item"><div class="name">Betternet VPN</div><div class="platform">📱 iOS + 📱 Android</div><div class="desc">Бесплатный, безлимитные данные</div><a class="link" href="https://apps.apple.com/app/betternet-vpn-best-wifi-proxy/id1120952923" target="_blank">⬇ Download</a></div>
-                    <div class="vpn-item"><div class="name">Seed4.Me VPN</div><div class="platform">📱 iOS</div><div class="desc">Безлимитный, без рекламы</div><a class="link" href="https://apps.apple.com/app/vpn-proxy-by-seed4-me-vpn/id1110372542" target="_blank">⬇ Download</a></div>
-                </div>
-                <div style="margin-top:16px; font-size:0.7rem; color:var(--text-dim); text-align:center;">
-                    ⚠️ Использование VPN обязательно для безопасности при работе с инжекторами и скриптами.
+                    <div class="vpn-item"><div class="name">ProtonVPN</div><div class="desc">Безлимитный, Swiss privacy</div><div class="actions"><button onclick="window.open('https://protonvpn.com/free-vpn/windows','_blank')">⬇ Download</button></div></div>
+                    <div class="vpn-item"><div class="name">Hotspot Shield</div><div class="desc">650M+ загрузок</div><div class="actions"><button onclick="window.open('https://www.hotspotshield.com/free-vpn/','_blank')">⬇ Download</button></div></div>
+                    <div class="vpn-item"><div class="name">Swiss VPN Free</div><div class="desc">Без регистрации, без логов</div><div class="actions"><button onclick="window.open('https://apps.apple.com/app/swiss-vpn-free-fast-secure/id6450358745','_blank')">⬇ Download</button></div></div>
+                    <div class="vpn-item"><div class="name">Betternet VPN</div><div class="desc">Бесплатный, безлимитные данные</div><div class="actions"><button onclick="window.open('https://apps.apple.com/app/betternet-vpn-best-wifi-proxy/id1120952923','_blank')">⬇ Download</button></div></div>
+                    <div class="vpn-item"><div class="name">Seed4.Me VPN</div><div class="desc">Безлимитный, без рекламы</div><div class="actions"><button onclick="window.open('https://apps.apple.com/app/vpn-proxy-by-seed4-me-vpn/id1110372542','_blank')">⬇ Download</button></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== APPS (новое) ===== -->
+        <!-- ===== APPS ===== -->
         <section id="page-apps" class="page">
             <div class="card">
-                <div class="card-title">📦 Official & Useful Roblox Apps</div>
+                <div class="card-title">📦 Official Roblox Apps</div>
                 <div class="apps-grid">
-                    <div class="apps-item"><div class="name">Bloxstrap</div><div class="platform">🖥️ PC (Windows)</div><div class="desc">Кастомный лаунчер Roblox с оптимизацией, модами и улучшениями</div><a class="link" href="https://github.com/pizzaboxer/bloxstrap" target="_blank">⬇ GitHub</a></div>
-                    <div class="apps-item"><div class="name">Roblox Studio</div><div class="platform">🖥️ PC + 🍏 macOS</div><div class="desc">Официальная среда разработки Roblox</div><a class="link" href="https://www.roblox.com/create" target="_blank">⬇ Official</a></div>
-                    <div class="apps-item"><div class="name">Roblox Account Manager</div><div class="platform">🖥️ PC</div><div class="desc">Управление несколькими аккаунтами, быстрый вход</div><a class="link" href="https://github.com/ic3w0lf22/Roblox-Account-Manager" target="_blank">⬇ GitHub</a></div>
-                    <div class="apps-item"><div class="name">RoPro</div><div class="platform">🌐 Browser Extension</div><div class="desc">Расширение для браузера с улучшениями Roblox</div><a class="link" href="https://ropro.io/" target="_blank">⬇ Official</a></div>
-                    <div class="apps-item"><div class="name">BTRoblox</div><div class="platform">🌐 Browser Extension</div><div class="desc">Улучшение интерфейса Roblox в браузере</div><a class="link" href="https://btr.meth0d.org/" target="_blank">⬇ Official</a></div>
-                    <div class="apps-item"><div class="name">Roblox FPS Unlocker</div><div class="platform">🖥️ PC</div><div class="desc">Снятие ограничения FPS в Roblox</div><a class="link" href="https://github.com/axstin/rbxfpsunlocker" target="_blank">⬇ GitHub</a></div>
-                </div>
-                <div style="margin-top:16px; font-size:0.7rem; color:var(--text-dim); text-align:center;">
-                    💡 Все приложения безопасны и рекомендованы сообществом.
+                    <div class="apps-item"><div class="name">Bloxstrap</div><div class="desc">Кастомный лаунчер с оптимизацией</div><div class="actions"><button onclick="window.open('https://github.com/pizzaboxer/bloxstrap','_blank')">⬇ GitHub</button></div></div>
+                    <div class="apps-item"><div class="name">Roblox Studio</div><div class="desc">Официальная среда разработки</div><div class="actions"><button onclick="window.open('https://www.roblox.com/create','_blank')">⬇ Official</button></div></div>
+                    <div class="apps-item"><div class="name">Roblox Account Manager</div><div class="desc">Управление несколькими аккаунтами</div><div class="actions"><button onclick="window.open('https://github.com/ic3w0lf22/Roblox-Account-Manager','_blank')">⬇ GitHub</button></div></div>
+                    <div class="apps-item"><div class="name">RoPro</div><div class="desc">Расширение для браузера</div><div class="actions"><button onclick="window.open('https://ropro.io/','_blank')">⬇ Official</button></div></div>
+                    <div class="apps-item"><div class="name">BTRoblox</div><div class="desc">Улучшение интерфейса</div><div class="actions"><button onclick="window.open('https://btr.meth0d.org/','_blank')">⬇ Official</button></div></div>
+                    <div class="apps-item"><div class="name">Roblox FPS Unlocker</div><div class="desc">Снятие ограничения FPS</div><div class="actions"><button onclick="window.open('https://github.com/axstin/rbxfpsunlocker','_blank')">⬇ GitHub</button></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- Остальные вкладки с script-item остаются без изменений, но для краткости я не буду дублировать все 20+ вкладок полностью, а покажу структуру. В реальном коде они будут полные. Здесь покажу пример для IY, остальные аналогично. -->
-
-        <!-- ===== IY (пример) ===== -->
-        <section id="page-iy" class="page">
-            <div class="card"><div class="card-title">✦ Infinite Yield & Mods</div><div class="script-grid">
-                <div class="script-item"><div class="name">Infinite Yield (Original)</div><div class="desc">400+ команд, открытый исходный код.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Infinite Fun (Mod)</div><div class="desc">Модификация с новыми командами: vdrop, clearscreen, betterwelds.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Infinite Yield Plus</div><div class="desc">Улучшенная версия с Dex++ 3.0.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Olegerorr/version_InfiniteYieldPlus/main/source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">IY + LoadAPI</div><div class="desc">Infinite Yield с Recreation API для сохранения моделей.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== INFINITE FUN ===== -->
-        <section id="page-infinitefun" class="page">
-            <div class="card"><div class="card-title">🌀 Infinite Fun & Mods</div><div class="script-grid">
-                <div class="script-item"><div class="name">Infinite Fun (Main)</div><div class="desc">Расширенная версия IY с улучшенным ESP и новыми командами.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Recreator (XMR)</div><div class="desc">GUI для сохранения моделей в JSON через Recreation API.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">RH Accessory Preserver</div><div class="desc">Сохранение аксессуаров Royale High.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== NAMELESS ADMIN ===== -->
-        <section id="page-nameless" class="page">
-            <div class="card"><div class="card-title">🛡️ Nameless Admin</div><div class="script-grid">
-                <div class="script-item"><div class="name">Nameless Admin (Official)</div><div class="desc">Официальная версия v2.5.1 с поддержкой плагинов.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/Source.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Nameless Admin (Testing)</div><div class="desc">Тестовая версия.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/NA%20testing.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Nameless Admin V2</div><div class="desc">Версия с улучшениями.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/refs/heads/main/Source.lua", true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Nameless Admin (FE)</div><div class="desc">Версия от FilteringEnabled.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
+        <!-- ===== INFINITE YIELD ===== -->
+        <section id="page-infiniteyield" class="page">
+            <div class="card">
+                <div class="card-title">✦ Infinite Yield & Mods</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Infinite Yield (Original)</div><div class="desc">400+ команд</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Infinite Fun (Mod)</div><div class="desc">Новые команды: vdrop, clearscreen</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Infinite Yield Plus</div><div class="desc">С Dex++ 3.0</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Olegerorr/version_InfiniteYieldPlus/main/source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">IY + LoadAPI</div><div class="desc">С Recreation API</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Xane123/InfiniteFun_IY/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
         </section>
 
         <!-- ===== PRISON LIFE ===== -->
         <section id="page-prison" class="page">
-            <div class="card"><div class="card-title">⛓️ Prison Life Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">PrizzLife Admin</div><div class="desc">200+ команд, мульти-экзекьютор.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/devguy100/PrizzLife/main/pladmin.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Prison Life Aimbot</div><div class="desc">Aimbot, Kill All, God Mode, Fling.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/XTheMasterX/Scripts/Main/PrisonLife",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">OP GUI (Keyless)</div><div class="desc">Auto Arrest, Fly, Esp, Killaura, Silent Aim.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/BHgi3VSk"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Tiger Admin Reforged</div><div class="desc">110+ команд, поддержка Solara.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/APIApple/Main/refs/heads/main/loadstring"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">CyberCoders Menu II</div><div class="desc">Silent Aim, Aimbot, Auto Arrest, Fly Car.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/CyberCodersStudio/CyberCoders/refs/heads/main/Script"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Silent Aimbot</div><div class="desc">Silent Aim для Prison Life.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://gist.githubusercontent.com/yMerch/c244bb0cffc6396148544c503ba5c80f/raw/661fd34e55bc2f84a1b87aa5580fa6b2428a55a6/SilentAim.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== FIGHT CLUB ===== -->
-        <section id="page-fight" class="page">
-            <div class="card"><div class="card-title">🥊 Fight Club Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Fight Club Auto Attack</div><div class="desc">Auto Attack, Kill Aura, Infinite Stamina.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://rentry.co/dwkid/raw", true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Fight Club Pastebin</div><div class="desc">Расширенный скрипт с Kill Aura.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/0b3hSS8B"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== FE FLING ===== -->
-        <section id="page-fefling" class="page">
-            <div class="card"><div class="card-title">🌀 FE Fling Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">OG TROLLFACE FLING</div><div class="desc">Пародия на FE YEET GUI с мультифлингом.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Cank09/TROLLFACEILOVEYOU/refs/heads/main/OG%20TROLLFACE.txt"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Ultimate Fling GUI</div><div class="desc">Выбор игроков для флинга через GUI.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/K1LAS1K/Ultimate-Fling-GUI/main/flingscript.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">FE Auto Fling</div><div class="desc">Автоматический флинг всех игроков.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/grelkgjelkrjg/Auto-fling/refs/heads/main/AutoFling.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">FE Ninja Fling</div><div class="desc">Для Natural Disaster Survival.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/TestLua/Hubs/main/NinjaFling.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">FE Punch</div><div class="desc">Ударом разбрасывает игроков и NPC.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/TestLua/Hubs/main/FightClub.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">SystemBroken Fling</div><div class="desc">Универсальный флинг с Speed, Fly, Noclip.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/SystemBroken/Scripts/main/Fling.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
+            <div class="card">
+                <div class="card-title">⛓️ Prison Life Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">PrizzLife Admin</div><div class="desc">200+ команд, мульти-экзекьютор</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/devguy100/PrizzLife/main/pladmin.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Prison NUKES Hub</div><div class="desc">Keyless hub с коллекцией</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://rawscripts.net/raw/Prison-Life-Keyless-hub-OP-130369'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Lumo Hub (Keyless)</div><div class="desc">Универсальный хаб</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-Lumo-Hub-prison-life-Keyless-117195'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Zenss OP</div><div class="desc">Keyless, стабильный</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/zenss555a/script/refs/heads/main/Prison-Life.lua',true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">PrisonWare v1.3</div><div class="desc">Популярный скрипт с хабом</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Denverrz/scripts/master/PRISONWARE_v1.3.txt'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Sapphire Hub</div><div class="desc">100+ функций</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastefy.app/ZYZqbgCO/raw'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Ultimate Hub</div><div class="desc">150+ функций</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://rawscripts.net/raw/Prison-Life-Ultimate-Hub-70369'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Prison OP GUI 2026</div><div class="desc">Обновлённая версия</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://scriptblox.com/raw/UPD-Prison-Life-OP-GUI-2026-update-93585'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
         </section>
 
         <!-- ===== FISCH ===== -->
         <section id="page-fisch" class="page">
-            <div class="card"><div class="card-title">🐟 Fisch Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Blackhub</div><div class="desc">370K+ пользователей, Auto Farm, ESP.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Skibidiking123/Fisch1/refs/heads/main/FischMain"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">BananaHub</div><div class="desc">Keyless, Auto Catch, Auto Sell.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/obiiyeuem/vthangsitink/main/BananaHub.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Lunor Hub</div><div class="desc">Multi-game хаб с поддержкой Fisch.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Just3itx/Lunor-Loadstrings/refs/heads/main/Loader"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">RaitoHub</div><div class="desc">Keyless, Auto Farm, Instant Catch.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Efe0626/RaitoHub/refs/heads/main/Script"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Y-HUB</div><div class="desc">ESP, Teleport, Auto Fish.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Luarmor123/community-Y-HUB/refs/heads/main/Fisch-YHUB"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Nox Hub</div><div class="desc">Open Source, Auto Catch.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://you.whimper.xyz/sources/NoxHub/fisch.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== DANGEROUS NIGHT ===== -->
-        <section id="page-dangerous" class="page">
-            <div class="card"><div class="card-title">🌙 Dangerous Night Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Main Script</div><div class="desc">Collect All Food, Monsters ESP, Teleports.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Bac0nHck/Scripts/refs/heads/main/dangerousnight.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">CyanHub</div><div class="desc">Auto Collect, ESP, Teleports.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/4NTHOcyan/CyanHub-FTB/refs/heads/main/ftb-jk"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">DipsikHub</div><div class="desc">Super Jump, Monster ESP.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/0b3hSS8B"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== SOLUNA ===== -->
-        <section id="page-soluna" class="page">
-            <div class="card"><div class="card-title">✦ Soluna Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Soluna Loader</div><div class="desc">Основной загрузчик Soluna.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/EndOverdosing/Soluna-API/refs/heads/main/src/main.lua",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Soluna Rivals</div><div class="desc">Для игры Rivals с аимботом.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/EndOverdosing/Soluna-API/refs/heads/main/rivals-rewrite.lua",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Soluna Isda</div><div class="desc">Универсальный скрипт от Soluna.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://soluna-script.vercel.app/fisch.lua",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== DEX ===== -->
-        <section id="page-dex" class="page">
-            <div class="card"><div class="card-title">🔍 Dex & Inspectors</div><div class="script-grid">
-                <div class="script-item"><div class="name">Dark Dex V3 (Bypassed)</div><div class="desc">Мощный инспектор, обходит защиты.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua", true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Universal Syn Save Instance</div><div class="desc">Сохраняет объекты в файл.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/luau/UniversalSynSaveInstance/main/source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== SPY ===== -->
-        <section id="page-spy" class="page">
-            <div class="card"><div class="card-title">👁️ Simple Spy & Trackers</div><div class="script-grid">
-                <div class="script-item"><div class="name">Simple Spy</div><div class="desc">Отслеживание удалённых событий.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/exxtremestuffs/SimpleSpySource/master/SimpleSpy.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== FRAMEWORK ===== -->
-        <section id="page-framework" class="page">
-            <div class="card"><div class="card-title">📦 Frameworks & Libraries</div><div class="script-grid">
-                <div class="script-item"><div class="name">Rayfield UI</div><div class="desc">Библиотека для создания GUI.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://sirius.menu/rayfield'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== TROLLING ===== -->
-        <section id="page-trolling" class="page">
-            <div class="card"><div class="card-title">🤡 Trolling Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Chat Spam</div><div class="desc">Спам в чат сообщениями.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Sound Spam</div><div class="desc">Спам звуками в игре.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Nuke Server</div><div class="desc">Взрывает всё на сервере (может крашнуть).</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/0b3hSS8B"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Infinite Yield (Trolling mode)</div><div class="desc">Троллинговые команды IY.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== AUTO FARM ===== -->
-        <section id="page-autofarm" class="page">
-            <div class="card"><div class="card-title">⚡ Auto Farm Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Universal Auto Farm</div><div class="desc">Автофарм для многих игр.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Auto Clicker</div><div class="desc">Автокликер для фарма.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Auto Sell</div><div class="desc">Автопродажа предметов.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/wally-rblx/funky-friday-autoplay/main/main.lua", true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== BLOX FRUITS ===== -->
-        <section id="page-bloxfruits" class="page">
-            <div class="card"><div class="card-title">🍉 Blox Fruits Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Blox Fruits Auto Farm</div><div class="desc">Автофарм для Blox Fruits.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Blox Fruits ESP</div><div class="desc">ESP для Blox Fruits.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== BEDWARS ===== -->
-        <section id="page-bedwars" class="page">
-            <div class="card"><div class="card-title">🛏️ BedWars Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">BedWars Auto Bridge</div><div class="desc">Автоматическая постройка мостов.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">BedWars Aimbot</div><div class="desc">Аимбот для BedWars.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== ARSENAL ===== -->
-        <section id="page-arsenal" class="page">
-            <div class="card"><div class="card-title">🔫 Arsenal Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Arsenal Aimbot</div><div class="desc">Аимбот для Arsenal.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Arsenal ESP</div><div class="desc">ESP для Arsenal.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== MM2 ===== -->
-        <section id="page-mm2" class="page">
-            <div class="card"><div class="card-title">🔪 Murder Mystery 2 Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">MM2 Auto Farm</div><div class="desc">Автофарм в Murder Mystery 2.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">MM2 Kill Aura</div><div class="desc">Kill Aura для MM2.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== TOWER OF HELL ===== -->
-        <section id="page-toh" class="page">
-            <div class="card"><div class="card-title">🏰 Tower of Hell Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">ToH Auto Jump</div><div class="desc">Автопрыжок в Tower of Hell.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">ToH Fly</div><div class="desc">Полёт в Tower of Hell.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
-        </section>
-
-        <!-- ===== ROYALE HIGH ===== -->
-        <section id="page-royalehigh" class="page">
-            <div class="card"><div class="card-title">👑 Royale High Scripts</div><div class="script-grid">
-                <div class="script-item"><div class="name">Royale High Auto Farm</div><div class="desc">Автофарм в Royale High.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/6bqPZq8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Royale High Teleports</div><div class="desc">Телепорты в Royale High.</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/5aU6sP8j"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
+            <div class="card">
+                <div class="card-title">🐟 Fisch Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Blackhub</div><div class="desc">370K+ пользователей, Auto Farm, ESP</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Skibidiking123/Fisch1/refs/heads/main/FischMain'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">BananaHub</div><div class="desc">Keyless, Auto Catch, Auto Sell</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/obiiyeuem/vthangsitink/main/BananaHub.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Lunor Hub</div><div class="desc">Multi-game хаб с поддержкой Fisch</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Just3itx/Lunor-Loadstrings/refs/heads/main/Loader'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">RaitoHub</div><div class="desc">Keyless, Auto Farm, Instant Catch</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Efe0626/RaitoHub/refs/heads/main/Script'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Y-HUB</div><div class="desc">ESP, Teleport, Auto Fish</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Luarmor123/community-Y-HUB/refs/heads/main/Fisch-YHUB'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Nox Hub</div><div class="desc">Open Source, Auto Catch</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://you.whimper.xyz/sources/NoxHub/fisch.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
         </section>
 
         <!-- ===== BROOKHAVEN ===== -->
         <section id="page-brookhaven" class="page">
-            <div class="card"><div class="card-title">🏡 Brookhaven Scripts (2026)</div><div class="script-grid">
-                <div class="script-item"><div class="name">IceHub — All-in-One</div><div class="desc">Kill All, Kick All, Rainbow Name/Bio/Car, Teleport, Admin</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Waza80/scripts-new/main/IceHubBrookhaven.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">SP Hub — No Key</div><div class="desc">Teleport, ESP, Kill/Fling, Fly, Speed, Secret locations</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/as6cd0/SP_Hub/refs/heads/main/Brookhaven"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Salvatore — Premium Unlocker</div><div class="desc">Free GamePass unlocking, Auto Money, Loot all, Premium vehicles</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/RFR-R1CH4RD/Loader/main/Salvatore.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Admin Panel (IY Based)</div><div class="desc">Full admin controls via Infinite Yield commands</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">NewIceHub — Kick All & Kill All</div><div class="desc">Kick All, Kill All, Get All, Auto Farm</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/IceMael7/NewIceHub/main/Brookhaven"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">ImperiaHub — Unlock All</div><div class="desc">Unlock All Gamepasses, Fe Headless, Garage</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Trev0rZ/LoaderM/refs/heads/main/ImperiaHub-lWorking.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Housegui — Fe Headless & Garage</div><div class="desc">All Passes, Fe Headless, Garage unlock</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/ChillSoftworks/Houseg/main/Housegui"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">z4trox Hub — Auto Unban & Troll</div><div class="desc">Auto Unban, Avatar modifications, Troll features</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Jfdedit3/z4trox-hub-v1/main/z4trox%20hub'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">METAB — Admin Menu</div><div class="desc">Admin Menu Trolling, Unlock All Gamepasses, Kick All</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/NocturneMoDz/BROOKHAVEN-GUI-/main/METAB", true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Pastefy Loader</div><div class="desc">Keyless loader with multiple features</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastefy.app/rtYXc36E",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">Chaos Hub — Advanced Trolling</div><div class="desc">Advanced trolling suite, premium features unlock</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/ChaosHub/ChaosHub/main/Brookhaven.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-                <div class="script-item"><div class="name">MangoHub — Vehicle Spawner</div><div class="desc">Vehicle spawner, tools, advanced features</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/MangoHub/MangoHub/main/Brookhaven.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
-            </div></div>
+            <div class="card">
+                <div class="card-title">🏡 Brookhaven Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">IceHub</div><div class="desc">Kill All, Kick All, Rainbow</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Waza80/scripts-new/main/IceHubBrookhaven.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">SP Hub</div><div class="desc">Teleport, ESP, Kill/Fling, Fly</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/as6cd0/SP_Hub/refs/heads/main/Brookhaven'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Salvatore</div><div class="desc">Premium Unlocker, Auto Money</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/RFR-R1CH4RD/Loader/main/Salvatore.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">NewIceHub</div><div class="desc">Kick All, Kill All, Auto Farm</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/IceMael7/NewIceHub/main/Brookhaven'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">ImperiaHub</div><div class="desc">Unlock All Gamepasses, Headless</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Trev0rZ/LoaderM/refs/heads/main/ImperiaHub-lWorking.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">METAB</div><div class="desc">Admin Menu Trolling, Unlock All</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/NocturneMoDz/BROOKHAVEN-GUI-/main/METAB', true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FE FLING ===== -->
+        <section id="page-fefling" class="page">
+            <div class="card">
+                <div class="card-title">🌀 FE Fling Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">OG TROLLFACE FLING</div><div class="desc">Пародия на FE YEET GUI с мультифлингом</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Cank09/TROLLFACEILOVEYOU/refs/heads/main/OG%20TROLLFACE.txt'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Ultimate Fling GUI</div><div class="desc">Выбор игроков для флинга через GUI</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/K1LAS1K/Ultimate-Fling-GUI/main/flingscript.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">FE Auto Fling</div><div class="desc">Автоматический флинг всех игроков</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/grelkgjelkrjg/Auto-fling/refs/heads/main/AutoFling.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">SystemBroken Fling</div><div class="desc">Универсальный флинг с Speed, Fly, Noclip</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/SystemBroken/Scripts/main/Fling.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BLOX FRUITS ===== -->
+        <section id="page-bloxfruits" class="page">
+            <div class="card">
+                <div class="card-title">🍉 Blox Fruits Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Blox Fruits Auto Farm</div><div class="desc">Автофарм уровней и фруктов</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastebin.com/raw/6bqPZq8j'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Blox Fruits ESP</div><div class="desc">ESP для Blox Fruits</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastebin.com/raw/5aU6sP8j'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MM2 ===== -->
+        <section id="page-mm2" class="page">
+            <div class="card">
+                <div class="card-title">🔪 Murder Mystery 2 Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">MM2 Most OP Aimbot</div><div class="desc">Аимбот, POV, Inf Jump, Speed</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">MM2 Aim Assist</div><div class="desc">Shooting Hub с FOV Circle</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastefy.app/cpaAP2i8/raw"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">MM2 Auto Farm</div><div class="desc">Автофарм монет (Rayfield Hub)</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://[Log in to view URL]'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">MM2 Aimbot & ESP</div><div class="desc">Kill All, Teleports, GUI</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">MM2 Auto aim / Kill all</div><div class="desc">Keyless script с Rayfield</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://[Log in to view URL]'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">MM2 Script Hub</div><div class="desc">Rayfield Hub для MM2</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://[Log in to view URL]'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FE TROLLING ===== -->
+        <section id="page-fetrolling" class="page">
+            <div class="card">
+                <div class="card-title">🤡 FE Trolling Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">FE Trolling Player GUI</div><div class="desc">Троллинг R6/R15 игроков</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/3LD4D0/FE-TROLLING-PLAYER-R6-R15/6eff8792afed57458d5114478b453a6f6bce5799/Fe%20trolling%20Player%20R6%20AND%20R15"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Universal Trolling GUI</div><div class="desc">Лучшие FE скрипты для троллинга</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://protected-roblox-scripts.onrender.com/a27c74d53adffd51ce1d1c7457ba9000"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">LifeTogether RP Trolling</div><div class="desc">Ultimate Trolling, Snapchat, Teleport, FE</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">KAT Script Trolling</div><div class="desc">Auto Farm, Silent Aim, Troll, Teleport</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FE SCRIPT ===== -->
+        <section id="page-fescript" class="page">
+            <div class="card">
+                <div class="card-title">⚡ FE Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Sky-Bloxxer FE</div><div class="desc">Универсальный FE скрипт для троллинга</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">FE Star Glitcher</div><div class="desc">Green Baseplate Reanimate</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Green-Baseplate-Reanimate-204629"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">FE Ultimate Flash</div><div class="desc">Speed Force abilities</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastefy.app/gvvo8kbV/raw"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">FE Motorbike Script</div><div class="desc">FE Car system for motorcycle</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/e2j7gssB"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BASE PLATE ===== -->
+        <section id="page-baseplate" class="page">
+            <div class="card">
+                <div class="card-title">🧱 Base Plate Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Just A Baseplate Moon</div><div class="desc">Moon Convert Script</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/Wk0E5uzi"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">BasePlate Rayfield</div><div class="desc">Rayfield Window for BasePlate</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/Wk0E5uzi"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">BasePlate Fling Big Parts</div><div class="desc">FE HilalWare Fling</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/HilalWare-Official/adam-ak-ll-ism-yok/refs/heads/main/kod%20birle%C5%9Ftiriciiiii.luau",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">BasePlate Achromoonic</div><div class="desc">Achromoonic back script</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/banishercool/banishercool/refs/heads/main/Achromoonicback.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== JUST A PLATE ===== -->
+        <section id="page-justplate" class="page">
+            <div class="card">
+                <div class="card-title">🟦 Just A Plate Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Just A Plate Reanimate</div><div class="desc">FE Chara Reanimate</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Madbaldman527wians/Raw-test/refs/heads/main/Stupid%20Reanimate"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Just A Plate Hathub</div><div class="desc">Updated hathub</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/inkdupe/hat-scripts/refs/heads/main/updatedhathub.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Just A Plate FE Sans</div><div class="desc">FE Sans Undertale</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/ilikeices/script/refs/heads/main/sans.luau"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Just A Plate FE Coolkid</div><div class="desc">FE Coolkid Forsaken</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/oldhacfard/ScriptKrytop-by-oldhacfard-rohl/refs/heads/main/Fecoolk%C5%9Fdforsaken.luau"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Just A Plate Qwerty</div><div class="desc">Qwerty5 script</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/randomstring0/Qwerty/main/qwerty5.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Just A Plate GMNF</div><div class="desc">GMNF hub fixed</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/Q33vMCnK"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BRAINROT ===== -->
+        <section id="page-brainrot" class="page">
+            <div class="card">
+                <div class="card-title">🧠 Brainrot Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Brainrot Evolution Auto Farm</div><div class="desc">Auto Farm & Pets</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Brainrot Training Auto Train</div><div class="desc">Auto Train & Pets</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Steal A Brainrot</div><div class="desc">Brainrot Memers Script</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Catch and Feed Brainrot</div><div class="desc">Auto Farm для Brainrot</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Find the Brainrot</div><div class="desc">Get All Brainrot</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Bike Obby For Brainrots</div><div class="desc">Auto Farm, Divine</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastebin.com/raw/K5FLWYb1"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== GROW A GARDEN ===== -->
+        <section id="page-growgarden" class="page">
+            <div class="card">
+                <div class="card-title">🌱 Grow A Garden Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Teddy Hub GUI</div><div class="desc">Auto Harvest, Auto Plant, Dupe</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Teddyseetink/Haidepzai/refs/heads/main/main.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Lumin Hub</div><div class="desc">Auto Sell, Auto Steal, Auto Harvest</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/795c7accd08487171484e54a92e75c77.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Grow A Garden Auto Farm</div><div class="desc">Auto Farm keyless</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/e8580ba6e94aeaa7aa2486f060167f85.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Unknown Hub</div><div class="desc">Auto Buy, Auto Collect, Auto Sell</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://unknownhub.win/api/projects/54474b4c5d5a4f459909c4cb70e7b4f3/loader"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Hoshi Hub (No Key)</div><div class="desc">Auto Plant, Auto Harvest, Dupe</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">SpeedHub X</div><div class="desc">No Clip, Infinite Jump</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">WalkyHub (No Key)</div><div class="desc">Instant Steal, Auto Farm, Speed Boost</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://pastefy.app/sKWZ4X9u/raw"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Axon Hub</div><div class="desc">Auto Farm GUI</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/97c3f6db55a2cf72141537a85458e5a7.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Avaythion2</div><div class="desc">Grow A Garden script</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/Ayvathion/AV-On-Top/refs/heads/main/GrowAGarden.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ANIME ===== -->
+        <section id="page-anime" class="page">
+            <div class="card">
+                <div class="card-title">🎌 Anime Games Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Anime Power League (Keyless)</div><div class="desc">Auto Train, Auto Farm, Auto Punch</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/ScriptsRBXdotCom/scripts/refs/heads/main/Anime%20Power%20League'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Anime Power League (Key)</div><div class="desc">Auto Farm, Speed Mode, Fly</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://api.jnkie.com/api/v1/luascripts/public/a2832ccd29e272caf2e76782d031159aa6847c3836c2a4d1aee6fe50012a0769/download'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Anime Overload Apel Hub</div><div class="desc">Auto Join, Auto Replay, Auto Shop</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/ApelsinkaFr/ApelHub/refs/heads/main/ApelHub'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Anime Overload LH Hub</div><div class="desc">Auto Farm, Auto Upgrade, Dupe</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastefy.app/ULaWpxKm/raw'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Rivals Z3US</div><div class="desc">Free keyless Lua script, aimbot, ESP</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastebin.com/raw/K5FLWYb1'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== RPG ===== -->
+        <section id="page-rpg" class="page">
+            <div class="card">
+                <div class="card-title">⚔️ RPG Games Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Untitled RPG Star Stream</div><div class="desc">Auto Farm, Kill Aura, Mobile Friendly</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/starstreamowner/StarStream/refs/heads/main/Hub'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Untitled RPG Greatness Hub</div><div class="desc">Auto Farm Mobs, Auto Level Up, ESP</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://api.jnkie.com/api/v1/luascripts/public/e8f5906d35bf4c147aa77335e5cfacce2127f4301b9ebe547fb6a0d6ef99f63a/download'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">3008 Abstract Hub</div><div class="desc">Auto bring food, ESP, Fly, Anti-Fall</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastebin.com/raw/K5FLWYb1'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">HD Admin Abuse Tower</div><div class="desc">Admin Commands, Fly, Auto Complete</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://pastebin.com/raw/ZPHY9aGF'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== OTHER ===== -->
+        <section id="page-other" class="page">
+            <div class="card">
+                <div class="card-title">📜 Other Useful Scripts 2026</div>
+                <div class="script-grid">
+                    <div class="script-item"><div class="name">Dark Dex V3 (Bypassed)</div><div class="desc">Мощный инспектор, обходит защиты</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua', true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Simple Spy</div><div class="desc">Отслеживание удалённых событий</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/exxtremestuffs/SimpleSpySource/master/SimpleSpy.lua'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Rayfield UI</div><div class="desc">Библиотека для создания GUI</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://sirius.menu/rayfield'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Universal Syn Save Instance</div><div class="desc">Сохраняет объекты в файл</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet('https://raw.githubusercontent.com/luau/UniversalSynSaveInstance/main/source'))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Project Delta Astra</div><div class="desc">Astra Freemium Script</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://getastra.lol/loader.lua"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">SystemBroken New 2026</div><div class="desc">Универсальный скрипт 2026</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/GZSSF/script3/95a45577475502cfbf546ae9ca8fc4f00b61eb83/script3"))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                    <div class="script-item"><div class="name">Project C00lkid Executor</div><div class="desc">Project C Executor 2026</div><div class="loadstring" onclick="copyScript(this)">loadstring(game:HttpGet("https://raw.githubusercontent.com/blox77er/custom-guis/refs/heads/main/Project%20C",true))()</div><div class="actions"><button onclick="copyScript(this.parentElement.parentElement.querySelector('.loadstring'))">📋 Copy</button></div></div>
+                </div>
+            </div>
         </section>
 
         <!-- ===== SETTINGS ===== -->
         <section id="page-settings" class="page">
             <div class="card">
-                <div class="card-title">⚙ Settings</div>
-
+                <div class="card-title">🎨 Appearance</div>
                 <div class="settings-row">
-                    <label>🎨 Theme</label>
-                    <div class="theme-group">
-                        <div class="theme-btn active" data-theme="dark">🌙 Dark</div>
-                        <div class="theme-btn" data-theme="light">☀️ Light</div>
-                        <div class="theme-btn" data-theme="red">🔥 Red</div>
-                        <div class="theme-btn" data-theme="green">🌿 Green</div>
-                        <div class="theme-btn" data-theme="blue">💎 Blue</div>
+                    <label>Theme</label>
+                    <div class="settings-group">
+                        <div class="settings-btn active" data-theme="dark">Dark</div>
+                        <div class="settings-btn" data-theme="light">Light</div>
+                        <div class="settings-btn" data-theme="amoled">AMOLED</div>
+                        <div class="settings-btn" data-theme="cyberpunk">Cyberpunk</div>
+                        <div class="settings-btn" data-theme="red">Red</div>
+                        <div class="settings-btn" data-theme="green">Green</div>
+                        <div class="settings-btn" data-theme="blue">Blue</div>
+                        <div class="settings-btn" data-theme="pink">Pink</div>
+                        <div class="settings-btn" data-theme="orange">Orange</div>
                     </div>
                 </div>
-
                 <div class="settings-row">
-                    <label>📐 Interface Layout</label>
-                    <div class="ui-group">
-                        <div class="ui-btn active" data-ui="default">Default</div>
-                        <div class="ui-btn" data-ui="compact">Compact</div>
-                        <div class="ui-btn" data-ui="wide">Wide</div>
+                    <label>UI Layout</label>
+                    <div class="settings-group">
+                        <div class="settings-btn active" data-ui="default">Default</div>
+                        <div class="settings-btn" data-ui="compact">Compact</div>
+                        <div class="settings-btn" data-ui="wide">Wide</div>
                     </div>
                 </div>
-
                 <div class="settings-row">
-                    <label>🔤 Font Size</label>
-                    <select id="fontSizeSelect" style="background:var(--bg-input); color:var(--text-primary); border:1px solid var(--border-color); border-radius:30px; padding:6px 16px; font-family:inherit;">
-                        <option value="0.85rem">Small</option>
+                    <label>Blur Intensity</label>
+                    <input type="range" id="blurRange" min="0" max="20" value="16">
+                    <span id="blurValue" style="font-size:0.7rem;color:var(--text-dim);">16px</span>
+                </div>
+                <div class="settings-row">
+                    <label>Font Size</label>
+                    <select id="fontSizeSelect">
+                        <option value="0.8rem">Small</option>
                         <option value="1rem" selected>Normal</option>
-                        <option value="1.15rem">Large</option>
-                        <option value="1.3rem">X-Large</option>
+                        <option value="1.2rem">Large</option>
+                        <option value="1.4rem">X-Large</option>
                     </select>
                 </div>
-
                 <div class="settings-row">
-                    <label>🎭 Animations</label>
+                    <label>Animations</label>
                     <div class="settings-group">
                         <div class="settings-btn active" data-anim="1">On</div>
                         <div class="settings-btn" data-anim="0">Off</div>
                     </div>
                 </div>
+            </div>
 
+            <div class="card">
+                <div class="card-title">⚙️ General</div>
                 <div class="settings-row">
-                    <label>🔊 Copy Sound</label>
-                    <div class="settings-group">
-                        <div class="settings-btn active" data-sound="1">On</div>
-                        <div class="settings-btn" data-sound="0">Off</div>
+                    <label>Language</label>
+                    <div class="lang-group">
+                        <button class="lang-btn active" data-lang="ru">Русский</button>
+                        <button class="lang-btn" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="es">Español</button>
+                        <button class="lang-btn" data-lang="pt">Português</button>
+                        <button class="lang-btn" data-lang="de">Deutsch</button>
+                        <button class="lang-btn" data-lang="fr">Français</button>
                     </div>
                 </div>
-
                 <div class="settings-row">
-                    <label>🧹 Reset Settings</label>
-                    <button id="resetSettingsBtn" style="background:var(--bg-input); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 20px; border-radius:30px; cursor:pointer; font-family:inherit;">⟲ Reset to Default</button>
-                </div>
-
-                <div class="settings-row">
-                    <label>📦 Export / Import Settings</label>
-                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                        <button id="exportSettingsBtn" style="background:var(--bg-input); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 20px; border-radius:30px; cursor:pointer; font-family:inherit;">⬇ Export</button>
-                        <button id="importSettingsBtn" style="background:var(--bg-input); border:1px solid var(--border-color); color:var(--text-primary); padding:6px 20px; border-radius:30px; cursor:pointer; font-family:inherit;">⬆ Import</button>
-                        <input type="file" id="importFileInput" style="display:none;" accept=".json">
+                    <div class="toggle-label">
+                        <span>Auto-save Settings</span>
+                        <div class="toggle active" id="autoSaveToggle"></div>
                     </div>
                 </div>
+                <div class="settings-row">
+                    <div class="toggle-label">
+                        <span>Low Performance Mode</span>
+                        <div class="toggle" id="lowPerfToggle"></div>
+                    </div>
+                </div>
+            </div>
 
-                <div style="font-size:0.7rem; color:var(--text-dim); margin-top:12px;">
-                    <p>💡 Нажми на любой скрипт или кнопку <strong>Copy</strong>, чтобы скопировать loadstring.</p>
-                    <p style="margin-top:6px;">⚠️ Скрипты и инжекторы собраны из открытых источников. Используй на свой страх и риск. Всегда используй <strong>VPN</strong> и <strong>ALT-аккаунт</strong>!</p>
-                    <p style="margin-top:6px;">📌 Инжекторы для iOS требуют <strong>TrollStore</strong> или <strong>side-loading</strong>.</p>
+            <div class="card">
+                <div class="card-title">🛡️ Security</div>
+                <div class="settings-row">
+                    <label>Anti-Cheat Bypass</label>
+                    <select id="bypassLevel">
+                        <option value="light">Light</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="aggressive">Aggressive</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <div class="toggle-label">
+                        <span>VPN Auto-connect</span>
+                        <div class="toggle" id="vpnToggle"></div>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="toggle-label">
+                        <span>Auto-clear Roblox Cache</span>
+                        <div class="toggle active" id="clearCacheToggle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📜 Scripts</div>
+                <div class="settings-row">
+                    <div class="toggle-label">
+                        <span>Auto-update Scripts</span>
+                        <div class="toggle active" id="autoUpdateScriptsToggle"></div>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="toggle-label">
+                        <span>Auto-execute after Inject</span>
+                        <div class="toggle" id="autoExecToggle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🌐 Network</div>
+                <div class="settings-row">
+                    <div class="toggle-label">
+                        <span>Auto-rejoin after crash</span>
+                        <div class="toggle active" id="autoRejoinToggle"></div>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <label>FPS Unlocker</label>
+                    <select id="fpsUnlocker">
+                        <option value="off">Off</option>
+                        <option value="60">60 FPS</option>
+                        <option value="120" selected>120 FPS</option>
+                        <option value="144">144 FPS</option>
+                        <option value="240">240 FPS</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💾 Backup & Restore</div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button class="settings-btn" id="exportSettingsBtn">⬇ Export Settings</button>
+                    <button class="settings-btn" id="importSettingsBtn">⬆ Import Settings</button>
+                    <button class="settings-btn" id="resetSettingsBtn">⟲ Reset to Default</button>
+                    <input type="file" id="importFileInput" style="display:none;" accept=".json">
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== LOGS ===== -->
+        <section id="page-logs" class="page">
+            <div class="card">
+                <div class="card-title">📋 System Logs</div>
+                <div class="log-area" id="globalLog" style="max-height:400px;background:var(--bg-input);border-radius:12px;padding:12px;font-size:0.7rem;border:1px solid var(--border-color);overflow-y:auto;"></div>
+                <div style="display:flex;gap:10px;margin-top:12px;">
+                    <button class="settings-btn" id="clearLogsBtn">🗑️ Clear</button>
+                    <button class="settings-btn" id="copyLogsBtn">📋 Copy</button>
                 </div>
             </div>
         </section>
@@ -1028,13 +1265,15 @@
 
     <div class="copy-toast" id="copyToast">✅ Скопировано!</div>
 
-    <footer class="footer">✦ meteor scripts — Roblox Scripts Hub 2026</footer>
+    <footer class="footer">✦ Velyo v3.0 — by @speedtroll</footer>
 
     <script>
-        // ===== PARTICLES =====
+        // ============================================================
+        //  PARTICLES
+        // ============================================================
         function createParticles() {
             const container = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 60; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 const size = Math.random() * 6 + 2;
@@ -1048,33 +1287,32 @@
         }
         createParticles();
 
-        // ===== NAVIGATION =====
+        // ============================================================
+        //  NAVIGATION
+        // ============================================================
         const pages = {
+            dashboard: document.getElementById('page-dashboard'),
             injectors: document.getElementById('page-injectors'),
             vpn: document.getElementById('page-vpn'),
             apps: document.getElementById('page-apps'),
-            iy: document.getElementById('page-iy'),
-            infinitefun: document.getElementById('page-infinitefun'),
-            nameless: document.getElementById('page-nameless'),
+            infiniteyield: document.getElementById('page-infiniteyield'),
             prison: document.getElementById('page-prison'),
-            fight: document.getElementById('page-fight'),
-            fefling: document.getElementById('page-fefling'),
             fisch: document.getElementById('page-fisch'),
-            dangerous: document.getElementById('page-dangerous'),
-            soluna: document.getElementById('page-soluna'),
-            dex: document.getElementById('page-dex'),
-            spy: document.getElementById('page-spy'),
-            framework: document.getElementById('page-framework'),
-            trolling: document.getElementById('page-trolling'),
-            autofarm: document.getElementById('page-autofarm'),
-            bloxfruits: document.getElementById('page-bloxfruits'),
-            bedwars: document.getElementById('page-bedwars'),
-            arsenal: document.getElementById('page-arsenal'),
-            mm2: document.getElementById('page-mm2'),
-            toh: document.getElementById('page-toh'),
-            royalehigh: document.getElementById('page-royalehigh'),
             brookhaven: document.getElementById('page-brookhaven'),
-            settings: document.getElementById('page-settings')
+            fefling: document.getElementById('page-fefling'),
+            bloxfruits: document.getElementById('page-bloxfruits'),
+            mm2: document.getElementById('page-mm2'),
+            fetrolling: document.getElementById('page-fetrolling'),
+            fescript: document.getElementById('page-fescript'),
+            baseplate: document.getElementById('page-baseplate'),
+            justplate: document.getElementById('page-justplate'),
+            brainrot: document.getElementById('page-brainrot'),
+            growgarden: document.getElementById('page-growgarden'),
+            anime: document.getElementById('page-anime'),
+            rpg: document.getElementById('page-rpg'),
+            other: document.getElementById('page-other'),
+            settings: document.getElementById('page-settings'),
+            logs: document.getElementById('page-logs')
         };
 
         document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1083,18 +1321,17 @@
                 document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
                 this.classList.add('active');
                 Object.values(pages).forEach(p => p.classList.remove('active'));
-                pages[page].classList.add('active');
-                // Сброс поиска при переключении вкладки
+                if (pages[page]) pages[page].classList.add('active');
                 const searchInput = document.getElementById('searchInput');
-                if (searchInput.value) {
-                    searchInput.value = '';
-                    clearSearch();
-                }
+                if (searchInput.value) { searchInput.value = '';
+                    clearSearch(); }
                 applySearch();
             });
         });
 
-        // ===== SEARCH =====
+        // ============================================================
+        //  SEARCH
+        // ============================================================
         const searchInput = document.getElementById('searchInput');
         const clearBtn = document.getElementById('clearSearchBtn');
 
@@ -1103,38 +1340,30 @@
             clearBtn.classList.remove('show');
             applySearch();
         }
-
         clearBtn.addEventListener('click', clearSearch);
 
         searchInput.addEventListener('input', function() {
-            const query = this.value.trim();
-            if (query.length > 0) {
-                clearBtn.classList.add('show');
-            } else {
-                clearBtn.classList.remove('show');
-            }
+            if (this.value.trim().length > 0) clearBtn.classList.add('show');
+            else clearBtn.classList.remove('show');
             applySearch();
         });
 
         function applySearch() {
             const query = searchInput.value.trim().toLowerCase();
-            const allScriptItems = document.querySelectorAll('.script-item');
-
+            const allItems = document.querySelectorAll('.script-item, .injector-item, .vpn-item, .apps-item, .settings-item');
             if (query === '') {
-                allScriptItems.forEach(item => item.classList.remove('hidden-by-search'));
+                allItems.forEach(item => item.classList.remove('hidden-by-search'));
                 return;
             }
-
-            allScriptItems.forEach(item => {
-                const name = item.querySelector('.name')?.textContent?.toLowerCase() || '';
-                const desc = item.querySelector('.desc')?.textContent?.toLowerCase() || '';
-                const loadstring = item.querySelector('.loadstring')?.textContent?.toLowerCase() || '';
-                const match = name.includes(query) || desc.includes(query) || loadstring.includes(query);
-                item.classList.toggle('hidden-by-search', !match);
+            allItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.classList.toggle('hidden-by-search', !text.includes(query));
             });
         }
 
-        // ===== COPY =====
+        // ============================================================
+        //  COPY
+        // ============================================================
         function copyScript(element) {
             let text = element.textContent.trim();
             if (element.tagName === 'BUTTON') {
@@ -1148,161 +1377,251 @@
                 const toast = document.getElementById('copyToast');
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 2000);
-                // Звук
-                const soundEnabled = localStorage.getItem('copySound') !== '0';
-                if (soundEnabled) {
-                    try {
-                        const audio = new Audio('data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==');
-                        audio.play().catch(() => {});
-                    } catch (e) {}
-                }
             }).catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
                 document.execCommand('copy');
-                textarea.remove();
+                ta.remove();
                 const toast = document.getElementById('copyToast');
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 2000);
             });
         }
 
-        // ===== THEME =====
+        // ============================================================
+        //  THEME
+        // ============================================================
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('meteorScriptsTheme', theme);
-            document.querySelectorAll('.theme-btn').forEach(btn => {
+            localStorage.setItem('velyotheme', theme);
+            document.querySelectorAll('[data-theme]').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
             });
         }
-
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                setTheme(this.getAttribute('data-theme'));
-            });
+        document.querySelectorAll('[data-theme]').forEach(btn => {
+            btn.addEventListener('click', function() { setTheme(this.getAttribute('data-theme')); });
         });
-
-        const savedTheme = localStorage.getItem('meteorScriptsTheme');
+        const savedTheme = localStorage.getItem('velyotheme');
         if (savedTheme) setTheme(savedTheme);
 
-        // ===== UI LAYOUT =====
+        // ============================================================
+        //  UI LAYOUT
+        // ============================================================
         function setUI(mode) {
             document.documentElement.setAttribute('data-ui', mode);
-            localStorage.setItem('meteorUI', mode);
-            document.querySelectorAll('.ui-btn').forEach(btn => {
+            localStorage.setItem('velyoui', mode);
+            document.querySelectorAll('[data-ui]').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-ui') === mode);
             });
         }
-
-        document.querySelectorAll('.ui-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                setUI(this.getAttribute('data-ui'));
-            });
+        document.querySelectorAll('[data-ui]').forEach(btn => {
+            btn.addEventListener('click', function() { setUI(this.getAttribute('data-ui')); });
         });
-
-        const savedUI = localStorage.getItem('meteorUI');
+        const savedUI = localStorage.getItem('velyoui');
         if (savedUI) setUI(savedUI);
 
-        // ===== FONT SIZE =====
-        const fontSizeSelect = document.getElementById('fontSizeSelect');
-        fontSizeSelect.addEventListener('change', function() {
-            document.documentElement.style.setProperty('--font-size-base', this.value);
-            localStorage.setItem('meteorFontSize', this.value);
-        });
-        const savedFontSize = localStorage.getItem('meteorFontSize');
-        if (savedFontSize) {
-            fontSizeSelect.value = savedFontSize;
-            document.documentElement.style.setProperty('--font-size-base', savedFontSize);
-        }
-
-        // ===== ANIMATIONS =====
+        // ============================================================
+        //  ANIMATIONS
+        // ============================================================
         function setAnimations(state) {
             document.documentElement.setAttribute('data-animations', state);
-            localStorage.setItem('meteorAnimations', state);
+            localStorage.setItem('velyoneAnim', state);
             document.querySelectorAll('[data-anim]').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-anim') === state);
             });
         }
-
         document.querySelectorAll('[data-anim]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                setAnimations(this.getAttribute('data-anim'));
-            });
+            btn.addEventListener('click', function() { setAnimations(this.getAttribute('data-anim')); });
         });
-
-        const savedAnim = localStorage.getItem('meteorAnimations');
+        const savedAnim = localStorage.getItem('velyoneAnim');
         if (savedAnim !== null) setAnimations(savedAnim);
 
-        // ===== COPY SOUND =====
-        function setCopySound(state) {
-            localStorage.setItem('copySound', state);
-            document.querySelectorAll('[data-sound]').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-sound') === state);
+        // ============================================================
+        //  BLUR
+        // ============================================================
+        const blurRange = document.getElementById('blurRange');
+        const blurValue = document.getElementById('blurValue');
+        blurRange.addEventListener('input', function() {
+            const val = this.value;
+            document.documentElement.style.setProperty('--blur', val + 'px');
+            blurValue.textContent = val + 'px';
+            localStorage.setItem('velyoblur', val);
+        });
+        const savedBlur = localStorage.getItem('velyoblur');
+        if (savedBlur) { blurRange.value = savedBlur;
+            blurRange.dispatchEvent(new Event('input')); }
+
+        // ============================================================
+        //  FONT SIZE
+        // ============================================================
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        fontSizeSelect.addEventListener('change', function() {
+            document.documentElement.style.setProperty('--font-size', this.value);
+            localStorage.setItem('velyofont', this.value);
+        });
+        const savedFont = localStorage.getItem('velyofont');
+        if (savedFont) { fontSizeSelect.value = savedFont;
+            fontSizeSelect.dispatchEvent(new Event('change')); }
+
+        // ============================================================
+        //  TOGGLES
+        // ============================================================
+        document.querySelectorAll('.toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() { this.classList.toggle('active'); });
+        });
+
+        // ============================================================
+        //  LANGUAGE
+        // ============================================================
+        const translations = {
+            ru: {
+                // ... все переводы на русский
+            },
+            en: {
+                // ... все переводы на английский
+            },
+            es: {
+                // ... все переводы на испанский
+            },
+            pt: {
+                // ... все переводы на португальский
+            },
+            de: {
+                // ... все переводы на немецкий
+            },
+            fr: {
+                // ... все переводы на французский
+            }
+        };
+
+        let currentLang = localStorage.getItem('velyolang') || 'ru';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('velyolang', lang);
+            const dict = translations[lang] || translations.ru;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key] !== undefined) {
+                    if (el.tagName === 'INPUT' && el.type === 'text') {
+                        el.placeholder = dict[key];
+                    } else {
+                        el.textContent = dict[key];
+                    }
+                }
+            });
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                const key = searchInput.getAttribute('data-i18n-placeholder');
+                if (dict[key] !== undefined) searchInput.placeholder = dict[key];
+            }
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
             });
         }
 
-        document.querySelectorAll('[data-sound]').forEach(btn => {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                setCopySound(this.getAttribute('data-sound'));
+                setLanguage(this.getAttribute('data-lang'));
             });
         });
 
-        const savedSound = localStorage.getItem('copySound');
-        if (savedSound !== null) setCopySound(savedSound);
+        if (localStorage.getItem('velyolang')) {
+            setLanguage(localStorage.getItem('velyolang'));
+        } else {
+            setLanguage('ru');
+        }
 
-        // ===== RESET SETTINGS =====
-        document.getElementById('resetSettingsBtn').addEventListener('click', function() {
-            localStorage.clear();
-            location.reload();
+        // ============================================================
+        //  LOGS
+        // ============================================================
+        const globalLog = document.getElementById('globalLog');
+        const recentLog = document.getElementById('recentLog');
+
+        function log(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const line = `<div style="color:${type === 'success' ? '#6ee7b7' : type === 'error' ? '#f87171' : 'var(--text-secondary)'};">[${time}] ${msg}</div>`;
+            if (globalLog) globalLog.insertAdjacentHTML('beforeend', line);
+            if (recentLog) {
+                recentLog.insertAdjacentHTML('beforeend', line);
+                if (recentLog.children.length > 10) recentLog.removeChild(recentLog.children[0]);
+                recentLog.scrollTop = recentLog.scrollHeight;
+            }
+            if (globalLog) globalLog.scrollTop = globalLog.scrollHeight;
+        }
+
+        document.getElementById('clearLogsBtn').addEventListener('click', function() {
+            if (globalLog) globalLog.innerHTML = '';
+            log('Логи очищены', 'info');
+        });
+        document.getElementById('copyLogsBtn').addEventListener('click', function() {
+            if (!globalLog) return;
+            const text = globalLog.textContent;
+            navigator.clipboard.writeText(text).then(() => log('📋 Логи скопированы', 'success'));
         });
 
-        // ===== EXPORT / IMPORT SETTINGS =====
+        // ============================================================
+        //  EXPORT / IMPORT SETTINGS
+        // ============================================================
         document.getElementById('exportSettingsBtn').addEventListener('click', function() {
             const settings = {
-                theme: localStorage.getItem('meteorScriptsTheme') || 'dark',
-                ui: localStorage.getItem('meteorUI') || 'default',
-                fontSize: localStorage.getItem('meteorFontSize') || '1rem',
-                animations: localStorage.getItem('meteorAnimations') || '1',
-                copySound: localStorage.getItem('copySound') || '1'
+                theme: localStorage.getItem('velyotheme') || 'dark',
+                ui: localStorage.getItem('velyoui') || 'default',
+                anim: localStorage.getItem('velyoneAnim') || '1',
+                blur: localStorage.getItem('velyoblur') || '16',
+                font: localStorage.getItem('velyofont') || '1rem',
+                lang: localStorage.getItem('velyolang') || 'ru'
             };
             const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'meteor_settings.json';
+            a.download = 'velyo_settings.json';
             a.click();
             URL.revokeObjectURL(url);
+            log('⚙️ Настройки экспортированы', 'success');
         });
 
         document.getElementById('importSettingsBtn').addEventListener('click', function() {
             document.getElementById('importFileInput').click();
         });
-
         document.getElementById('importFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(ev) {
                 try {
-                    const settings = JSON.parse(ev.target.result);
-                    if (settings.theme) setTheme(settings.theme);
-                    if (settings.ui) setUI(settings.ui);
-                    if (settings.fontSize) {
-                        fontSizeSelect.value = settings.fontSize;
-                        document.documentElement.style.setProperty('--font-size-base', settings.fontSize);
-                        localStorage.setItem('meteorFontSize', settings.fontSize);
-                    }
-                    if (settings.animations) setAnimations(settings.animations);
-                    if (settings.copySound) setCopySound(settings.copySound);
-                } catch (err) {
-                    alert('Ошибка импорта настроек');
-                }
+                    const s = JSON.parse(ev.target.result);
+                    if (s.theme) setTheme(s.theme);
+                    if (s.ui) setUI(s.ui);
+                    if (s.anim) setAnimations(s.anim);
+                    if (s.blur) { blurRange.value = s.blur;
+                        blurRange.dispatchEvent(new Event('input')); }
+                    if (s.font) { fontSizeSelect.value = s.font;
+                        fontSizeSelect.dispatchEvent(new Event('change')); }
+                    if (s.lang) { setLanguage(s.lang); }
+                    log('✅ Настройки импортированы', 'success');
+                } catch (err) { log('❌ Ошибка импорта', 'error'); }
             };
             reader.readAsText(file);
             this.value = '';
         });
+
+        document.getElementById('resetSettingsBtn').addEventListener('click', function() {
+            if (confirm('Сбросить все настройки?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        log('✦ Velyo v3.0 загружен', 'success');
+        log('💡 Найди все функции в настройках', 'info');
+        log('👤 Разработчик: @speedtroll', 'info');
     </script>
 </body>
 </html>
