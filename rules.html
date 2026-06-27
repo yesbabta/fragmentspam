@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Правила чата</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050b05;
+            color: #d0f0c0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* контейнер */
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        /* шапка */
+        .header {
+            text-align: center;
+            padding: 18px 0 25px;
+            border-bottom: 2px solid #2e8e2e;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #6f6;
+            text-shadow: 0 0 20px #0f0, 0 0 40px #0f0;
+            letter-spacing: 4px;
+        }
+        .header .creators {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px 30px;
+            font-size: 0.95rem;
+            color: #a8d8a8;
+        }
+        .header .creators span {
+            background: rgba(10, 25, 10, 0.6);
+            padding: 5px 16px;
+            border-radius: 30px;
+            border: 1px solid #2e5a2e;
+            display: inline-block;
+            letter-spacing: 0.5px;
+        }
+        .header .creators .owner {
+            border-color: #6f6;
+            color: #6f6;
+            box-shadow: 0 0 12px rgba(0, 255, 0, 0.15);
+        }
+        .chat-link {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 8px 28px;
+            border: 1px solid #3e8e3e;
+            border-radius: 30px;
+            color: #6f6;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .chat-link:hover {
+            background: #1a3a1a;
+            border-color: #6f6;
+            box-shadow: 0 0 20px #0f0;
+        }
+
+        /* навигация вкладок */
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .nav-btn {
+            background: #0a1a0a;
+            border: 1px solid #2e5a2e;
+            border-radius: 30px;
+            padding: 10px 28px;
+            color: #a8d8a8;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .nav-btn:hover {
+            background: #1a3a1a;
+            border-color: #4e8e4e;
+            color: #fff;
+            box-shadow: 0 0 15px #0f0;
+        }
+        .nav-btn.active {
+            background: #1e4a1e;
+            border-color: #6f6;
+            color: #fff;
+            box-shadow: 0 0 20px #0f0;
+        }
+
+        /* вкладки */
+        .tab {
+            display: none;
+            animation: fade 0.3s ease;
+        }
+        .tab.active { display: block; }
+        @keyframes fade {
+            0% { opacity: 0; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* карточка правил */
+        .rules-card {
+            background: rgba(10, 25, 10, 0.7);
+            border: 1px solid #2e5a2e;
+            border-radius: 16px;
+            padding: 24px 28px;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 16px rgba(0, 20, 0, 0.4);
+            margin-bottom: 22px;
+            transition: all 0.2s;
+        }
+        .rules-card:hover {
+            border-color: #4e8e4e;
+            box-shadow: 0 0 24px rgba(0, 255, 0, 0.06);
+        }
+        .rules-card .title {
+            color: #6f6;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-bottom: 1px dashed #2e5a2e;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .rule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a3a1a;
+            gap: 15px;
+        }
+        .rule-item:last-child { border-bottom: none; }
+        .rule-item .num {
+            color: #4a8a4a;
+            font-weight: bold;
+            min-width: 34px;
+            font-size: 1rem;
+        }
+        .rule-item .text {
+            flex: 1;
+            color: #d0f0d0;
+            line-height: 1.5;
+        }
+        .rule-item .text .exception {
+            color: #8a8;
+            font-size: 0.85rem;
+            display: block;
+            margin-top: 4px;
+            padding-left: 14px;
+            border-left: 2px solid #2e5a2e;
+        }
+        .rule-item .punishment {
+            text-align: right;
+            min-width: 140px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .punishment.mute { color: #ffaa44; }
+        .punishment.ban { color: #ff4444; }
+        .punishment.warn { color: #ffaa00; }
+        .punishment.mute-ban { color: #ff8844; }
+        .punishment.ban-weeks { color: #ff6644; }
+        .punishment.x2 { color: #ff66aa; }
+
+        /* подвал */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid #1a3a1a;
+            font-size: 0.75rem;
+            color: #4a6a4a;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a1a0a; }
+        ::-webkit-scrollbar-thumb { background: #2e5a2e; border-radius: 10px; }
+
+        @media (max-width: 680px) {
+            .header h1 { font-size: 2rem; }
+            .header .creators { flex-direction: column; gap: 8px; align-items: center; }
+            .nav-btn { padding: 6px 16px; font-size: 0.75rem; }
+            .rule-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .rule-item .punishment {
+                text-align: left;
+                min-width: auto;
+                white-space: normal;
+            }
+            .container { padding: 10px; }
+            .rules-card { padding: 18px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ШАПКА -->
+        <div class="header">
+            <h1>⛓️ ПРАВИЛА ЧАТА</h1>
+
+            <div class="creators">
+                <span>📜 правила создал <strong>@Mrgor4k</strong> — Мощная Торпеда/Горак</span>
+                <span>🌐 сайт создал <strong>@mwq0z</strong> — Пиздабол/ишак плеер</span>
+                <span class="owner">👑 чат и канал создал <strong>N</strong> (нет юза)</span>
+            </div>
+
+            <a class="chat-link" href="https://t.me/chatat2andprisma3d" target="_blank">📱 Перейти в чат</a>
+        </div>
+
+        <!-- НАВИГАЦИЯ -->
+        <div class="nav">
+            <button class="nav-btn active" data-tab="rules">📋 Правила</button>
+            <button class="nav-btn" data-tab="punishments">🔴 Наказания</button>
+        </div>
+
+        <!-- ===== ВКЛАДКА ПРАВИЛА ===== -->
+        <div class="tab active" id="tab-rules">
+            <div class="rules-card">
+                <div class="title">📋 Полный список правил</div>
+
+                <div class="rule-item">
+                    <span class="num">1.</span>
+                    <span class="text">Оскорбление родителей, родственников участников чата</span>
+                    <span class="punishment mute">🔴 мут: сутки + варн</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">2.</span>
+                    <span class="text">Оскорбление религий, а также верующих, если это затрагивает их религию</span>
+                    <span class="punishment warn">🔴 Варн</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">3.</span>
+                    <span class="text">Политика</span>
+                    <span class="punishment warn">🔴 Варн</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">4.</span>
+                    <span class="text">Спам медиа-файлами (больше четырёх за раз)</span>
+                    <span class="punishment mute">🔴 мут: 4 часа + варн</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">5.</span>
+                    <span class="text">Если участник заебал прям всех и никому не нравится</span>
+                    <span class="punishment mute">🔴 мут: 3 часа</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">6.</span>
+                    <span class="text">Пропаганда любых идеологий, их символов и т.д.</span>
+                    <span class="punishment mute">🔴 мут: 4 часа + варн</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">7.</span>
+                    <span class="text">Рейд чата</span>
+                    <span class="punishment ban">🔴 Бан</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">8.</span>
+                    <span class="text">Реклама азартных игр</span>
+                    <span class="punishment ban">🔴 Бан</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">9.</span>
+                    <span class="text">Реклама других чатов, ТГК, ТГБ и пересылка с них</span>
+                    <span class="punishment mute">🔴 мут: 10 часов</span>
+                </div>
+
+                <div class="rule-item" style="border-bottom: 1px solid #1a3a1a; margin-bottom: 6px;">
+                    <span class="num"></span>
+                    <span class="text"><span style="color: #8a8;">ИСКЛЮЧЕНИЕ 9 правила:</span> Если нужно было что-то доказать или показать, то мут не ставится!</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">10.</span>
+                    <span class="text">Навязчивость к кому-то</span>
+                    <span class="punishment mute">🔴 мут: 5 часов</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">11.</span>
+                    <span class="text">Слив платных, приватных или ещё незаконченных работ (анимации, спрайты, постеры)</span>
+                    <span class="punishment ban-weeks">🔴 Бан: 2 недели</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">12.</span>
+                    <span class="text">Обход любого наказания при помощи новых аккаунтов</span>
+                    <span class="punishment ban">🔴 Бан</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">13.</span>
+                    <span class="text">Флуд</span>
+                    <span class="punishment mute">🔴 мут: 5 часов</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">14.</span>
+                    <span class="text">Спам текстом, командами ириса и других ботов</span>
+                    <span class="punishment mute">🔴 мут: 20 минут</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">15.</span>
+                    <span class="text">Попрошайничество админки</span>
+                    <span class="punishment mute">🔴 мут: 10 минут</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">15.2</span>
+                    <span class="text">Попрошайничество снятия мута</span>
+                    <span class="punishment x2">🔴 Х2 наказание</span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">16.</span>
+                    <span class="text">Выебываться (говорить про свою крутость и т.д.)</span>
+                    <span class="punishment mute">🔴 мут: 30 минут (чтоб не выебывался)</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===== ВКЛАДКА НАКАЗАНИЯ ===== -->
+        <div class="tab" id="tab-punishments">
+            <div class="rules-card">
+                <div class="title">🔴 Виды наказаний</div>
+
+                <div class="rule-item">
+                    <span class="num">🟡</span>
+                    <span class="text"><strong>Варн (Warn)</strong> — предупреждение. При повторном нарушении — мут или бан.</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">🟠</span>
+                    <span class="text"><strong>Мут (Mute)</strong> — ограничение на отправку сообщений на определённое время.</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">🔴</span>
+                    <span class="text"><strong>Бан (Ban)</strong> — полное исключение из чата. В некоторых случаях — на 2 недели или навсегда.</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item" style="border-bottom: none; margin-top: 10px; border-top: 1px solid #2e5a2e; padding-top: 16px;">
+                    <span class="num">🔒</span>
+                    <span class="text"><strong>Соблюдайте правила, чтобы обеспечить комфортное общение для всех!</strong></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="rules-card">
+                <div class="title">📊 Сводка наказаний</div>
+
+                <div class="rule-item">
+                    <span class="num">⏱️</span>
+                    <span class="text">Самый короткий мут — <strong>10 минут</strong> (попрошайничество админки)</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">⏱️</span>
+                    <span class="text">Самый длинный мут — <strong>10 часов</strong> (реклама других чатов)</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">⛔</span>
+                    <span class="text">Самый строгий бан — <strong>2 недели</strong> (слив работ)</span>
+                    <span></span>
+                </div>
+
+                <div class="rule-item">
+                    <span class="num">⛔</span>
+                    <span class="text">Бан навсегда — за <strong>рейд</strong>, <strong>рекламу азартных игр</strong> и <strong>обход наказаний</strong></span>
+                    <span></span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2026 · Правила чата · Все права защищены
+        </div>
+    </div>
+
+    <script>
+        // переключение вкладок
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.getElementById('tab-' + tab).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
